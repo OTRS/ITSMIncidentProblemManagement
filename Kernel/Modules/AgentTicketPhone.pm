@@ -2,7 +2,7 @@
 # Kernel/Modules/AgentTicketPhone.pm - to handle phone calls
 # Copyright (C) 2001-2009 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketPhone.pm,v 1.13.2.1 2009-08-28 11:37:03 mh Exp $
+# $Id: AgentTicketPhone.pm,v 1.13.2.2 2009-10-02 07:27:46 ub Exp $
 # $OldId: AgentTicketPhone.pm,v 1.113 2009/08/25 14:32:55 martin Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -31,7 +31,7 @@ use Kernel::System::Service;
 # ---
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.13.2.1 $) [1];
+$VERSION = qw($Revision: 1.13.2.2 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;

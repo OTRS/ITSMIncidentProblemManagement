@@ -2,8 +2,8 @@
 # Kernel/Modules/AgentTicketAddtlITSMField.pm - additional itsm fields for ticket
 # Copyright (C) 2001-2009 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketAddtlITSMField.pm,v 1.7.2.1 2009-08-28 11:32:05 mh Exp $
-# $OldId: AgentTicketFreeText.pm,v 1.59 2009/08/25 14:32:55 martin Exp $
+# $Id: AgentTicketAddtlITSMField.pm,v 1.7.2.2 2009-10-02 07:27:46 ub Exp $
+# $OldId: AgentTicketFreeText.pm,v 1.59.2.1 2009/09/23 09:51:58 martin Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -31,7 +31,7 @@ use Kernel::System::Service;
 # ---
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.7.2.1 $) [1];
+$VERSION = qw($Revision: 1.7.2.2 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -1225,11 +1225,10 @@ sub _Mask {
             Size       => 10,
             OnClick    => "change_selected(0)",
         );
-        my %UserHash = ();
+        my %UserHash;
         if (@OldUserInfo) {
-            my $Counter = 0;
+            my $Counter = 1;
             for my $User ( reverse @OldUserInfo ) {
-                next if !$Counter;
                 next if $UserHash{ $User->{UserID} };
                 $UserHash{ $User->{UserID} } = "$Counter: $User->{UserLastname} "
                     . "$User->{UserFirstname} ($User->{UserLogin})";

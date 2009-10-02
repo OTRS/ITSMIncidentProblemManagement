@@ -2,8 +2,8 @@
 # Kernel/Modules/AgentTicketEmail.pm - to compose initial email to customer
 # Copyright (C) 2001-2009 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketEmail.pm,v 1.11.2.1 2009-08-28 11:34:18 mh Exp $
-# $OldId: AgentTicketEmail.pm,v 1.99 2009/08/25 14:32:55 martin Exp $
+# $Id: AgentTicketEmail.pm,v 1.11.2.2 2009-10-02 07:27:46 ub Exp $
+# $OldId: AgentTicketEmail.pm,v 1.99.2.1 2009/09/30 09:10:15 mb Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -33,7 +33,7 @@ use Kernel::System::Service;
 # ---
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.11.2.1 $) [1];
+$VERSION = qw($Revision: 1.11.2.2 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -1150,6 +1150,7 @@ sub Run {
             %GetParam,
             CustomerUserID => $CustomerUser || '',
             QueueID        => $QueueID      || 1,
+            Services       => $Services,
         );
 
         # get free text config options
