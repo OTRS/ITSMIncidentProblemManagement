@@ -2,7 +2,7 @@
 # AgentTicketZoom.dtl - provides HTML for AgentTicketZoom.pm
 # Copyright (C) 2001-2009 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketZoom.dtl,v 1.6.2.3 2009-10-02 07:27:47 ub Exp $
+# $Id: AgentTicketZoom.dtl,v 1.6.2.4 2009-10-14 21:05:03 ub Exp $
 # $OldId: AgentTicketZoom.dtl,v 1.62 2009/08/28 11:49:09 mh Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -16,6 +16,7 @@ $Include{"AgentTicketZoomArticleFilterDialog"}
 
 <!-- dtl:block:Header -->
 <!-- start ticket head $Data{"TicketNumber"} -->
+
 <table border="0" width="100%" cellspacing="0" cellpadding="3">
     <tr>
         <td width="70%" class="mainhead">
