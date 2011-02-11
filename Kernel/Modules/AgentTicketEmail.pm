@@ -1,9 +1,9 @@
 # --
 # Kernel/Modules/AgentTicketEmail.pm - to compose initial email to customer
-# Copyright (C) 2001-2010 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2011 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketEmail.pm,v 1.14 2010-01-20 13:53:50 ub Exp $
-# $OldId: AgentTicketEmail.pm,v 1.99.2.3 2010/01/07 22:26:02 martin Exp $
+# $Id: AgentTicketEmail.pm,v 1.14.4.1 2011-02-11 13:37:39 ub Exp $
+# $OldId: AgentTicketEmail.pm,v 1.99.2.6 2010/04/01 17:59:52 martin Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -33,7 +33,7 @@ use Kernel::System::Service;
 # ---
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.14 $) [1];
+$VERSION = qw($Revision: 1.14.4.1 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -197,6 +197,34 @@ sub Run {
             = $Self->{ParamObject}->GetParam( Param => "ArticleFreeKey$_" );
         $GetParam{"ArticleFreeText$_"}
             = $Self->{ParamObject}->GetParam( Param => "ArticleFreeText$_" );
+    }
+
+    # transform pending time, time stamp based on user time zone
+    if (
+        defined $GetParam{Year}
+        && defined $GetParam{Month}
+        && defined $GetParam{Day}
+        && defined $GetParam{Hour}
+        && defined $GetParam{Minute}
+        )
+    {
+        %GetParam = $Self->{LayoutObject}->TransfromDateSelection(
+            %GetParam,
+        );
+    }
+
+    # transform free time, time stamp based on user time zone
+    for my $Count ( 1 .. 6 ) {
+        my $Prefix = 'TicketFreeTime' . $Count;
+        next if !defined $GetParam{ $Prefix . 'Year' };
+        next if !defined $GetParam{ $Prefix . 'Month' };
+        next if !defined $GetParam{ $Prefix . 'Day' };
+        next if !defined $GetParam{ $Prefix . 'Hour' };
+        next if !defined $GetParam{ $Prefix . 'Minute' };
+        %GetParam = $Self->{LayoutObject}->TransfromDateSelection(
+            %GetParam,
+            Prefix => $Prefix
+        );
     }
 
     if ( !$Self->{Subaction} || $Self->{Subaction} eq 'Created' ) {
@@ -375,6 +403,30 @@ sub Run {
 
         $Output .= $Self->{LayoutObject}->Footer();
         return $Output;
+    }
+
+    # deliver signature
+    elsif ( $Self->{Subaction} eq 'Signature' ) {
+        my $QueueID = $Self->{ParamObject}->GetParam( Param => 'QueueID' );
+        if ( !$QueueID ) {
+            my $Dest = $Self->{ParamObject}->GetParam( Param => 'Dest' ) || '';
+            ($QueueID) = split( /\|\|/, $Dest );
+        }
+        my $Signature = $Self->_GetSignature( QueueID => $QueueID || 1 );
+        my $MimeType = 'text/plain';
+        if ( $Self->{ConfigObject}->Get('Frontend::RichText') ) {
+            $MimeType  = 'text/html';
+            $Signature = $Self->{LayoutObject}->RichTextDocumentComplete(
+                String => $Signature,
+            );
+        }
+
+        return $Self->{LayoutObject}->Attachment(
+            ContentType => $MimeType . '; charset=' . $Self->{LayoutObject}->{Charset},
+            Content     => $Signature,
+            Type        => 'inline',
+            NoCache     => 1,
+        );
     }
 
     # create new ticket and article
@@ -767,7 +819,7 @@ sub Run {
                 Body         => $Self->{LayoutObject}->Ascii2Html( Text => $GetParam{Body} ),
                 Errors       => \%Error,
                 Attachments  => \@Attachments,
-                Signature    => $Self->{HTMLUtilsObject}->ToAscii( String => $Signature, ),
+                Signature    => $Signature,
                 %GetParam,
                 %TicketFreeTextHTML,
                 %TicketFreeTimeHTML,
@@ -840,22 +892,19 @@ sub Run {
                 && defined( $GetParam{ 'TicketFreeTime' . $_ . 'Minute' } )
                 )
             {
-                my %Time;
-                $Time{ 'TicketFreeTime' . $_ . 'Year' }    = 0;
-                $Time{ 'TicketFreeTime' . $_ . 'Month' }   = 0;
-                $Time{ 'TicketFreeTime' . $_ . 'Day' }     = 0;
-                $Time{ 'TicketFreeTime' . $_ . 'Hour' }    = 0;
-                $Time{ 'TicketFreeTime' . $_ . 'Minute' }  = 0;
-                $Time{ 'TicketFreeTime' . $_ . 'Secunde' } = 0;
 
-                if ( $GetParam{ 'TicketFreeTime' . $_ . 'Used' } ) {
-                    %Time = $Self->{LayoutObject}->TransfromDateSelection(
-                        %GetParam,
-                        Prefix => 'TicketFreeTime' . $_,
-                    );
+                # set time stamp to NULL if field is not used/checked
+                if ( !$GetParam{ 'TicketFreeTime' . $_ . 'Used' } ) {
+                    $GetParam{ 'TicketFreeTime' . $_ . 'Year' }   = 0;
+                    $GetParam{ 'TicketFreeTime' . $_ . 'Month' }  = 0;
+                    $GetParam{ 'TicketFreeTime' . $_ . 'Day' }    = 0;
+                    $GetParam{ 'TicketFreeTime' . $_ . 'Hour' }   = 0;
+                    $GetParam{ 'TicketFreeTime' . $_ . 'Minute' } = 0;
                 }
+
+                # set free time
                 $Self->{TicketObject}->TicketFreeTimeSet(
-                    %Time,
+                    %GetParam,
                     Prefix   => 'TicketFreeTime',
                     TicketID => $TicketID,
                     Counter  => $_,
@@ -1016,6 +1065,8 @@ sub Run {
 
             # set pending time
             elsif ( $StateData{TypeName} =~ /^pending/i ) {
+
+                # set pending time
                 $Self->{TicketObject}->TicketPendingTimeSet(
                     UserID   => $Self->{UserID},
                     TicketID => $TicketID,
@@ -1228,11 +1279,6 @@ sub Run {
                     );
                 }
             }
-        }
-
-        # convert Signature to ASCII, if RichText is on
-        if ( $Self->{ConfigObject}->Get('Frontend::RichText') ) {
-            $Signature = $Self->{HTMLUtilsObject}->ToAscii( String => $Signature, );
         }
 
         my $JSON = $Self->{LayoutObject}->BuildJSON(
@@ -1745,6 +1791,9 @@ sub _MaskEmailNew {
             },
         );
     }
+
+    # add signature update
+    $Param{FromStrg} =~ s/(onchange=")/$1ReloadSignature();/;
 
     # customer info string
     if ( $Self->{ConfigObject}->Get('Ticket::Frontend::CustomerInfoCompose') ) {

@@ -1,9 +1,9 @@
 # --
 # Kernel/Modules/CustomerTicketZoom.pm - to get a closer view
-# Copyright (C) 2001-2010 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2011 OTRS AG, http://otrs.org/
 # --
-# $Id: CustomerTicketZoom.pm,v 1.10 2010-01-20 13:53:50 ub Exp $
-# $OldId: CustomerTicketZoom.pm,v 1.48.2.1 2009/12/08 15:23:05 ub Exp $
+# $Id: CustomerTicketZoom.pm,v 1.10.4.1 2011-02-11 13:37:39 ub Exp $
+# $OldId: CustomerTicketZoom.pm,v 1.48.2.2 2010/05/31 15:14:32 mb Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -24,7 +24,7 @@ use Kernel::System::GeneralCatalog;
 # ---
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.10 $) [1];
+$VERSION = qw($Revision: 1.10.4.1 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -258,17 +258,20 @@ sub Run {
             );
             if ($ArticleID) {
 
-                # set state
-                my %NextStateData = $Self->{StateObject}->StateGet( ID => $GetParam{StateID} );
-                my $NextState = $NextStateData{Name}
-                    || $Self->{Config}->{StateDefault}
-                    || 'open';
-                $Self->{TicketObject}->StateSet(
-                    TicketID  => $Self->{TicketID},
-                    ArticleID => $ArticleID,
-                    State     => $NextState,
-                    UserID    => $Self->{ConfigObject}->Get('CustomerPanelUserID'),
-                );
+                if ( $Self->{Config}->{State} ) {
+
+                    # set state
+                    my %NextStateData = $Self->{StateObject}->StateGet( ID => $GetParam{StateID} );
+                    my $NextState = $NextStateData{Name}
+                        || $Self->{Config}->{StateDefault}
+                        || 'open';
+                    $Self->{TicketObject}->StateSet(
+                        TicketID  => $Self->{TicketID},
+                        ArticleID => $ArticleID,
+                        State     => $NextState,
+                        UserID    => $Self->{ConfigObject}->Get('CustomerPanelUserID'),
+                    );
+                }
 
                 # set priority
                 if ( $Self->{Config}->{Priority} && $GetParam{PriorityID} ) {

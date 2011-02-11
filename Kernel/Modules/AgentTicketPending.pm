@@ -1,9 +1,9 @@
 # --
 # Kernel/Modules/AgentTicketPending.pm - set ticket to pending
-# Copyright (C) 2001-2009 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2011 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketPending.pm,v 1.9 2009-09-30 17:53:05 ub Exp $
-# $OldId: AgentTicketPending.pm,v 1.69.2.1 2009/09/23 09:51:58 martin Exp $
+# $Id: AgentTicketPending.pm,v 1.9.4.1 2011-02-11 13:37:38 ub Exp $
+# $OldId: AgentTicketPending.pm,v 1.69.2.8 2010/07/21 05:45:32 mp Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -26,7 +26,7 @@ use Kernel::System::Service;
 # ---
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.9 $) [1];
+$VERSION = qw($Revision: 1.9.4.1 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -289,12 +289,13 @@ sub Run {
             SystemTime => $TicketFreeTimeString,
         );
 
-        $GetParam{ $FreeTimePrefix . 'Used' }   = 1;
-        $GetParam{ $FreeTimePrefix . 'Minute' } = $Minute;
-        $GetParam{ $FreeTimePrefix . 'Hour' }   = $Hour;
-        $GetParam{ $FreeTimePrefix . 'Day' }    = $Day;
-        $GetParam{ $FreeTimePrefix . 'Month' }  = $Month;
-        $GetParam{ $FreeTimePrefix . 'Year' }   = $Year;
+        $GetParam{ $FreeTimePrefix . 'UsedFromTicket' } = 1;
+        $GetParam{ $FreeTimePrefix . 'Used' }           = 1;
+        $GetParam{ $FreeTimePrefix . 'Minute' }         = $Minute;
+        $GetParam{ $FreeTimePrefix . 'Hour' }           = $Hour;
+        $GetParam{ $FreeTimePrefix . 'Day' }            = $Day;
+        $GetParam{ $FreeTimePrefix . 'Month' }          = $Month;
+        $GetParam{ $FreeTimePrefix . 'Year' }           = $Year;
     }
 
     # get article free text params
@@ -303,6 +304,35 @@ sub Run {
         my $Value = 'ArticleFreeText' . $Count;
         $GetParam{$Key}   = $Self->{ParamObject}->GetParam( Param => $Key );
         $GetParam{$Value} = $Self->{ParamObject}->GetParam( Param => $Value );
+    }
+
+    # transform pending time, time stamp based on user time zone
+    if (
+        defined $GetParam{Year}
+        && defined $GetParam{Month}
+        && defined $GetParam{Day}
+        && defined $GetParam{Hour}
+        && defined $GetParam{Minute}
+        )
+    {
+        %GetParam = $Self->{LayoutObject}->TransfromDateSelection(
+            %GetParam,
+        );
+    }
+
+    # transform free time, time stamp based on user time zone
+    for my $Count ( 1 .. 6 ) {
+        my $Prefix = 'TicketFreeTime' . $Count;
+        next if $GetParam{ $Prefix . 'UsedFromTicket' };
+        next if !defined $GetParam{ $Prefix . 'Year' };
+        next if !defined $GetParam{ $Prefix . 'Month' };
+        next if !defined $GetParam{ $Prefix . 'Day' };
+        next if !defined $GetParam{ $Prefix . 'Hour' };
+        next if !defined $GetParam{ $Prefix . 'Minute' };
+        %GetParam = $Self->{LayoutObject}->TransfromDateSelection(
+            %GetParam,
+            Prefix => $Prefix
+        );
     }
 
     # rewrap body if exists
@@ -715,21 +745,19 @@ sub Run {
                 && defined $GetParam{ 'TicketFreeTime' . $_ . 'Minute' }
                 )
             {
-                my %Time;
-                $Time{ 'TicketFreeTime' . $_ . 'Year' }    = 0;
-                $Time{ 'TicketFreeTime' . $_ . 'Month' }   = 0;
-                $Time{ 'TicketFreeTime' . $_ . 'Day' }     = 0;
-                $Time{ 'TicketFreeTime' . $_ . 'Hour' }    = 0;
-                $Time{ 'TicketFreeTime' . $_ . 'Minute' }  = 0;
-                $Time{ 'TicketFreeTime' . $_ . 'Secunde' } = 0;
 
-                if ( $GetParam{ 'TicketFreeTime' . $_ . 'Used' } ) {
-                    %Time = $Self->{LayoutObject}->TransfromDateSelection(
-                        %GetParam, Prefix => 'TicketFreeTime' . $_
-                    );
+                # set time stamp to NULL if field is not used/checked
+                if ( !$GetParam{ 'TicketFreeTime' . $_ . 'Used' } ) {
+                    $GetParam{ 'TicketFreeTime' . $_ . 'Year' }   = 0;
+                    $GetParam{ 'TicketFreeTime' . $_ . 'Month' }  = 0;
+                    $GetParam{ 'TicketFreeTime' . $_ . 'Day' }    = 0;
+                    $GetParam{ 'TicketFreeTime' . $_ . 'Hour' }   = 0;
+                    $GetParam{ 'TicketFreeTime' . $_ . 'Minute' } = 0;
                 }
+
+                # set free time
                 $Self->{TicketObject}->TicketFreeTimeSet(
-                    %Time,
+                    %GetParam,
                     Prefix   => 'TicketFreeTime',
                     TicketID => $Self->{TicketID},
                     Counter  => $_,
@@ -787,6 +815,8 @@ sub Run {
 
             # set pending time
             elsif ( $StateData{TypeName} =~ /^pending/i ) {
+
+                # set pending time
                 $Self->{TicketObject}->TicketPendingTimeSet(
                     UserID   => $Self->{UserID},
                     TicketID => $Self->{TicketID},
@@ -1008,7 +1038,10 @@ sub _Mask {
     }
     my %Ticket = $Self->{TicketObject}->TicketGet( TicketID => $Self->{TicketID} );
 
+    my $FormElement = 4;
+
     if ( $Self->{Config}->{Title} ) {
+        $FormElement++;
         $Self->{LayoutObject}->Block(
             Name => 'Title',
             Data => \%Param,
@@ -1022,6 +1055,7 @@ sub _Mask {
             Action => $Self->{Action},
             UserID => $Self->{UserID},
         );
+        $FormElement++;
         $Param{TypeStrg} = $Self->{LayoutObject}->BuildSelection(
             Data         => \%Type,
             Name         => 'TypeID',
@@ -1049,6 +1083,7 @@ sub _Mask {
                 UserID         => $Self->{UserID},
             );
         }
+        $FormElement++;
         $Param{ServiceStrg} = $Self->{LayoutObject}->BuildSelection(
             Data         => \%Service,
             Name         => 'ServiceID',
@@ -1123,6 +1158,7 @@ sub _Mask {
                 UserID => $Self->{UserID},
             );
         }
+        $FormElement++;
         $Param{SLAStrg} = $Self->{LayoutObject}->BuildSelection(
             Data         => \%SLA,
             Name         => 'SLAID',
@@ -1189,6 +1225,13 @@ sub _Mask {
     }
     if ( $Self->{Config}->{Owner} ) {
 
+        #check if owner must be set by agent
+        if ( $Self->{Config}->{OwnerMandatory} ) {
+            $Param{OwnerMandatory} = 1;
+        }
+
+        $FormElement++;
+
         # get user of own groups
         my %ShownUsers       = ();
         my %AllGroupsMembers = $Self->{UserObject}->UserList(
@@ -1213,12 +1256,13 @@ sub _Mask {
 
         # get old owner
         my @OldUserInfo = $Self->{TicketObject}->OwnerList( TicketID => $Self->{TicketID} );
+        $FormElement = $FormElement + 2;
         $Param{OwnerStrg} = $Self->{LayoutObject}->OptionStrgHashRef(
             Data       => \%ShownUsers,
             SelectedID => $Param{NewOwnerID},
             Name       => 'NewOwnerID',
             Size       => 10,
-            OnClick    => "change_selected(0)",
+            OnClick    => "change_selected($FormElement)",
         );
         my %UserHash;
         if (@OldUserInfo) {
@@ -1242,11 +1286,12 @@ sub _Mask {
         }
 
         # build string
+        $FormElement = $FormElement + 2;
         $Param{OldOwnerStrg} = $Self->{LayoutObject}->OptionStrgHashRef(
             Data       => \%UserHash,
             SelectedID => $OldOwnerSelectedID,
             Name       => 'OldOwnerID',
-            OnClick    => "change_selected(2)",
+            OnClick    => "change_selected($FormElement)",
         );
         if ( $Param{NewOwnerType} && $Param{NewOwnerType} eq 'Old' ) {
             $Param{'NewOwnerType::Old'} = 'checked="checked"';

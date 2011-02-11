@@ -1,9 +1,9 @@
 # --
 # Kernel/Modules/AgentTicketPhone.pm - to handle phone calls
-# Copyright (C) 2001-2010 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2011 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketPhone.pm,v 1.15 2010-01-20 13:53:50 ub Exp $
-# $OldId: AgentTicketPhone.pm,v 1.113.2.2 2010/01/07 22:26:02 martin Exp $
+# $Id: AgentTicketPhone.pm,v 1.15.4.1 2011-02-11 13:37:38 ub Exp $
+# $OldId: AgentTicketPhone.pm,v 1.113.2.5 2010/04/01 17:59:53 martin Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -31,7 +31,7 @@ use Kernel::System::Service;
 # ---
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.15 $) [1];
+$VERSION = qw($Revision: 1.15.4.1 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -181,6 +181,34 @@ sub Run {
             = $Self->{ParamObject}->GetParam( Param => "ArticleFreeText$_" );
     }
 
+    # transform pending time, time stamp based on user time zone
+    if (
+        defined $GetParam{Year}
+        && defined $GetParam{Month}
+        && defined $GetParam{Day}
+        && defined $GetParam{Hour}
+        && defined $GetParam{Minute}
+        )
+    {
+        %GetParam = $Self->{LayoutObject}->TransfromDateSelection(
+            %GetParam,
+        );
+    }
+
+    # transform free time, time stamp based on user time zone
+    for my $Count ( 1 .. 6 ) {
+        my $Prefix = 'TicketFreeTime' . $Count;
+        next if !$GetParam{ $Prefix . 'Year' };
+        next if !$GetParam{ $Prefix . 'Month' };
+        next if !$GetParam{ $Prefix . 'Day' };
+        next if !$GetParam{ $Prefix . 'Hour' };
+        next if !$GetParam{ $Prefix . 'Minute' };
+        %GetParam = $Self->{LayoutObject}->TransfromDateSelection(
+            %GetParam,
+            Prefix => $Prefix
+        );
+    }
+
     if ( !$Self->{Subaction} || $Self->{Subaction} eq 'Created' ) {
 
         # header
@@ -248,12 +276,6 @@ sub Run {
                     $GetParam{ 'TicketFreeTime' . $Count . 'Day' }    = $Day;
                     $GetParam{ 'TicketFreeTime' . $Count . 'Hour' }   = $Hour;
                     $GetParam{ 'TicketFreeTime' . $Count . 'Minute' } = $Min;
-
-                    # do agent time zone translation
-                    %GetParam = $Self->{LayoutObject}->TransfromDateSelection(
-                        %GetParam,
-                        Prefix => 'TicketFreeTime' . $Count,
-                    );
                 }
             }
 
@@ -868,22 +890,19 @@ sub Run {
                 && defined( $GetParam{ 'TicketFreeTime' . $_ . 'Minute' } )
                 )
             {
-                my %Time;
-                $Time{ 'TicketFreeTime' . $_ . 'Year' }    = 0;
-                $Time{ 'TicketFreeTime' . $_ . 'Month' }   = 0;
-                $Time{ 'TicketFreeTime' . $_ . 'Day' }     = 0;
-                $Time{ 'TicketFreeTime' . $_ . 'Hour' }    = 0;
-                $Time{ 'TicketFreeTime' . $_ . 'Minute' }  = 0;
-                $Time{ 'TicketFreeTime' . $_ . 'Secunde' } = 0;
 
-                if ( $GetParam{ 'TicketFreeTime' . $_ . 'Used' } ) {
-                    %Time = $Self->{LayoutObject}->TransfromDateSelection(
-                        %GetParam,
-                        Prefix => 'TicketFreeTime' . $_,
-                    );
+                # set time stamp to NULL if field is not used/checked
+                if ( !$GetParam{ 'TicketFreeTime' . $_ . 'Used' } ) {
+                    $GetParam{ 'TicketFreeTime' . $_ . 'Year' }   = 0;
+                    $GetParam{ 'TicketFreeTime' . $_ . 'Month' }  = 0;
+                    $GetParam{ 'TicketFreeTime' . $_ . 'Day' }    = 0;
+                    $GetParam{ 'TicketFreeTime' . $_ . 'Hour' }   = 0;
+                    $GetParam{ 'TicketFreeTime' . $_ . 'Minute' } = 0;
                 }
+
+                # set free time
                 $Self->{TicketObject}->TicketFreeTimeSet(
-                    %Time,
+                    %GetParam,
                     Prefix   => 'TicketFreeTime',
                     TicketID => $TicketID,
                     Counter  => $_,
@@ -1070,6 +1089,8 @@ sub Run {
 
             # set pending time
             elsif ( $StateData{TypeName} =~ /^pending/i ) {
+
+                # set pending time
                 $Self->{TicketObject}->TicketPendingTimeSet(
                     UserID   => $Self->{UserID},
                     TicketID => $TicketID,

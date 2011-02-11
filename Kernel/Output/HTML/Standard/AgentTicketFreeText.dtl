@@ -1,9 +1,9 @@
 # --
 # AgentTicketFreeText.dtl - provides HTML form for free text mask
-# Copyright (C) 2001-2010 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2011 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketFreeText.dtl,v 1.4 2010-01-20 13:54:26 ub Exp $
-# $OldId: AgentTicketFreeText.dtl,v 1.30.2.4 2009/12/08 09:15:08 mg Exp $
+# $Id: AgentTicketFreeText.dtl,v 1.4.4.1 2011-02-11 13:37:19 ub Exp $
+# $OldId: AgentTicketFreeText.dtl,v 1.30.2.7 2010/07/21 05:47:50 mp Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -77,19 +77,21 @@ function submit_compose() {
 <!-- dtl:block:TimeUnitsJs -->
 
     if (document.getElementsByName('NewOwnerType').length) {
-        // new owner
-        if (document.getElementsByName('NewOwnerType').item(0).checked
-            && document.compose.NewOwnerID.value == '') {
+        if (document.compose.OwnerMandatory.value == 1 ) {
+            // new owner
+            if (document.getElementsByName('NewOwnerType').item(0).checked &&
+            document.compose.NewOwnerID.value == '') {
 
-            alert('$JSText{"Please set a new owner!"}');
-            return false;
-        }
-        // previous owner
-        else if (document.getElementsByName('NewOwnerType').item(1).checked
-            && document.compose.OldOwnerID.value == '') {
+                alert('$JSText{"Please set a new owner!"}');
+                return false;
+            }
+            // previous owner
+            else if (document.getElementsByName('NewOwnerType').item(1).checked &&
+                document.compose.OldOwnerID.value == '') {
 
-            alert('$JSText{"Please set a new owner!"}');
-            return false;
+                    alert('$JSText{"Please set a new owner!"}');
+                    return false;
+                }
         }
     }
 
@@ -112,7 +114,6 @@ function SpellCheckSubmit() {
 <script language="JavaScript" type="text/javascript">
 <!--
 function change_selected(sel) {
-    start_elements = (sel + 4);
     if (document.compose.elements[0].name == "$Config{"SessionName"}") {
         start_elements = start_elements + 1;
     }
@@ -193,6 +194,7 @@ function change_selected(sel) {
                                 <tr>
                                     <td width="18%" class="contentkey">$Text{"New Owner"}:</td>
                                     <td width="2%" class="contentvalue">
+                                        <input type="hidden" name="OwnerMandatory" value="$QData{"OwnerMandatory"}"/>
                                         <input type="radio" name="NewOwnerType" value="New" $Data{"NewOwnerType::New"}/>
                                     </td>
                                     <td width="80%" class="contentvalue">$Data{"OwnerStrg"}</td>
@@ -329,7 +331,7 @@ $Include{"RichTextEditor"}
 #<!-- dtl:block:TicketFreeText2 -->
 <!-- dtl:block:TicketFreeTime -->
                                 <tr>
-                                    <td colspan="2" class="contentkey">$Text{"$QData{"TicketFreeTimeKey"}"}:</td>
+                                    <td colspan="2" class="contentkey">$Text{"$Data{"TicketFreeTimeKey"}"}:</td>
                                     <td class="contentvalue">$Data{"TicketFreeTime"}</td>
                                 </tr>
 <!-- dtl:block:TicketFreeTime -->
