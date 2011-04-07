@@ -2,8 +2,8 @@
 # Kernel/Modules/AgentTicketEmail.pm - to compose initial email to customer
 # Copyright (C) 2001-2011 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketEmail.pm,v 1.14.4.1 2011-02-11 13:37:39 ub Exp $
-# $OldId: AgentTicketEmail.pm,v 1.99.2.6 2010/04/01 17:59:52 martin Exp $
+# $Id: AgentTicketEmail.pm,v 1.14.4.2 2011-04-07 20:28:04 ub Exp $
+# $OldId: AgentTicketEmail.pm,v 1.99.2.7 2010/11/02 23:36:21 en Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -33,7 +33,7 @@ use Kernel::System::Service;
 # ---
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.14.4.1 $) [1];
+$VERSION = qw($Revision: 1.14.4.2 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -1633,6 +1633,9 @@ sub _MaskEmailNew {
             Name => 'CustomerUser',
             Max  => 70,
         );
+        if ( $Param{CustomerUserStrg} ne "" ) {
+            $Self->{LayoutObject}->Block( Name => 'TakeCustomerButton' );
+        }
     }
 
     # build to string
