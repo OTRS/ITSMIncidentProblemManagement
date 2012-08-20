@@ -1,9 +1,9 @@
 # --
 # AgentTicketEmail.dtl - provides HTML form for agent email
-# Copyright (C) 2001-2011 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2012 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketEmail.dtl,v 1.28 2011-04-26 15:57:36 ub Exp $
-# $OldId: AgentTicketEmail.dtl,v 1.142 2010/12/20 15:35:05 martin Exp $
+# $Id: AgentTicketEmail.dtl,v 1.28.2.1 2012-08-20 15:30:28 ub Exp $
+# $OldId: AgentTicketEmail.dtl,v 1.142.2.4 2012/05/25 13:32:22 mg Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -106,6 +106,9 @@ $('#Dest').bind('change', function (Event) {
 <!-- dtl:block:ToInvalidMXServerErrorMsg -->
                             <p>$Text{"This email address failed MX check."}</p>
 <!-- dtl:block:ToInvalidMXServerErrorMsg -->
+<!-- dtl:block:ToInvalidDNSServerErrorMsg -->
+                            <p>$Text{"DNS problem, please check your configuration and the error log."}</p>
+<!-- dtl:block:ToInvalidDNSServerErrorMsg -->
 <!-- dtl:block:ToInvalidSyntaxServerErrorMsg -->
                             <p>$Text{"The syntax of this email address is incorrect."}</p>
 <!-- dtl:block:ToInvalidSyntaxServerErrorMsg -->
@@ -129,6 +132,15 @@ $('#Dest').bind('change', function (Event) {
                         </div>
                     </div>
                     <div class="Clear"></div>
+<!--dtl:js_on_document_complete-->
+<script type="text/javascript">//<![CDATA[
+if ($('#CryptKeyID').length){
+    $('#Cc').bind('blur', function (Event) {
+        Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'Cc', ['CryptKeyID']);
+    });
+}
+//]]></script>
+<!--dtl:js_on_document_complete-->
 
                     <label for="Bcc">$Text{"Bcc"}:</label>
                     <div class="Field">
@@ -146,6 +158,15 @@ $('#Dest').bind('change', function (Event) {
                         </div>
                     </div>
                     <div class="Clear"></div>
+<!--dtl:js_on_document_complete-->
+<script type="text/javascript">//<![CDATA[
+if ($('#CryptKeyID').length){
+    $('#Bcc').bind('blur', function (Event) {
+        Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'Bcc', ['CryptKeyID']);
+    });
+}
+//]]></script>
+<!--dtl:js_on_document_complete-->
 
 <!-- dtl:block:TicketService -->
                     <label for="ServiceID">$Text{"Service"}:</label>
@@ -219,10 +240,10 @@ $('#ResponsibleSelectionGetAll').bind('click', function (Event) {
 <!-- dtl:block:ResponsibleSelection -->
 
 <!-- dtl:block:Option -->
-                    <label>$Text{"$Data{"Key"}"}:</label>
+                    <label for="$QData{"Name"}">$Text{"$Data{"Key"}"}:</label>
                     <div class="Field">
                         $Data{"Value"}
-                        <p class="Error">$QData{"Invalid"}</p>
+                        <div id="$QData{"Name"}ServerError" class="TooltipErrorMessage"><p>$QData{"Invalid"}</p></div>
                     </div>
                     <div class="Clear"></div>
 <!-- dtl:block:Option -->
@@ -291,11 +312,15 @@ $Include{"RichTextEditor"}
 <!-- dtl:block:Attachment -->
                             <li>
                                 $QData{"Filename"} ($QData{"Filesize"})
-                                <button type="submit" id="AttachmentDelete$QData{"FileID"}" name="AttachmentDelete$QData{"FileID"}" value="$Text{"Delete"}">$Text{"Delete"}</button>
+                                <button type="button" id="AttachmentDeleteButton$QData{"FileID"}" name="AttachmentDeleteButton$QData{"FileID"}" value="$Text{"Delete"}" class="SpacingLeft">$Text{"Delete"}</button>
+                                <input type="hidden" id="AttachmentDelete$QData{"FileID"}" name="AttachmentDelete$QData{"FileID"}" />
 <!--dtl:js_on_document_complete-->
 <script type="text/javascript">//<![CDATA[
-    $('#AttachmentDelete$QData{"FileID"}').bind('click', function () {
-        Core.Form.Validate.DisableValidation($('#AttachmentDelete$QData{"FileID"}').closest('form'));
+    $('#AttachmentDeleteButton$QData{"FileID"}').bind('click', function () {
+        var $Form = $('#AttachmentDeleteButton$QData{"FileID"}').closest('form');
+        $('#AttachmentDelete$QData{"FileID"}').val(1);
+        Core.Form.Validate.DisableValidation($Form);
+        $Form.trigger('submit');
     });
 //]]></script>
 <!--dtl:js_on_document_complete-->

@@ -1,9 +1,9 @@
 # --
 # AgentTicketZoom.dtl - provides HTML for AgentTicketZoom.pm
-# Copyright (C) 2001-2011 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2012 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketZoom.dtl,v 1.38 2011-04-20 10:12:39 ub Exp $
-# $OldId: AgentTicketZoom.dtl,v 1.182.2.9 2011/04/05 18:41:21 mp Exp $
+# $Id: AgentTicketZoom.dtl,v 1.38.2.1 2012-08-20 15:30:28 ub Exp $
+# $OldId: AgentTicketZoom.dtl,v 1.182.2.12 2012/08/17 09:01:22 mg Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -38,7 +38,7 @@
         var Data = {
             Action:       'AgentTicketZoom',
             Subaction:    'ArticleFilterSet',
-            TicketID:     '$QData{"TicketID"}',
+            TicketID:     "$QData{"TicketID"}",
             SaveDefaults: 1
         };
         Core.AJAX.FunctionCall(Core.Config.Get('CGIHandle'), Data, function () {
@@ -767,7 +767,9 @@ $Data{"Body"}
 <!-- dtl:block:BodyHTML -->
                 <div>
 # execute IFrame JS asynchronously. Otherwise it could happen before our API was loaded
-                    <iframe width="100%" frameborder="0" id="Iframe$QData{"ArticleID"}" onload="window.setTimeout( function (){ if (typeof Core === 'object' && typeof Core.Agent === 'object' && typeof Core.Agent.TicketZoom === 'object') { Core.Agent.TicketZoom.IframeAutoHeight($('#Iframe$QData{"ArticleID"}')); } }, 500);" src="$Env{"Baselink"}Action=AgentTicketAttachment;Subaction=HTMLView;ArticleID=$QData{"ArticleID"};FileID=$QData{"AttachmentIDOfHTMLBody"}"></iframe>
+# Use the HTML5 sandbox attribute to prevent plugins and scripts from being executed in the browser.
+# Use IE's (non-standard) security attribute to achieve something similar in older IE browsers. Append session info to URL because IE will not send cookies.
+                    <iframe sandbox="allow-same-origin" security="restricted" width="100%" frameborder="0" id="Iframe$QData{"ArticleID"}" onload="window.setTimeout( function (){ if (typeof Core === 'object' && typeof Core.Agent === 'object' && typeof Core.Agent.TicketZoom === 'object') { Core.Agent.TicketZoom.IframeAutoHeight($('#Iframe$QData{"ArticleID"}')); } }, 500);" src="$Env{"Baselink"}Action=AgentTicketAttachment;Subaction=HTMLView;ArticleID=$QData{"ArticleID"};FileID=$QData{"AttachmentIDOfHTMLBody"};$QEnv{"SessionName"}=$QEnv{"SessionID"}"></iframe>
                 </div>
 <!-- dtl:block:BodyHTML -->
             </div>
@@ -783,9 +785,12 @@ $Data{"Body"}
 <!-- dtl:block:ArticleItemMarkAsSeen -->
 <!-- dtl:block:ArticleItem -->
 
-
+<!-- dtl:block:TicketZoomInit -->
 <!-- dtl:js_on_document_complete -->
 <script type="text/javascript">//<![CDATA[
     Core.Agent.TicketZoom.Init({ ArticleTableHeight: parseInt('$Env{"UserTicketZoomArticleTableHeight"}', 10)});
+    Core.Config.Set('Ticket::Frontend::HTMLArticleHeightDefault', parseInt("$Config{"Ticket::Frontend::HTMLArticleHeightDefault"}" || 0, 10));
+    Core.Config.Set('Ticket::Frontend::HTMLArticleHeightMax', parseInt("$Config{"Ticket::Frontend::HTMLArticleHeightMax"}" || 0, 10));
 //]]></script>
 <!-- dtl:js_on_document_complete -->
+<!-- dtl:block:TicketZoomInit -->

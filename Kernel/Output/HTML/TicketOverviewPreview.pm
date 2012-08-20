@@ -1,9 +1,9 @@
 # --
 # Kernel/Output/HTML/TicketOverviewPreview.pm
-# Copyright (C) 2001-2011 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2012 OTRS AG, http://otrs.org/
 # --
-# $Id: TicketOverviewPreview.pm,v 1.10 2011-03-03 15:20:08 ub Exp $
-# $OldId: TicketOverviewPreview.pm,v 1.49.2.1 2011/03/01 18:17:20 cg Exp $
+# $Id: TicketOverviewPreview.pm,v 1.10.2.1 2012-08-20 15:30:28 ub Exp $
+# $OldId: TicketOverviewPreview.pm,v 1.49.2.4 2012/06/12 10:24:20 mg Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -19,7 +19,7 @@ use Kernel::System::CustomerUser;
 use Kernel::System::SystemAddress;
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.10 $) [1];
+$VERSION = qw($Revision: 1.10.2.1 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -370,15 +370,21 @@ sub _Show {
         }
     }
 
+    my %Ticket = $Self->{TicketObject}->TicketGet(
+        TicketID      => $Param{TicketID},
+        DynamicFields => 0,
+    );
+
+    my $AdditionalClasses = $Param{Config}->{TicketActionsPerTicket} ? 'ShowInlineActions' : '';
+
     $Self->{LayoutObject}->Block(
         Name => 'DocumentContent',
         Data => {
             %Param,
             %Article,
             Class             => 'ArticleCount' . $ArticleCount,
-            AdditionalClasses => $Param{Config}->{TicketActionsPerTicket}
-            ? 'ShowInlineActions'
-            : '',
+            AdditionalClasses => $AdditionalClasses,
+            Created           => $Ticket{Created},              # use value from ticket, not article
         },
     );
 
@@ -746,12 +752,12 @@ sub _Show {
 
             # html quoting
             $ArticleItem->{Body} = $Self->{LayoutObject}->Ascii2Html(
-                NewLine => $Self->{Config}->{DefaultViewNewLine}  || 90,
+                NewLine => $Param{Config}->{DefaultViewNewLine}  || 90,
                 Text    => $ArticleItem->{Body},
-                VMax    => $Self->{Config}->{DefaultPreViewLines} || 25,
+                VMax    => $Param{Config}->{DefaultPreViewLines} || 25,
                 LinkFeature     => 1,
                 HTMLResultMode  => 1,
-                StripEmptyLines => $Self->{Config}->{StripEmptyLines},
+                StripEmptyLines => $Param{Config}->{StripEmptyLines},
             );
 
             # do charset check
