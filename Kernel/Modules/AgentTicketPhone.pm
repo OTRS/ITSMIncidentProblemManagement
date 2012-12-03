@@ -2,7 +2,7 @@
 # Kernel/Modules/AgentTicketPhone.pm - to handle phone calls
 # Copyright (C) 2001-2012 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketPhone.pm,v 1.49 2012-10-22 21:24:53 ub Exp $
+# $Id: AgentTicketPhone.pm,v 1.49.2.1 2012-12-03 10:29:27 ub Exp $
 # $OldId: AgentTicketPhone.pm,v 1.236.2.8 2012/10/11 20:02:41 cr Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -34,7 +34,7 @@ use Kernel::System::ITSMCIPAllocate;
 # ---
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.49 $) [1];
+$VERSION = qw($Revision: 1.49.2.1 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -1164,13 +1164,13 @@ sub Run {
         if ( $GetParam{ServiceID} && $Service{CriticalityID} ) {
 
             # get config for criticality dynamic field
-            my $ImpactDynamicFieldConfig = $Self->{DynamicFieldObject}->DynamicFieldGet(
+            my $CriticalityDynamicFieldConfig = $Self->{DynamicFieldObject}->DynamicFieldGet(
                 Name => 'TicketFreeText13',
             );
 
             # set the criticality
             $Self->{BackendObject}->ValueSet(
-                DynamicFieldConfig => $ImpactDynamicFieldConfig,
+                DynamicFieldConfig => $CriticalityDynamicFieldConfig,
                 ObjectID           => $TicketID,
                 Value              => $Service{CriticalityID},
                 UserID             => $Self->{UserID},
