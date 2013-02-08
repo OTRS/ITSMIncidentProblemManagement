@@ -1,8 +1,8 @@
 # --
 # Kernel/Modules/AgentTicketEmail.pm - to compose initial email to customer
-# Copyright (C) 2001-2012 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2013 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketEmail.pm,v 1.44 2012-10-22 21:24:52 ub Exp $
+# $Id: AgentTicketEmail.pm,v 1.44.2.1 2013-02-08 11:29:51 ub Exp $
 # $OldId: AgentTicketEmail.pm,v 1.206.2.8 2012/10/17 20:20:40 cr Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -36,7 +36,7 @@ use Kernel::System::LinkObject;
 # ---
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.44 $) [1];
+$VERSION = qw($Revision: 1.44.2.1 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -2540,6 +2540,23 @@ sub _MaskEmailNew {
             },
         );
     }
+# ---
+# ITSM
+# ---
+    # make sure to show the options block so that the "Link Ticket" option is shown
+    # even if spellchecker, address book and OptionCustomer is turned off
+    if ( !$ShownOptionsBlock ) {
+        $Self->{LayoutObject}->Block(
+            Name => 'TicketOptions',
+            Data => {
+                %Param,
+            },
+        );
+
+        # set flag to "true" in order to prevent calling the Options block again
+        $ShownOptionsBlock = 1;
+    }
+# ---
 
     # show attachments
     for my $Attachment ( @{ $Param{Attachments} } ) {

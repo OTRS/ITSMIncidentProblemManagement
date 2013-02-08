@@ -1,8 +1,8 @@
 # --
 # Kernel/Modules/AgentTicketPhone.pm - to handle phone calls
-# Copyright (C) 2001-2012 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2013 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketPhone.pm,v 1.49.2.1 2012-12-03 10:29:27 ub Exp $
+# $Id: AgentTicketPhone.pm,v 1.49.2.2 2013-02-08 11:29:51 ub Exp $
 # $OldId: AgentTicketPhone.pm,v 1.236.2.8 2012/10/11 20:02:41 cr Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -34,7 +34,7 @@ use Kernel::System::ITSMCIPAllocate;
 # ---
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.49.2.1 $) [1];
+$VERSION = qw($Revision: 1.49.2.2 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -2328,6 +2328,23 @@ sub _MaskPhoneNew {
             },
         );
     }
+# ---
+# ITSM
+# ---
+    # make sure to show the options block so that the "Link Ticket" option is shown
+    # even if spellchecker and OptionCustomer is turned off
+    if ( !$ShownOptionsBlock ) {
+        $Self->{LayoutObject}->Block(
+            Name => 'TicketOptions',
+            Data => {
+                %Param,
+            },
+        );
+
+        # set flag to "true" in order to prevent calling the Options block again
+        $ShownOptionsBlock = 1;
+    }
+# ---
 
     # show attachments
     for my $Attachment ( @{ $Param{Attachments} } ) {
