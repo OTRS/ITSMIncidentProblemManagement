@@ -2,7 +2,7 @@
 # Kernel/Modules/AgentTicketPhone.pm - to handle phone calls
 # Copyright (C) 2001-2013 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketPhone.pm,v 1.49.2.2 2013-02-08 11:29:51 ub Exp $
+# $Id: AgentTicketPhone.pm,v 1.49.2.3 2013-03-26 16:22:41 ub Exp $
 # $OldId: AgentTicketPhone.pm,v 1.236.2.8 2012/10/11 20:02:41 cr Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -34,7 +34,7 @@ use Kernel::System::ITSMCIPAllocate;
 # ---
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.49.2.2 $) [1];
+$VERSION = qw($Revision: 1.49.2.3 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -922,6 +922,13 @@ sub Run {
                 }
                 if ( $CustomerUserData{UserLogin} ) {
                     $CustomerUser = $CustomerUserData{UserLogin};
+                    $FromExternalCustomer{Customer} = $CustomerUserData{UserLogin};
+                }
+                if ( $FromExternalCustomer{Customer} ) {
+                    my %ExternalCustomerUserData = $Self->{CustomerUserObject}->CustomerUserDataGet(
+                        User => $FromExternalCustomer{Customer},
+                    );
+                    $FromExternalCustomer{Email} = $ExternalCustomerUserData{UserEmail};
                 }
             }
 
@@ -1817,8 +1824,15 @@ sub _GetServices {
     my $DefaultServiceUnknownCustomer
         = $Self->{ConfigObject}->Get('Ticket::Service::Default::UnknownCustomer');
 
+    # check if no CustomerUserID is selected
+    # if $DefaultServiceUnknownCustomer = 0 leave CustomerUserID empty, it will not get any services
+    # if $DefaultServiceUnknownCustomer = 1 set CustomerUserID to get default services
+    if ( !$Param{CustomerUserID} && $DefaultServiceUnknownCustomer ) {
+        $Param{CustomerUserID} = '<DEFAULT>';
+    }
+
     # get service list
-    if ( $Param{CustomerUserID} || $DefaultServiceUnknownCustomer ) {
+    if ( $Param{CustomerUserID} ) {
         %Service = $Self->{TicketObject}->TicketServiceList(
             %Param,
             Action => $Self->{Action},

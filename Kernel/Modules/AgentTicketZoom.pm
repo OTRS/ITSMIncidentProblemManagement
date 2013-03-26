@@ -1,8 +1,8 @@
 # --
 # Kernel/Modules/AgentTicketZoom.pm - to get a closer view
-# Copyright (C) 2001-2012 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2013 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketZoom.pm,v 1.36 2012-08-01 12:11:59 ub Exp $
+# $Id: AgentTicketZoom.pm,v 1.36.2.1 2013-03-26 16:22:41 ub Exp $
 # $OldId: AgentTicketZoom.pm,v 1.177.2.1 2012/06/26 07:48:26 mg Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -29,7 +29,7 @@ use Kernel::System::GeneralCatalog;
 # ---
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.36 $) [1];
+$VERSION = qw($Revision: 1.36.2.1 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -457,7 +457,7 @@ sub MaskAgentZoom {
             # ignore system sender type
             next ARTICLE
                 if $Self->{ConfigObject}->Get('Ticket::NewArticleIgnoreSystemSender')
-                    && $Article->{SenderType} eq 'system';
+                && $Article->{SenderType} eq 'system';
 
             # get article flags
             my %ArticleFlag = $Self->{TicketObject}->ArticleFlagGet(
@@ -1106,7 +1106,7 @@ sub MaskAgentZoom {
         # ignore system sender type
         next ARTICLE
             if $Self->{ConfigObject}->Get('Ticket::NewArticleIgnoreSystemSender')
-                && $Article->{SenderType} eq 'system';
+            && $Article->{SenderType} eq 'system';
 
         # get article flags
         my %ArticleFlag = $Self->{TicketObject}->ArticleFlagGet(
@@ -1361,7 +1361,7 @@ sub _ArticleTree {
         my $Type = $Self->{ConfigObject}->Get('AttachmentDownloadType') || 'attachment';
 
         # if attachment will be forced to download, don't open a new download window!
-        my $Target = '';
+        my $Target = 'target="AttachmentWindow" ';
         if ( $Type =~ /inline/i ) {
             $Target = 'target="attachment" ';
         }

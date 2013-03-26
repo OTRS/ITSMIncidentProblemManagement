@@ -2,7 +2,7 @@
 # Kernel/Modules/AgentTicketEmail.pm - to compose initial email to customer
 # Copyright (C) 2001-2013 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketEmail.pm,v 1.44.2.1 2013-02-08 11:29:51 ub Exp $
+# $Id: AgentTicketEmail.pm,v 1.44.2.2 2013-03-26 16:22:41 ub Exp $
 # $OldId: AgentTicketEmail.pm,v 1.206.2.8 2012/10/17 20:20:40 cr Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -36,7 +36,7 @@ use Kernel::System::LinkObject;
 # ---
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.44.2.1 $) [1];
+$VERSION = qw($Revision: 1.44.2.2 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -1888,8 +1888,15 @@ sub _GetServices {
     my $DefaultServiceUnknownCustomer
         = $Self->{ConfigObject}->Get('Ticket::Service::Default::UnknownCustomer');
 
+    # check if no CustomerUserID is selected
+    # if $DefaultServiceUnknownCustomer = 0 leave CustomerUserID empty, it will not get any services
+    # if $DefaultServiceUnknownCustomer = 1 set CustomerUserID to get default services
+    if ( !$Param{CustomerUserID} && $DefaultServiceUnknownCustomer ) {
+        $Param{CustomerUserID} = '<DEFAULT>';
+    }
+
     # get service list
-    if ( $Param{CustomerUserID} || $DefaultServiceUnknownCustomer ) {
+    if ( $Param{CustomerUserID} ) {
         %Service = $Self->{TicketObject}->TicketServiceList(
             %Param,
             Action => $Self->{Action},

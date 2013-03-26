@@ -1,8 +1,8 @@
 # --
 # Kernel/Modules/AgentTicketActionCommon.pm - common file for several modules
-# Copyright (C) 2001-2012 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2013 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketActionCommon.pm,v 1.33 2012-10-02 11:02:03 ub Exp $
+# $Id: AgentTicketActionCommon.pm,v 1.33.2.1 2013-03-26 16:22:41 ub Exp $
 # $OldId: AgentTicketActionCommon.pm,v 1.81.2.9 2012/09/24 09:28:05 mg Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -1246,7 +1246,7 @@ sub _Mask {
             Data  => \%Type,
             Name  => 'TypeID',
             SelectedID   => $Param{TypeID},
-            PossibleNone => 0,
+            PossibleNone => 1,
             Sort         => 'AlphanumericValue',
             Translation  => 0,
         );
@@ -1853,12 +1853,15 @@ sub _GetServices {
     my $DefaultServiceUnknownCustomer
         = $Self->{ConfigObject}->Get('Ticket::Service::Default::UnknownCustomer');
 
+    # check if no CustomerUserID is selected
+    # if $DefaultServiceUnknownCustomer = 0 leave CustomerUserID empty, it will not get any services
+    # if $DefaultServiceUnknownCustomer = 1 set CustomerUserID to get default services
+    if ( !$Param{CustomerUserID} && $DefaultServiceUnknownCustomer ) {
+        $Param{CustomerUserID} = '<DEFAULT>';
+    }
+
     # get service list
-    if (
-        ( defined $Param{CustomerUserID} && $Param{CustomerUserID} )
-        || $DefaultServiceUnknownCustomer
-        )
-    {
+    if ( $Param{CustomerUserID} ) {
         %Service = $Self->{TicketObject}->TicketServiceList(
             %Param,
             Action => $Self->{Action},
