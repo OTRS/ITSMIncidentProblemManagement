@@ -1,8 +1,8 @@
 # --
 # Kernel/Modules/AgentTicketPhone.pm - to handle phone calls
-# Copyright (C) 2001-2012 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2013 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketPhone.pm,v 1.34.2.1 2012-08-20 15:30:28 ub Exp $
+# $Id: AgentTicketPhone.pm,v 1.34.2.2 2013-05-10 10:35:37 mg Exp $
 # $OldId: AgentTicketPhone.pm,v 1.178.2.7 2012/03/05 09:48:08 mg Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -31,7 +31,7 @@ use Kernel::System::Service;
 # ---
 
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.34.2.1 $) [1];
+$VERSION = qw($Revision: 1.34.2.2 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -248,7 +248,23 @@ sub Run {
         my %Article;
         my %CustomerData;
         if ( $GetParam{ArticleID} ) {
-            %Article = $Self->{TicketObject}->ArticleGet( ArticleID => $GetParam{ArticleID} );
+
+            my $Access = $Self->{TicketObject}->TicketPermission(
+                Type     => 'ro',
+                TicketID => $Self->{TicketID},
+                UserID   => $Self->{UserID}
+            );
+
+            if ( !$Access ) {
+                return $Self->{LayoutObject}->NoPermission(
+                    Message    => "You need ro permission!",
+                    WithHeader => 'yes',
+                );
+            }
+
+            %Article = $Self->{TicketObject}->ArticleGet(
+                ArticleID     => $GetParam{ArticleID},
+            );
 
             # Check if article is from the same TicketID as we checked permissions for.
             if ( $Article{TicketID} ne $Self->{TicketID} ) {
@@ -1158,6 +1174,18 @@ sub Run {
             && $Self->{Config}->{SplitLinkType}->{Direction}
             )
         {
+            my $Access = $Self->{TicketObject}->TicketPermission(
+                Type     => 'ro',
+                TicketID => $GetParam{LinkTicketID},
+                UserID   => $Self->{UserID}
+            );
+
+            if ( !$Access ) {
+                return $Self->{LayoutObject}->NoPermission(
+                    Message    => "You need ro permission!",
+                    WithHeader => 'yes',
+                );
+            }
 
             my $SourceKey = $GetParam{LinkTicketID};
             my $TargetKey = $TicketID;
