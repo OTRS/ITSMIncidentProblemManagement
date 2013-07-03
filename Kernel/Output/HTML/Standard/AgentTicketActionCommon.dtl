@@ -1,8 +1,8 @@
 # --
 # AgentTicketActionCommon.dtl - provides common HTML form for several masks
-# Copyright (C) 2001-2012 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2013 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketActionCommon.dtl,v 1.29 2012-11-22 13:07:46 ub Exp $
+# $Id: AgentTicketActionCommon.dtl,v 1.29.2.1 2013-07-03 14:15:22 ub Exp $
 # $OldId: AgentTicketActionCommon.dtl,v 1.70 2012/11/20 15:19:46 mh Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -175,7 +175,7 @@ $('#TypeID').bind('change', function (Event) {
     $('#NewOwnerID').bind('change', function (Event) {
         Core.AJAX.FormUpdate($('#Compose'), 'AJAXUpdate', 'NewOwnerID', [ 'TypeID', 'ServiceID', 'SLAID', 'OldOwnerID', 'NewResponsibleID', 'NewStateID', 'NewPriorityID', $Data{"DynamicFieldNamesStrg"} ]);
     });
-    $('#NewOwnerID').bind('click', function () {
+    $('#NewOwnerID').bind('focus', function () {
         Core.Agent.TicketAction.SelectRadioButton('New','NewOwnerType');
     });
 //]]></script>
@@ -193,7 +193,7 @@ $('#TypeID').bind('change', function (Event) {
     $('#OldOwnerID').bind('change', function (Event) {
         Core.AJAX.FormUpdate($('#Compose'), 'AJAXUpdate', 'OldOwnerID', [ 'TypeID', 'ServiceID', 'SLAID', 'NewOwnerID', 'NewResponsibleID', 'NewStateID', 'NewPriorityID', $Data{"DynamicFieldNamesStrg"} ]);
     });
-    $('#OldOwnerID').bind('click', function () {
+    $('#OldOwnerID').bind('focus', function () {
         Core.Agent.TicketAction.SelectRadioButton('Old','NewOwnerType');
     });
 //]]></script>

@@ -2,7 +2,7 @@
 # AgentTicketZoom.dtl - provides HTML for AgentTicketZoom.pm
 # Copyright (C) 2001-2013 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketZoom.dtl,v 1.60 2013-06-13 08:48:10 ub Exp $
+# $Id: AgentTicketZoom.dtl,v 1.60.2.1 2013-07-03 14:15:22 ub Exp $
 # $OldId: AgentTicketZoom.dtl,v 1.232 2013/02/11 14:45:28 mn Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -360,7 +360,7 @@
                         <div class="Clear"></div>
 
                         <label>$Text{"Activity"}:</label>
-                        <p class="Value" title="$QData{"Activity"}">$QData{"Activity","18"}</p>
+                        <p class="Value" title="$Text{"$Data{"Activity"}"}">$Text{"$Data{"Activity"}"}</p>
                         <div class="Clear"></div>
                     </fieldset>
 <!-- dtl:block:ProcessData -->

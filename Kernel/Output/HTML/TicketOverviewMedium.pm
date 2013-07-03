@@ -2,7 +2,7 @@
 # Kernel/Output/HTML/TicketOverviewMedium.pm
 # Copyright (C) 2001-2013 OTRS AG, http://otrs.org/
 # --
-# $Id: TicketOverviewMedium.pm,v 1.17 2013-01-23 14:57:00 ub Exp $
+# $Id: TicketOverviewMedium.pm,v 1.17.2.1 2013-07-03 14:15:22 ub Exp $
 # $OldId: TicketOverviewMedium.pm,v 1.58 2013/01/17 12:29:39 cr Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -26,7 +26,7 @@ use Kernel::System::VariableCheck qw(:all);
 use Kernel::System::GeneralCatalog;
 # ---
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.17 $) [1];
+$VERSION = qw($Revision: 1.17.2.1 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -255,18 +255,24 @@ sub _Show {
         Type     => 'move_into',
     );
 
-    # get last article
+    # get last customer article
     my %Article = $Self->{TicketObject}->ArticleLastCustomerArticle(
         TicketID      => $Param{TicketID},
         DynamicFields => 0,
     );
 
+    # get ticket data
+    my %Ticket = $Self->{TicketObject}->TicketGet(
+       TicketID      => $Param{TicketID},
+       DynamicFields => 0,
+    );
+
+    # show ticket create time in current view
+    $Article{Created} = $Ticket{Created};
+
     # Fallback for tickets without articles: get at least basic ticket data
     if ( !%Article ) {
-        %Article = $Self->{TicketObject}->TicketGet(
-            TicketID      => $Param{TicketID},
-            DynamicFields => 0,
-        );
+        %Article = %Ticket;
         if ( !$Article{Title} ) {
             $Article{Title} = $Self->{LayoutObject}->{LanguageObject}->Get(
                 'This ticket has no title or subject'
