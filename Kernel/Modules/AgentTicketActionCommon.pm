@@ -2,7 +2,7 @@
 # Kernel/Modules/AgentTicketActionCommon.pm - common file for several modules
 # Copyright (C) 2001-2013 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketActionCommon.pm,v 1.33.2.1 2013-03-26 16:22:41 ub Exp $
+# $Id: AgentTicketActionCommon.pm,v 1.33.2.2 2013-07-03 12:34:15 ub Exp $
 # $OldId: AgentTicketActionCommon.pm,v 1.81.2.9 2012/09/24 09:28:05 mg Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -1749,7 +1749,14 @@ sub _GetResponsible {
         Type  => 'Long',
         Valid => 1,
     );
-    if ( $Param{QueueID} && !$Param{AllUsers} ) {
+
+    # show all users
+    if ( $Self->{ConfigObject}->Get('Ticket::ChangeOwnerToEveryone') ) {
+        %ShownUsers = %AllGroupsMembers;
+    }
+
+    # show only users with responsible or rw pemissions in the queue
+    elsif ( $Param{QueueID} && !$Param{AllUsers} ) {
         my $GID = $Self->{QueueObject}->GetQueueGroupID( QueueID => $Param{QueueID} );
         my %MemberList = $Self->{GroupObject}->GroupMemberList(
             GroupID => $GID,
@@ -1783,7 +1790,14 @@ sub _GetOwners {
         Type  => 'Long',
         Valid => 1,
     );
-    if ( $Param{QueueID} && !$Param{AllUsers} ) {
+
+    # show all users
+    if ( $Self->{ConfigObject}->Get('Ticket::ChangeOwnerToEveryone') ) {
+        %ShownUsers = %AllGroupsMembers;
+    }
+
+    # show only users with owner or rw pemissions in the queue
+    elsif ( $Param{QueueID} && !$Param{AllUsers} ) {
         my $GID = $Self->{QueueObject}->GetQueueGroupID( QueueID => $Param{QueueID} );
         my %MemberList = $Self->{GroupObject}->GroupMemberList(
             GroupID => $GID,

@@ -1,8 +1,8 @@
 # --
 # AgentTicketOverviewPreview.dtl - provides HTML Ticket Overview
-# Copyright (C) 2001-2012 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2013 OTRS AG, http://otrs.org/
 # --
-# $Id: AgentTicketOverviewPreview.dtl,v 1.20 2012-06-23 12:11:03 mb Exp $
+# $Id: AgentTicketOverviewPreview.dtl,v 1.20.2.1 2013-07-03 12:34:15 ub Exp $
 # $OldId: AgentTicketOverviewPreview.dtl,v 1.77 2012/04/20 12:16:58 mg Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -369,6 +369,12 @@ $Data{"Body"}
     Core.UI.StaticTableControl($('#OverviewControl'));
     $('.MasterAction').bind('click', function (Event) {
         var $MasterActionLink = $(this).find('.MasterActionLink');
+
+        // if the user is trying to select text from an article, MasterAction should not be executed
+        if (typeof Event.target === 'object' && $(Event.target).hasClass('ArticleBody')) {
+            return false;
+        }
+
         // only act if the link was not clicked directly
         if (Event.target !== $MasterActionLink.get(0)) {
             window.location = $MasterActionLink.attr('href');

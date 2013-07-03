@@ -1,8 +1,8 @@
 # --
 # Kernel/Output/HTML/TicketOverviewMedium.pm
-# Copyright (C) 2001-2012 OTRS AG, http://otrs.org/
+# Copyright (C) 2001-2013 OTRS AG, http://otrs.org/
 # --
-# $Id: TicketOverviewMedium.pm,v 1.14 2012-04-24 08:52:36 ub Exp $
+# $Id: TicketOverviewMedium.pm,v 1.14.2.1 2013-07-03 12:34:15 ub Exp $
 # $OldId: TicketOverviewMedium.pm,v 1.54 2012/04/20 12:00:31 mg Exp $
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -26,7 +26,7 @@ use Kernel::System::VariableCheck qw(:all);
 use Kernel::System::GeneralCatalog;
 # ---
 use vars qw($VERSION);
-$VERSION = qw($Revision: 1.14 $) [1];
+$VERSION = qw($Revision: 1.14.2.1 $) [1];
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -255,18 +255,24 @@ sub _Show {
         Type     => 'move_into',
     );
 
-    # get last article
+    # get last customer article
     my %Article = $Self->{TicketObject}->ArticleLastCustomerArticle(
         TicketID      => $Param{TicketID},
         DynamicFields => 0,
     );
 
+    # get ticket data
+    my %Ticket = $Self->{TicketObject}->TicketGet(
+        TicketID      => $Param{TicketID},
+        DynamicFields => 0,
+    );
+
+    # show ticket create time in current view
+    $Article{Created} = $Ticket{Created};
+
     # Fallback for tickets without articles: get at least basic ticket data
     if ( !%Article ) {
-        %Article = $Self->{TicketObject}->TicketGet(
-            TicketID      => $Param{TicketID},
-            DynamicFields => 0,
-        );
+        %Article = %Ticket;
     }
 
 # ---
