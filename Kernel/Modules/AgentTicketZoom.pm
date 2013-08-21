@@ -387,6 +387,7 @@ sub Run {
         # get criticality list
         my $CriticalityList = $Self->{GeneralCatalogObject}->ItemList(
             Class => 'ITSM::Core::Criticality',
+            Valid => 0,
         );
         $Ticket{Criticality} = $CriticalityList->{$Ticket{DynamicField_TicketFreeText13}};
     }
@@ -397,6 +398,7 @@ sub Run {
         # get impact list
         my $ImpactList = $Self->{GeneralCatalogObject}->ItemList(
             Class => 'ITSM::Core::Impact',
+            Valid => 0,
         );
         $Ticket{Impact} = $ImpactList->{$Ticket{DynamicField_TicketFreeText14}};
     }
