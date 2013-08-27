@@ -66,7 +66,7 @@ $Include{"AgentCustomerSearch"}
 <!--dtl:js_on_document_complete-->
 <script type="text/javascript">//<![CDATA[
 $('#TypeID').bind('change', function (Event) {
-    Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'TypeID', [ 'Dest', 'NewUserID', 'NewResponsibleID', 'NextStateID', 'PriorityID', 'ServiceID', 'SLAID', 'SignKeyID', 'CryptKeyID', 'To', 'Cc', 'Bcc' $Data{"DynamicFieldNamesStrg"}]);
+    Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'TypeID', [ 'Dest', 'NewUserID', 'NewResponsibleID', 'NextStateID', 'PriorityID', 'ServiceID', 'SLAID', 'SignKeyID', 'CryptKeyID', $Data{"DynamicFieldNamesStrg"}, 'To', 'Cc', 'Bcc']);
 });
 //]]></script>
 <!--dtl:js_on_document_complete-->
@@ -83,7 +83,7 @@ $('#TypeID').bind('change', function (Event) {
 <script type="text/javascript">//<![CDATA[
 $('#Dest').bind('change', function (Event) {
     var SignatureURL = '$Env{"Baselink"}Action=$Env{"Action"};Subaction=Signature;Dest=' + $(this).val();
-    Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'Dest', ['Signature', 'NewUserID', 'NewResponsibleID', 'NextStateID', 'PriorityID', 'ServiceID', 'SLAID', 'SignKeyID', 'CryptKeyID', 'To', 'Cc', 'Bcc' $Data{"DynamicFieldNamesStrg"}]);
+    Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'Dest', ['Signature', 'NewUserID', 'NewResponsibleID', 'NextStateID', 'PriorityID', 'ServiceID', 'SLAID', 'SignKeyID', 'CryptKeyID', $Data{"DynamicFieldNamesStrg"}, 'To', 'Cc', 'Bcc']);
     if (!Core.Config.Get('SessionIDCookie')) {
         SignatureURL += ';' + Core.Config.Get('SessionName') + '=' + Core.Config.Get('SessionID');
     }
@@ -299,7 +299,7 @@ $('#Dest').bind('change', function (Event) {
 <!--dtl:js_on_document_complete-->
 <script type="text/javascript">//<![CDATA[
 $('#ServiceID').bind('change', function (Event) {
-    Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'ServiceID', ['TypeID', 'Dest', 'NewUserID', 'NewResponsibleID', 'NextStateID', 'PriorityID', 'SLAID', 'SignKeyID', 'CryptKeyID', 'To', 'Cc', 'Bcc' $Data{"DynamicFieldNamesStrg"}]);
+    Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'ServiceID', ['TypeID', 'Dest', 'NewUserID', 'NewResponsibleID', 'NextStateID', 'PriorityID', 'SLAID', 'SignKeyID', 'CryptKeyID', $Data{"DynamicFieldNamesStrg"}, 'To', 'Cc', 'Bcc']);
 });
 //]]></script>
 <!--dtl:js_on_document_complete-->
@@ -314,7 +314,7 @@ $('#ServiceID').bind('change', function (Event) {
 <!--dtl:js_on_document_complete-->
 <script type="text/javascript">//<![CDATA[
 $('#SLAID').bind('change', function (Event) {
-    Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'SLAID', ['TypeID', 'Dest', 'NewUserID', 'NewResponsibleID', 'ServiceID', 'NextStateID', 'PriorityID', 'SignKeyID', 'CryptKeyID', 'To', 'Cc', 'Bcc' $Data{"DynamicFieldNamesStrg"}]);
+    Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'SLAID', ['TypeID', 'Dest', 'NewUserID', 'NewResponsibleID', 'ServiceID', 'NextStateID', 'PriorityID', 'SignKeyID', 'CryptKeyID', $Data{"DynamicFieldNamesStrg"}, 'To', 'Cc', 'Bcc']);
 });
 //]]></script>
 <!--dtl:js_on_document_complete-->
@@ -338,7 +338,7 @@ $('#OwnerSelectionGetAll').bind('click', function (Event) {
 });
 
 $('#NewUserID').bind('change', function (Event) {
-    Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'NewUserID', [ 'TypeID', 'Dest', 'NewResponsibleID', 'NextStateID', 'PriorityID', 'ServiceID', 'SLAID', 'SignKeyID', 'CryptKeyID', 'To', 'Cc', 'Bcc' $Data{"DynamicFieldNamesStrg"}]);
+    Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'NewUserID', [ 'TypeID', 'Dest', 'NewResponsibleID', 'NextStateID', 'PriorityID', 'ServiceID', 'SLAID', 'SignKeyID', 'CryptKeyID', $Data{"DynamicFieldNamesStrg"}, 'To', 'Cc', 'Bcc']);
 });
 //]]></script>
 <!--dtl:js_on_document_complete-->
@@ -362,7 +362,7 @@ $('#ResponsibleSelectionGetAll').bind('click', function (Event) {
 });
 
 $('#NewResponsibleID').bind('change', function (Event) {
-    Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'NewResponsibleID', [ 'TypeID', 'Dest', 'NewUserID', 'NextStateID', 'PriorityID', 'ServiceID', 'SLAID', 'SignKeyID', 'CryptKeyID', 'To', 'Cc', 'Bcc' $Data{"DynamicFieldNamesStrg"}]);
+    Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'NewResponsibleID', [ 'TypeID', 'Dest', 'NewUserID', 'NextStateID', 'PriorityID', 'ServiceID', 'SLAID', 'SignKeyID', 'CryptKeyID', $Data{"DynamicFieldNamesStrg"}, 'To', 'Cc', 'Bcc']);
 });
 //]]></script>
 <!--dtl:js_on_document_complete-->
@@ -487,7 +487,7 @@ $('#FileUpload').bind('change', function () {
 <!--dtl:js_on_document_complete-->
 <script type="text/javascript">//<![CDATA[
     $('#NextStateID').bind('change', function (Event) {
-        Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'NextStateID', [ 'TypeID', 'Dest', 'NewUserID','NewResponsibleID', 'PriorityID', 'ServiceID', 'SLAID', 'SignKeyID', 'CryptKeyID', 'To', 'Cc', 'Bcc' $Data{"DynamicFieldNamesStrg"}]);
+        Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'NextStateID', [ 'TypeID', 'Dest', 'NewUserID','NewResponsibleID', 'PriorityID', 'ServiceID', 'SLAID', 'SignKeyID', 'CryptKeyID', $Data{"DynamicFieldNamesStrg"}, 'To', 'Cc', 'Bcc']);
     });
 //]]></script>
 <!--dtl:js_on_document_complete-->
@@ -523,7 +523,7 @@ $('#FileUpload').bind('change', function () {
 <!--dtl:js_on_document_complete-->
 <script type="text/javascript">//<![CDATA[
     $('#PriorityID').bind('change', function (Event) {
-        Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'PriorityID', [ 'TypeID', 'Dest', 'NewUserID','NewResponsibleID', 'NextStateID', 'ServiceID', 'SLAID', 'SignKeyID', 'CryptKeyID', 'To', 'Cc', 'Bcc' $Data{"DynamicFieldNamesStrg"}]);
+        Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'PriorityID', [ 'TypeID', 'Dest', 'NewUserID','NewResponsibleID', 'NextStateID', 'ServiceID', 'SLAID', 'SignKeyID', 'CryptKeyID', $Data{"DynamicFieldNamesStrg"}, 'To', 'Cc', 'Bcc']);
     });
 //]]></script>
 <!--dtl:js_on_document_complete-->
