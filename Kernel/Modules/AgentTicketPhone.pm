@@ -2,7 +2,7 @@
 # Kernel/Modules/AgentTicketPhone.pm - to handle phone calls
 # Copyright (C) 2001-2014 OTRS AG, http://otrs.com/
 # --
-# $origin: https://github.com/OTRS/otrs/blob/dc3029ebfd89299b3a26e1c72c4f092e6a4454c5/Kernel/Modules/AgentTicketPhone.pm
+# $origin: https://github.com/OTRS/otrs/blob/704d68553b3b28f2bc961b32c5a2932170efffbd/Kernel/Modules/AgentTicketPhone.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -115,8 +115,7 @@ sub Run {
 
     # MultipleCustomer From-field
     my @MultipleCustomer;
-    my $CustomersNumber
-        = $Self->{ParamObject}->GetParam( Param => 'CustomerTicketCounterFromCustomer' ) || 0;
+    my $CustomersNumber = $Self->{ParamObject}->GetParam( Param => 'CustomerTicketCounterFromCustomer' ) || 0;
     my $Selected = $Self->{ParamObject}->GetParam( Param => 'CustomerSelected' ) || '';
 
     # hash for check duplicated entries
@@ -125,8 +124,7 @@ sub Run {
     if ($CustomersNumber) {
         my $CustomerCounter = 1;
         for my $Count ( 1 ... $CustomersNumber ) {
-            my $CustomerElement
-                = $Self->{ParamObject}->GetParam( Param => 'CustomerTicketText_' . $Count );
+            my $CustomerElement = $Self->{ParamObject}->GetParam( Param => 'CustomerTicketText_' . $Count );
             my $CustomerSelected = ( $Selected eq $Count ? 'checked="checked"' : '' );
             my $CustomerKey = $Self->{ParamObject}->GetParam( Param => 'CustomerKey_' . $Count )
                 || '';
@@ -192,12 +190,11 @@ sub Run {
         next DYNAMICFIELD if !IsHashRefWithData($DynamicFieldConfig);
 
         # extract the dynamic field value form the web request
-        $DynamicFieldValues{ $DynamicFieldConfig->{Name} }
-            = $Self->{BackendObject}->EditFieldValueGet(
+        $DynamicFieldValues{ $DynamicFieldConfig->{Name} } = $Self->{BackendObject}->EditFieldValueGet(
             DynamicFieldConfig => $DynamicFieldConfig,
             ParamObject        => $Self->{ParamObject},
             LayoutObject       => $Self->{LayoutObject},
-            );
+        );
 # ---
 # ITSM
 # ---
@@ -217,8 +214,7 @@ sub Run {
         next DYNAMICFIELD if !$DynamicField;
         next DYNAMICFIELD if !$DynamicFieldValues{$DynamicField};
 
-        $DynamicFieldACLParameters{ 'DynamicField_' . $DynamicField }
-            = $DynamicFieldValues{$DynamicField};
+        $DynamicFieldACLParameters{ 'DynamicField_' . $DynamicField } = $DynamicFieldValues{$DynamicField};
     }
     $GetParam{DynamicField} = \%DynamicFieldACLParameters;
 # ---
@@ -373,7 +369,7 @@ sub Run {
 
             $Article{Subject} = $Self->{TicketObject}->TicketSubjectClean(
                 TicketNumber => $Article{TicketNumber},
-                Subject => $Article{Subject} || '',
+                Subject      => $Article{Subject} || '',
             );
 
             # save article from for addresses list
@@ -506,8 +502,7 @@ sub Run {
 
             # override the value from user preferences if is set
             if ( $UserPreferences{ 'UserDynamicField_' . $DynamicFieldConfig->{Name} } ) {
-                $DefaultValue
-                    = $UserPreferences{ 'UserDynamicField_' . $DynamicFieldConfig->{Name} };
+                $DefaultValue = $UserPreferences{ 'UserDynamicField_' . $DynamicFieldConfig->{Name} };
             }
 
             next DYNAMICFIELD if $DefaultValue eq '';
@@ -559,8 +554,7 @@ sub Run {
             $SplitTicketParam{AllUsers} = 1;
 
             # set the selected queue in format ID||Name
-            $SplitTicketParam{ToSelected}
-                = $SplitTicketData{QueueID} . '||' . $SplitTicketData{Queue};
+            $SplitTicketParam{ToSelected} = $SplitTicketData{QueueID} . '||' . $SplitTicketData{Queue};
 
             for my $Key ( sort keys %SplitTicketData ) {
                 if ( $Key =~ /DynamicField\_(.*)/ ) {
@@ -611,8 +605,7 @@ sub Run {
                         my %Filter = $Self->{TicketObject}->TicketAclData();
 
                         # convert Filer key => key back to key => value using map
-                        %{$PossibleValuesFilter}
-                            = map { $_ => $PossibleValues->{$_} }
+                        %{$PossibleValuesFilter} = map { $_ => $PossibleValues->{$_} }
                             keys %Filter;
                     }
                 }
@@ -625,9 +618,8 @@ sub Run {
             # from DB this cases
             if ( $Self->{TicketID} && $Article{ArticleID} ) {
 
-            # select TicketID or ArticleID to get the value depending on dynamic field configuration
-                my $ObjectID
-                    = $DynamicFieldConfig->{ObjectType} eq 'Ticket'
+                # select TicketID or ArticleID to get the value depending on dynamic field configuration
+                my $ObjectID = $DynamicFieldConfig->{ObjectType} eq 'Ticket'
                     ? $Self->{TicketID}
                     : $Article{ArticleID};
 
@@ -649,8 +641,7 @@ sub Run {
             }
 
             # get field html
-            $DynamicFieldHTML{ $DynamicFieldConfig->{Name} }
-                = $Self->{BackendObject}->EditFieldRender(
+            $DynamicFieldHTML{ $DynamicFieldConfig->{Name} } = $Self->{BackendObject}->EditFieldRender(
                 DynamicFieldConfig   => $DynamicFieldConfig,
                 PossibleValuesFilter => $PossibleValuesFilter,
                 Value                => $Value,
@@ -658,8 +649,8 @@ sub Run {
                 ParamObject          => $Self->{ParamObject},
                 AJAXUpdate           => 1,
                 UpdatableFields      => $Self->_GetFieldsToUpdate(),
-                Mandatory => $Self->{Config}->{DynamicField}->{ $DynamicFieldConfig->{Name} } == 2,
-                );
+                Mandatory            => $Self->{Config}->{DynamicField}->{ $DynamicFieldConfig->{Name} } == 2,
+            );
         }
 
         # get all attachments meta data
@@ -823,8 +814,7 @@ sub Run {
         my $ExpandCustomerName = $Self->{ParamObject}->GetParam( Param => 'ExpandCustomerName' )
             || 0;
         my %FromExternalCustomer;
-        $FromExternalCustomer{Customer}
-            = $Self->{ParamObject}->GetParam( Param => 'PreSelectedCustomerUser' )
+        $FromExternalCustomer{Customer} = $Self->{ParamObject}->GetParam( Param => 'PreSelectedCustomerUser' )
             || $Self->{ParamObject}->GetParam( Param => 'CustomerUser' )
             || '';
 
@@ -956,8 +946,7 @@ sub Run {
                         my %Filter = $Self->{TicketObject}->TicketAclData();
 
                         # convert Filer key => key back to key => value using map
-                        %{$PossibleValuesFilter}
-                            = map { $_ => $PossibleValues->{$_} }
+                        %{$PossibleValuesFilter} = map { $_ => $PossibleValues->{$_} }
                             keys %Filter;
                     }
                 }
@@ -991,8 +980,7 @@ sub Run {
             }
 
             # get field html
-            $DynamicFieldHTML{ $DynamicFieldConfig->{Name} }
-                = $Self->{BackendObject}->EditFieldRender(
+            $DynamicFieldHTML{ $DynamicFieldConfig->{Name} } = $Self->{BackendObject}->EditFieldRender(
                 DynamicFieldConfig   => $DynamicFieldConfig,
                 PossibleValuesFilter => $PossibleValuesFilter,
                 ServerError          => $ValidationResult->{ServerError} || '',
@@ -1001,8 +989,8 @@ sub Run {
                 ParamObject          => $Self->{ParamObject},
                 AJAXUpdate           => 1,
                 UpdatableFields      => $Self->_GetFieldsToUpdate(),
-                Mandatory => $Self->{Config}->{DynamicField}->{ $DynamicFieldConfig->{Name} } == 2,
-                );
+                Mandatory            => $Self->{Config}->{DynamicField}->{ $DynamicFieldConfig->{Name} } == 2,
+            );
         }
 
         # expand customer name
@@ -1049,7 +1037,10 @@ sub Run {
             else {
 
                 # don't check email syntax on multi customer select
-                $Self->{ConfigObject}->Set( Key => 'CheckEmailAddresses', Value => 0 );
+                $Self->{ConfigObject}->Set(
+                    Key   => 'CheckEmailAddresses',
+                    Value => 0
+                );
                 $CustomerID = '';
 
                 # clear from if there is no customer found
@@ -1271,7 +1262,7 @@ sub Run {
                     %ACLCompatGetParam,
                     QueueID => $NewQueueID || '',
                 ),
-                CustomerID => $Self->{LayoutObject}->Ascii2Html( Text => $CustomerID ),
+                CustomerID   => $Self->{LayoutObject}->Ascii2Html( Text => $CustomerID ),
                 CustomerUser => $CustomerUser,
                 CustomerData => \%CustomerData,
                 To           => $Self->_GetTos(
@@ -1765,6 +1756,12 @@ sub Run {
             %ACLCompatGetParam,
             QueueID => $QueueID || '',
         );
+        my $Types = $Self->_GetTypes(
+            %GetParam,
+            %ACLCompatGetParam,
+            CustomerUserID => $CustomerUser || '',
+            QueueID        => $QueueID      || 1,
+        );
 
         # update Dynamic Fields Possible Values via AJAX
         my @DynamicFieldAJAX;
@@ -1859,10 +1856,9 @@ sub Run {
                 my $StdAttachmentObject = Kernel::System::StdAttachment->new( %{$Self} );
 
                 # add std. attachments to ticket
-                my %AllStdAttachments
-                    = $StdAttachmentObject->StdAttachmentStandardTemplateMemberList(
+                my %AllStdAttachments = $StdAttachmentObject->StdAttachmentStandardTemplateMemberList(
                     StandardTemplateID => $GetParam{StandardTemplateID},
-                    );
+                );
                 for ( sort keys %AllStdAttachments ) {
                     my %AttachmentsData = $StdAttachmentObject->StdAttachmentGet( ID => $_ );
                     $Self->{UploadCacheObject}->FormIDAddFile(
@@ -1959,6 +1955,14 @@ sub Run {
                     SelectedID   => $GetParam{StandardTemplateID},
                     PossibleNone => 1,
                     Translation  => 1,
+                    Max          => 100,
+                },
+                {
+                    Name         => 'TypeID',
+                    Data         => $Types,
+                    SelectedID   => $GetParam{TypeID},
+                    PossibleNone => 1,
+                    Translation  => 0,
                     Max          => 100,
                 },
                 @DynamicFieldAJAX,
@@ -2154,8 +2158,7 @@ sub _GetServices {
     return \%Service if !$Param{QueueID} && !$Param{TicketID};
 
     # get options for default services for unknown customers
-    my $DefaultServiceUnknownCustomer
-        = $Self->{ConfigObject}->Get('Ticket::Service::Default::UnknownCustomer');
+    my $DefaultServiceUnknownCustomer = $Self->{ConfigObject}->Get('Ticket::Service::Default::UnknownCustomer');
 
     # check if no CustomerUserID is selected
     # if $DefaultServiceUnknownCustomer = 0 leave CustomerUserID empty, it will not get any services
@@ -2369,8 +2372,7 @@ sub _MaskPhoneNew {
     # prepare errors!
     if ( $Param{Errors} ) {
         for my $KeyError ( sort keys %{ $Param{Errors} } ) {
-            $Param{$KeyError}
-                = '* ' . $Self->{LayoutObject}->Ascii2Html( Text => $Param{Errors}->{$KeyError} );
+            $Param{$KeyError} = '* ' . $Self->{LayoutObject}->Ascii2Html( Text => $Param{Errors}->{$KeyError} );
         }
     }
 
@@ -2578,12 +2580,12 @@ sub _MaskPhoneNew {
     # pending data string
     $Param{PendingDateString} = $Self->{LayoutObject}->BuildDateSelection(
         %Param,
-        Format           => 'DateInputFormatLong',
-        YearPeriodPast   => 0,
-        YearPeriodFuture => 5,
-        DiffTime         => $Self->{ConfigObject}->Get('Ticket::Frontend::PendingDiffTime') || 0,
-        Class            => $Param{Errors}->{DateInvalid},
-        Validate         => 1,
+        Format               => 'DateInputFormatLong',
+        YearPeriodPast       => 0,
+        YearPeriodFuture     => 5,
+        DiffTime             => $Self->{ConfigObject}->Get('Ticket::Frontend::PendingDiffTime') || 0,
+        Class                => $Param{Errors}->{DateInvalid},
+        Validate             => 1,
         ValidateDateInFuture => 1,
     );
 
@@ -2798,7 +2800,10 @@ sub _MaskPhoneNew {
     }
 
     # get output back
-    return $Self->{LayoutObject}->Output( TemplateFile => 'AgentTicketPhone', Data => \%Param );
+    return $Self->{LayoutObject}->Output(
+        TemplateFile => 'AgentTicketPhone',
+        Data         => \%Param
+    );
 }
 
 sub _GetFieldsToUpdate {
@@ -2808,8 +2813,7 @@ sub _GetFieldsToUpdate {
 
     # set the fields that can be updatable via AJAXUpdate
     if ( !$Param{OnlyDynamicFields} ) {
-        @UpdatableFields
-            = qw( TypeID Dest ServiceID SLAID NewUserID NewResponsibleID NextStateID PriorityID
+        @UpdatableFields = qw( TypeID Dest ServiceID SLAID NewUserID NewResponsibleID NextStateID PriorityID
             StandardTemplateID
         );
     }

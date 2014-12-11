@@ -2,7 +2,7 @@
 # AgentTicketEmail.dtl - provides HTML form for agent email
 # Copyright (C) 2001-2014 OTRS AG, http://otrs.com/
 # --
-# $origin: https://github.com/OTRS/otrs/blob/dc3029ebfd89299b3a26e1c72c4f092e6a4454c5/Kernel/Output/HTML/Standard/AgentTicketEmail.dtl
+# $origin: https://github.com/OTRS/otrs/blob/704d68553b3b28f2bc961b32c5a2932170efffbd/Kernel/Output/HTML/Standard/AgentTicketEmail.dtl
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -83,7 +83,7 @@ $('#TypeID').bind('change', function (Event) {
 <script type="text/javascript">//<![CDATA[
 $('#Dest').bind('change', function (Event) {
     var SignatureURL = '$Env{"Baselink"}Action=$Env{"Action"};Subaction=Signature;Dest=' + $(this).val();
-    Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'Dest', ['Signature', 'NewUserID', 'NewResponsibleID', 'NextStateID', 'PriorityID', 'ServiceID', 'SLAID', 'SignKeyID', 'CryptKeyID', 'To', 'Cc', 'Bcc', 'StandardTemplateID' $Data{"DynamicFieldNamesStrg"}]);
+    Core.AJAX.FormUpdate($('#NewEmailTicket'), 'AJAXUpdate', 'Dest', [ 'TypeID', 'Signature', 'NewUserID', 'NewResponsibleID', 'NextStateID', 'PriorityID', 'ServiceID', 'SLAID', 'SignKeyID', 'CryptKeyID', 'To', 'Cc', 'Bcc', 'StandardTemplateID' $Data{"DynamicFieldNamesStrg"}]);
     if (!Core.Config.Get('SessionIDCookie')) {
         SignatureURL += ';' + Core.Config.Get('SessionName') + '=' + Core.Config.Get('SessionID');
     }
@@ -593,11 +593,12 @@ $('#FileUpload').bind('change', function () {
                     </div>
                     <div class="Clear"></div>
 
-                    <label>$Text{"Pending Date"} ($Text{"for pending* states"}):</label>
+                    <label>$Text{"Pending date"}:</label>
                     <div class="Field">
                         $Data{"PendingDateString"}
                         <div id="DayServerError" class="TooltipErrorMessage"><p>$Text{"Date invalid!"}</p></div>
                         <div id="HourServerError" class="TooltipErrorMessage"><p>$Text{"Date invalid!"}</p></div>
+                        <p class="FieldExplanation">$Text{"For all pending* states."}</p>
                     </div>
                     <div class="Clear"></div>
 

@@ -2,7 +2,7 @@
 # Kernel/Modules/AgentTicketPrint.pm - print layout for agent interface
 # Copyright (C) 2001-2014 OTRS AG, http://otrs.com/
 # --
-# $origin: https://github.com/OTRS/otrs/blob/dc3029ebfd89299b3a26e1c72c4f092e6a4454c5/Kernel/Modules/AgentTicketPrint.pm
+# $origin: https://github.com/OTRS/otrs/blob/704d68553b3b28f2bc961b32c5a2932170efffbd/Kernel/Modules/AgentTicketPrint.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -48,8 +48,7 @@ sub new {
     $Self->{BackendObject}      = Kernel::System::DynamicField::Backend->new(%Param);
 
     # get dynamic field config for frontend module
-    $Self->{DynamicFieldFilter}
-        = $Self->{ConfigObject}->Get("Ticket::Frontend::AgentTicketPrint")->{DynamicField};
+    $Self->{DynamicFieldFilter} = $Self->{ConfigObject}->Get("Ticket::Frontend::AgentTicketPrint")->{DynamicField};
 
     return $Self;
 }
@@ -234,7 +233,8 @@ sub Run {
 
         # create first pdf page
         $Self->{PDFObject}->PageNew(
-            %Page, FooterRight => $Page{PageText} . ' ' . $Page{PageCount},
+            %Page,
+            FooterRight => $Page{PageText} . ' ' . $Page{PageCount},
         );
         $Page{PageCount}++;
 
@@ -402,7 +402,10 @@ sub _PDFOutputTicketInfos {
     # check needed stuff
     for my $Needed (qw(PageData TicketData UserData)) {
         if ( !defined( $Param{$Needed} ) ) {
-            $Self->{LogObject}->Log( Priority => 'error', Message => "Need $Needed!" );
+            $Self->{LogObject}->Log(
+                Priority => 'error',
+                Message  => "Need $Needed!"
+            );
             return;
         }
     }
@@ -448,8 +451,7 @@ sub _PDFOutputTicketInfos {
     if ( $Self->{ConfigObject}->Get('Ticket::Responsible') ) {
         my $Responsible = '-';
         if ( $Ticket{Responsible} ) {
-            $Responsible
-                = $Ticket{Responsible} . ' ('
+            $Responsible = $Ticket{Responsible} . ' ('
                 . $Param{ResponsibleData}->{UserFirstname} . ' '
                 . $Param{ResponsibleData}->{UserLastname} . ')';
         }
@@ -472,12 +474,12 @@ sub _PDFOutputTicketInfos {
     # add service and sla row, if feature is enabled
     if ( $Self->{ConfigObject}->Get('Ticket::Service') ) {
         my $RowService = {
-            Key => $Self->{LayoutObject}->{LanguageObject}->Get('Service'),
+            Key   => $Self->{LayoutObject}->{LanguageObject}->Get('Service'),
             Value => $Ticket{Service} || '-',
         };
         push( @{$TableLeft}, $RowService );
         my $RowSLA = {
-            Key => $Self->{LayoutObject}->{LanguageObject}->Get('SLA'),
+            Key   => $Self->{LayoutObject}->{LanguageObject}->Get('SLA'),
             Value => $Ticket{SLA} || '-',
         };
         push( @{$TableLeft}, $RowSLA );
@@ -614,7 +616,8 @@ sub _PDFOutputTicketInfos {
         }
         else {
             $Self->{PDFObject}->PageNew(
-                %Page, FooterRight => $Page{PageText} . ' ' . $Page{PageCount},
+                %Page,
+                FooterRight => $Page{PageText} . ' ' . $Page{PageCount},
             );
             $Page{PageCount}++;
         }
@@ -628,7 +631,10 @@ sub _PDFOutputLinkedObjects {
     # check needed stuff
     for my $Needed (qw(PageData LinkData LinkTypeList)) {
         if ( !defined( $Param{$Needed} ) ) {
-            $Self->{LogObject}->Log( Priority => 'error', Message => "Need $Needed!" );
+            $Self->{LogObject}->Log(
+                Priority => 'error',
+                Message  => "Need $Needed!"
+            );
             return;
         }
     }
@@ -712,7 +718,8 @@ sub _PDFOutputLinkedObjects {
         }
         else {
             $Self->{PDFObject}->PageNew(
-                %Page, FooterRight => $Page{PageText} . ' ' . $Page{PageCount},
+                %Page,
+                FooterRight => $Page{PageText} . ' ' . $Page{PageCount},
             );
             $Page{PageCount}++;
         }
@@ -727,7 +734,10 @@ sub _PDFOutputTicketDynamicFields {
     # check needed stuff
     for my $Needed (qw(PageData TicketData)) {
         if ( !defined( $Param{$Needed} ) ) {
-            $Self->{LogObject}->Log( Priority => 'error', Message => "Need $Needed!" );
+            $Self->{LogObject}->Log(
+                Priority => 'error',
+                Message  => "Need $Needed!"
+            );
             return;
         }
     }
@@ -825,7 +835,8 @@ sub _PDFOutputTicketDynamicFields {
             }
             else {
                 $Self->{PDFObject}->PageNew(
-                    %Page, FooterRight => $Page{PageText} . ' ' . $Page{PageCount},
+                    %Page,
+                    FooterRight => $Page{PageText} . ' ' . $Page{PageCount},
                 );
                 $Page{PageCount}++;
             }
@@ -840,7 +851,10 @@ sub _PDFOutputCustomerInfos {
     # check needed stuff
     for my $Needed (qw(PageData CustomerData)) {
         if ( !defined( $Param{$Needed} ) ) {
-            $Self->{LogObject}->Log( Priority => 'error', Message => "Need $Needed!" );
+            $Self->{LogObject}->Log(
+                Priority => 'error',
+                Message  => "Need $Needed!"
+            );
             return;
         }
     }
@@ -917,7 +931,8 @@ sub _PDFOutputCustomerInfos {
             }
             else {
                 $Self->{PDFObject}->PageNew(
-                    %Page, FooterRight => $Page{PageText} . ' ' . $Page{PageCount},
+                    %Page,
+                    FooterRight => $Page{PageText} . ' ' . $Page{PageCount},
                 );
                 $Page{PageCount}++;
             }
@@ -932,7 +947,10 @@ sub _PDFOutputArticles {
     # check needed stuff
     for my $Needed (qw(PageData ArticleData)) {
         if ( !defined( $Param{$Needed} ) ) {
-            $Self->{LogObject}->Log( Priority => 'error', Message => "Need $Needed!" );
+            $Self->{LogObject}->Log(
+                Priority => 'error',
+                Message  => "Need $Needed!"
+            );
             return;
         }
     }
@@ -1014,8 +1032,7 @@ sub _PDFOutputArticles {
                 $Row++;
             }
         }
-        $TableParam1{CellData}[$Row][0]{Content}
-            = $Self->{LayoutObject}->{LanguageObject}->Get('Created') . ':';
+        $TableParam1{CellData}[$Row][0]{Content} = $Self->{LayoutObject}->{LanguageObject}->Get('Created') . ':';
         $TableParam1{CellData}[$Row][0]{Font}    = 'ProportionalBold';
         $TableParam1{CellData}[$Row][1]{Content} = $Self->{LayoutObject}->Output(
             Template => '$TimeLong{"$Data{"Created"}"}',
@@ -1063,17 +1080,15 @@ sub _PDFOutputArticles {
             $Row++;
         }
 
-        $TableParam1{CellData}[$Row][0]{Content}
-            = $Self->{LayoutObject}->{LanguageObject}->Get('Type') . ':';
-        $TableParam1{CellData}[$Row][0]{Font} = 'ProportionalBold';
+        $TableParam1{CellData}[$Row][0]{Content} = $Self->{LayoutObject}->{LanguageObject}->Get('Type') . ':';
+        $TableParam1{CellData}[$Row][0]{Font}    = 'ProportionalBold';
         $TableParam1{CellData}[$Row][1]{Content}
             = $Self->{LayoutObject}->{LanguageObject}->Get( $Article{ArticleType} );
         $Row++;
 
         if ($Attachments) {
-            $TableParam1{CellData}[$Row][0]{Content}
-                = $Self->{LayoutObject}->{LanguageObject}->Get('Attachment') . ':';
-            $TableParam1{CellData}[$Row][0]{Font} = 'ProportionalBold';
+            $TableParam1{CellData}[$Row][0]{Content} = $Self->{LayoutObject}->{LanguageObject}->Get('Attachment') . ':';
+            $TableParam1{CellData}[$Row][0]{Font}    = 'ProportionalBold';
             chomp($Attachments);
             $TableParam1{CellData}[$Row][1]{Content} = $Attachments;
         }
@@ -1106,7 +1121,8 @@ sub _PDFOutputArticles {
             }
             else {
                 $Self->{PDFObject}->PageNew(
-                    %Page, FooterRight => $Page{PageText} . ' ' . $Page{PageCount},
+                    %Page,
+                    FooterRight => $Page{PageText} . ' ' . $Page{PageCount},
                 );
                 $Page{PageCount}++;
             }
@@ -1136,7 +1152,8 @@ sub _PDFOutputArticles {
             }
             else {
                 $Self->{PDFObject}->PageNew(
-                    %Page, FooterRight => $Page{PageText} . ' ' . $Page{PageCount},
+                    %Page,
+                    FooterRight => $Page{PageText} . ' ' . $Page{PageCount},
                 );
                 $Page{PageCount}++;
             }
@@ -1153,14 +1170,15 @@ sub _HTMLMask {
     if ( $Self->{ConfigObject}->Get('Ticket::Responsible') ) {
         my $Responsible = '-';
         if ( $Param{Responsible} ) {
-            $Responsible
-                = $Param{Responsible} . ' ('
+            $Responsible = $Param{Responsible} . ' ('
                 . $Param{ResponsibleData}->{UserFirstname} . ' '
                 . $Param{ResponsibleData}->{UserLastname} . ')';
         }
         $Self->{LayoutObject}->Block(
             Name => 'Responsible',
-            Data => { ResponsibleString => $Responsible, },
+            Data => {
+                ResponsibleString => $Responsible,
+            },
         );
     }
 
