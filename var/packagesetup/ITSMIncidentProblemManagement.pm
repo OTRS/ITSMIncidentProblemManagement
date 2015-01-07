@@ -1,6 +1,6 @@
 # --
 # ITSMIncidentProblemManagement.pm - code to excecute during package installation
-# Copyright (C) 2001-2014 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2015 OTRS AG, http://otrs.com/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -439,7 +439,10 @@ sub _SetStateValid {
 
     # check needed stuff
     if ( !$Param{StateNames} ) {
-        $Self->{LogObject}->Log( Priority => 'error', Message => 'Need StateNames!' );
+        $Self->{LogObject}->Log(
+            Priority => 'error',
+            Message  => 'Need StateNames!'
+        );
         return;
     }
 
@@ -485,7 +488,10 @@ sub _SetTypeValid {
 
     # check needed stuff
     if ( !$Param{TypeNames} ) {
-        $Self->{LogObject}->Log( Priority => 'error', Message => 'Need TypeNames!' );
+        $Self->{LogObject}->Log(
+            Priority => 'error',
+            Message  => 'Need TypeNames!'
+        );
         return;
     }
 
