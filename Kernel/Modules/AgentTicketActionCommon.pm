@@ -2,7 +2,7 @@
 # Kernel/Modules/AgentTicketActionCommon.pm - common file for several modules
 # Copyright (C) 2001-2015 OTRS AG, http://otrs.com/
 # --
-# $origin: https://github.com/OTRS/otrs/blob/34e9c00c0c87719a0e1b582e1b051dbea81d3a5a/Kernel/Modules/AgentTicketActionCommon.pm
+# $origin: https://github.com/OTRS/otrs/blob/2cc2100e0cefcfafddd79e78b9f165481e6ba1f8/Kernel/Modules/AgentTicketActionCommon.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -2213,6 +2213,21 @@ sub _GetServices {
 
 sub _GetSLAs {
     my ( $Self, %Param ) = @_;
+
+    # if non set customers can get default services then they should also be able to get the SLAs
+    #  for those services (this works during ticket creation).
+    # if no CustomerUserID is set, TicketSLAList will complain during AJAX updates as UserID is not
+    #  passed. See bug 11147.
+
+    # get options for default services for unknown customers
+    my $DefaultServiceUnknownCustomer = $Self->{ConfigObject}->Get('Ticket::Service::Default::UnknownCustomer');
+
+    # check if no CustomerUserID is selected
+    # if $DefaultServiceUnknownCustomer = 0 leave CustomerUserID empty, it will not get any services
+    # if $DefaultServiceUnknownCustomer = 1 set CustomerUserID to get default services
+    if ( !$Param{CustomerUserID} && $DefaultServiceUnknownCustomer ) {
+        $Param{CustomerUserID} = '<DEFAULT>';
+    }
 
     my %SLA;
     if ( $Param{ServiceID} ) {
