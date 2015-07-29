@@ -2,7 +2,7 @@
 # Kernel/Modules/AgentTicketZoom.pm - to get a closer view
 # Copyright (C) 2001-2015 OTRS AG, http://otrs.com/
 # --
-# $origin: https://github.com/OTRS/otrs/blob/ff2055e6074278681938fd77707093b0dd489031/Kernel/Modules/AgentTicketZoom.pm
+# $origin: https://github.com/OTRS/otrs/blob/87815ea3b039de61c05983b05e45f5e678dd318a/Kernel/Modules/AgentTicketZoom.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -2377,6 +2377,15 @@ sub _ArticleTree {
             {
                 $Item->{HistoryType} = 'ChatInternal';
                 $Item->{Class}       = 'TypeInternal';
+            }
+            elsif (
+                $Item->{HistoryType} eq 'Forward'
+                && $Item->{ArticleID}
+                && IsHashRefWithData( $ArticlesByArticleID->{ $Item->{ArticleID} } )
+                && $ArticlesByArticleID->{ $Item->{ArticleID} }->{ArticleType} eq 'email-internal'
+                )
+            {
+                $Item->{Class} = 'TypeNoteInternal';
             }
             elsif ( grep { $_ eq $Item->{HistoryType} } @TypesTicketAction ) {
                 $Item->{Class} = 'TypeTicketAction';
