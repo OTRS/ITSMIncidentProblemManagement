@@ -103,8 +103,54 @@
             </Option>
         </Setting>
     </ConfigItem>
+
+    <ConfigItem Name="Ticket::Frontend::AgentTicketAddtlITSMField###ServiceMandatory" Required="0" Valid="1">
+        <Description Translatable="1">Sets if service must be selected by the agent.</Description>
+        <Group>Ticket</Group>
+        <SubGroup>Frontend::Agent::Ticket::ViewAddtlITSMField</SubGroup>
+        <Setting>
+            <Option SelectedID="0">
+                <Item Key="0">No</Item>
+                <Item Key="1">Yes</Item>
+            </Option>
+        </Setting>
+    </ConfigItem>
+    <ConfigItem Name="Ticket::Frontend::AgentTicketAddtlITSMField###SLAMandatory" Required="0" Valid="1">
+        <Description Translatable="1">Sets if SLA must be selected by the agent.</Description>
+        <Group>Ticket</Group>
+        <SubGroup>Frontend::Agent::Ticket::ViewAddtlITSMField</SubGroup>
+        <Setting>
+            <Option SelectedID="0">
+                <Item Key="0">No</Item>
+                <Item Key="1">Yes</Item>
+            </Option>
+        </Setting>
+    </ConfigItem>
+
+    <ConfigItem Name="Ticket::Frontend::AgentTicketAddtlITSMField###Queue" Required="0" Valid="1">
+        <Description Translatable="1">Sets the queue in the ticket responsible screen of a zoomed ticket in the agent interface.</Description>
+        <Group>Ticket</Group>
+        <SubGroup>Frontend::Agent::Ticket::ViewAddtlITSMField</SubGroup>
+        <Setting>
+            <Option SelectedID="0">
+                <Item Key="0">No</Item>
+                <Item Key="1">Yes</Item>
+            </Option>
+        </Setting>
+    </ConfigItem>
     <ConfigItem Name="Ticket::Frontend::AgentTicketAddtlITSMField###Owner" Required="0" Valid="1">
         <Description Translatable="1">Sets the ticket owner in the additional ITSM field screen of the agent interface.</Description>
+        <Group>Ticket</Group>
+        <SubGroup>Frontend::Agent::Ticket::ViewAddtlITSMField</SubGroup>
+        <Setting>
+            <Option SelectedID="0">
+                <Item Key="0">No</Item>
+                <Item Key="1">Yes</Item>
+            </Option>
+        </Setting>
+    </ConfigItem>
+    <ConfigItem Name="Ticket::Frontend::AgentTicketAddtlITSMField###OwnerMandatory" Required="0" Valid="1">
+        <Description Translatable="1">Sets if ticket owner must be selected by the agent.</Description>
         <Group>Ticket</Group>
         <SubGroup>Frontend::Agent::Ticket::ViewAddtlITSMField</SubGroup>
         <Setting>
@@ -159,6 +205,17 @@
     </ConfigItem>
     <ConfigItem Name="Ticket::Frontend::AgentTicketAddtlITSMField###Note" Required="0" Valid="1">
         <Description Translatable="1">Allows adding notes in the additional ITSM field screen of the agent interface.</Description>
+        <Group>Ticket</Group>
+        <SubGroup>Frontend::Agent::Ticket::ViewAddtlITSMField</SubGroup>
+        <Setting>
+            <Option SelectedID="0">
+                <Item Key="0">No</Item>
+                <Item Key="1">Yes</Item>
+            </Option>
+        </Setting>
+    </ConfigItem>
+    <ConfigItem Name="Ticket::Frontend::AgentTicketAddtlITSMField###NoteMandatory" Required="0" Valid="1">
+        <Description Translatable="1">Sets if note must be filled in by the agent. Can be overwritten by Ticket::Frontend::NeedAccountedTime.</Description>
         <Group>Ticket</Group>
         <SubGroup>Frontend::Agent::Ticket::ViewAddtlITSMField</SubGroup>
         <Setting>
@@ -336,8 +393,54 @@
             </Option>
         </Setting>
     </ConfigItem>
+
+    <ConfigItem Name="Ticket::Frontend::AgentTicketDecision###ServiceMandatory" Required="0" Valid="1">
+        <Description Translatable="1">Sets if service must be selected by the agent.</Description>
+        <Group>Ticket</Group>
+        <SubGroup>Frontend::Agent::Ticket::ViewDecision</SubGroup>
+        <Setting>
+            <Option SelectedID="0">
+                <Item Key="0">No</Item>
+                <Item Key="1">Yes</Item>
+            </Option>
+        </Setting>
+    </ConfigItem>
+    <ConfigItem Name="Ticket::Frontend::AgentTicketDecision###SLAMandatory" Required="0" Valid="1">
+        <Description Translatable="1">Sets if SLA must be selected by the agent.</Description>
+        <Group>Ticket</Group>
+        <SubGroup>Frontend::Agent::Ticket::ViewDecision</SubGroup>
+        <Setting>
+            <Option SelectedID="0">
+                <Item Key="0">No</Item>
+                <Item Key="1">Yes</Item>
+            </Option>
+        </Setting>
+    </ConfigItem>
+
+    <ConfigItem Name="Ticket::Frontend::AgentTicketDecision###Queue" Required="0" Valid="1">
+        <Description Translatable="1">Sets the queue in the ticket note screen of a zoomed ticket in the agent interface.</Description>
+        <Group>Ticket</Group>
+        <SubGroup>Frontend::Agent::Ticket::ViewDecision</SubGroup>
+        <Setting>
+            <Option SelectedID="0">
+                <Item Key="0">No</Item>
+                <Item Key="1">Yes</Item>
+            </Option>
+        </Setting>
+    </ConfigItem>
     <ConfigItem Name="Ticket::Frontend::AgentTicketDecision###Owner" Required="0" Valid="1">
         <Description Translatable="1">Sets the ticket owner in the decision screen of the agent interface.</Description>
+        <Group>Ticket</Group>
+        <SubGroup>Frontend::Agent::Ticket::ViewDecision</SubGroup>
+        <Setting>
+            <Option SelectedID="0">
+                <Item Key="0">No</Item>
+                <Item Key="1">Yes</Item>
+            </Option>
+        </Setting>
+    </ConfigItem>
+    <ConfigItem Name="Ticket::Frontend::AgentTicketDecision###OwnerMandatory" Required="0" Valid="1">
+        <Description Translatable="1">Sets if ticket owner must be selected by the agent.</Description>
         <Group>Ticket</Group>
         <SubGroup>Frontend::Agent::Ticket::ViewDecision</SubGroup>
         <Setting>
@@ -396,6 +499,17 @@
         <SubGroup>Frontend::Agent::Ticket::ViewDecision</SubGroup>
         <Setting>
             <Option SelectedID="1">
+                <Item Key="0">No</Item>
+                <Item Key="1">Yes</Item>
+            </Option>
+        </Setting>
+    </ConfigItem>
+    <ConfigItem Name="Ticket::Frontend::AgentTicketDecision###NoteMandatory" Required="0" Valid="1">
+        <Description Translatable="1">Sets if note must be filled in by the agent. Can be overwritten by Ticket::Frontend::NeedAccountedTime.</Description>
+        <Group>Ticket</Group>
+        <SubGroup>Frontend::Agent::Ticket::ViewDecision</SubGroup>
+        <Setting>
+            <Option SelectedID="0">
                 <Item Key="0">No</Item>
                 <Item Key="1">Yes</Item>
             </Option>
