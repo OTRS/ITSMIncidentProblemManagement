@@ -165,11 +165,6 @@ sub Run {
         }
     }
 
-    # resort article order
-    if ( $Self->{ZoomExpandSort} eq 'reverse' ) {
-        @ArticleBox = reverse(@ArticleBox);
-    }
-
     # show total accounted time if feature is active:
     if ( $Self->{ConfigObject}->Get('Ticket::Frontend::AccountTime') ) {
         $Ticket{TicketTimeUnits} = $Self->{TicketObject}->TicketAccountedTimeGet(
@@ -978,8 +973,16 @@ sub _PDFOutputArticles {
     }
     my %Page = %{ $Param{PageData} };
 
+    my @ArticleData  = @{ $Param{ArticleData} };
+    my $ArticleCount = scalar @ArticleData;
+
+    # resort article order
+    if ( $Self->{ZoomExpandSort} eq 'reverse' ) {
+        @ArticleData = reverse(@ArticleData);
+    }
+
     my $ArticleCounter = 1;
-    for my $ArticleTmp ( @{ $Param{ArticleData} } ) {
+    for my $ArticleTmp ( @ArticleData ) {
         if ( $ArticleCounter == 1 ) {
             $Self->{PDFObject}->PositionSet(
                 Move => 'relativ',
@@ -1030,9 +1033,11 @@ sub _PDFOutputArticles {
             Y    => -6,
         );
 
+        my $ArticleNumber = $Self->{ZoomExpandSort} eq 'reverse' ? $ArticleCount - $ArticleCounter + 1 : $ArticleCounter;
+
         # article number tag
         $Self->{PDFObject}->Text(
-            Text     => '    # ' . $ArticleCounter,
+            Text     => '    # ' . $ArticleNumber,
             Height   => 7,
             Type     => 'Cut',
             Font     => 'ProportionalBoldItalic',
