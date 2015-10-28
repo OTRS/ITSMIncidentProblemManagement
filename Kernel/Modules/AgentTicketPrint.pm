@@ -2,7 +2,7 @@
 # Kernel/Modules/AgentTicketPrint.pm - print layout for agent interface
 # Copyright (C) 2001-2015 OTRS AG, http://otrs.com/
 # --
-# $origin: https://github.com/OTRS/otrs/blob/1b261ad06f8de4190510f28b8a260bd6266705cc/Kernel/Modules/AgentTicketPrint.pm
+# $origin: https://github.com/OTRS/otrs/blob/4620110f5b36688dbae9c373a76a156a61d7a1d7/Kernel/Modules/AgentTicketPrint.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -528,6 +528,15 @@ sub _PDFOutputTicketInfos {
         },
     ];
 
+    # show created by if different then User ID 1
+    if ( $Ticket{CreateBy} > 1 ) {
+        my $Row = {
+            Key   => $Self->{LayoutObject}->{LanguageObject}->Translate('Created by'),
+            Value => $Self->{UserObject}->UserName( UserID => $Ticket{CreateBy} ),
+        };
+        push( @{$TableRight}, $Row );
+    }
+
     if ( $Self->{ConfigObject}->Get('Ticket::Frontend::AccountTime') ) {
         my $Row = {
             Key   => $Self->{LayoutObject}->{LanguageObject}->Translate('Accounted time'),
@@ -982,7 +991,7 @@ sub _PDFOutputArticles {
     }
 
     my $ArticleCounter = 1;
-    for my $ArticleTmp ( @ArticleData ) {
+    for my $ArticleTmp (@ArticleData) {
         if ( $ArticleCounter == 1 ) {
             $Self->{PDFObject}->PositionSet(
                 Move => 'relativ',
@@ -1033,7 +1042,8 @@ sub _PDFOutputArticles {
             Y    => -6,
         );
 
-        my $ArticleNumber = $Self->{ZoomExpandSort} eq 'reverse' ? $ArticleCount - $ArticleCounter + 1 : $ArticleCounter;
+        my $ArticleNumber
+            = $Self->{ZoomExpandSort} eq 'reverse' ? $ArticleCount - $ArticleCounter + 1 : $ArticleCounter;
 
         # article number tag
         $Self->{PDFObject}->Text(
