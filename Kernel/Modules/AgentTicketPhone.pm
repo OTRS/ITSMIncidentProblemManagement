@@ -261,15 +261,10 @@ sub Run {
         # recalculate priority
         if ( $GetParam{PriorityRC} && $GetParam{DynamicField_ITSMImpact} ) {
 
-            # get possible values for impact
-            my $ImpactPossibleValues = $Self->{BackendObject}->PossibleValuesGet(
-                DynamicFieldConfig => $ImpactDynamicFieldConfig,
-            );
-
             # get priority
             $GetParam{PriorityIDFromImpact} = $Self->{CIPAllocateObject}->PriorityAllocationGet(
                 Criticality => $Service{Criticality},
-                Impact      => $ImpactPossibleValues->{ $GetParam{DynamicField_ITSMImpact} } || $GetParam{DynamicField_ITSMImpact},
+                Impact      => $GetParam{DynamicField_ITSMImpact},
             );
         }
 
