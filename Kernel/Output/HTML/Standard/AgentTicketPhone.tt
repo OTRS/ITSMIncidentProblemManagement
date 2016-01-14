@@ -2,7 +2,7 @@
 # AgentTicketPhone.tt - provides HTML form for phone
 # Copyright (C) 2001-2016 OTRS AG, http://otrs.com/
 # --
-# $origin: https://github.com/OTRS/otrs/blob/4620110f5b36688dbae9c373a76a156a61d7a1d7/Kernel/Output/HTML/Standard/AgentTicketPhone.tt
+# $origin: https://github.com/OTRS/otrs/blob/85b1d64a2f5f4a4310a1138f71e6f880846bdfc8/Kernel/Output/HTML/Standard/AgentTicketPhone.tt
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -178,7 +178,7 @@
 
                     <label for="CustomerID">[% Translate("CustomerID") | html %]:</label>
                     <div class="Field">
-                        <input type="text" name="CustomerID" id="CustomerID" value="[% Data.CustomerID | html %]" class="W75pc"/>
+                        <input type="text" name="CustomerID" id="CustomerID" value="[% Data.CustomerID | html %]" [% IF Config("Ticket::Frontend::AgentTicketPhone::CustomerIDReadOnly") %] readonly [% END %] class="W75pc"/>
                     </div>
                     <div class="Clear"></div>
 

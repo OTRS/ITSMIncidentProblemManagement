@@ -2,7 +2,7 @@
 # Kernel/Modules/AgentTicketEmail.pm - to compose initial email to customer
 # Copyright (C) 2001-2016 OTRS AG, http://otrs.com/
 # --
-# $origin: https://github.com/OTRS/otrs/blob/4620110f5b36688dbae9c373a76a156a61d7a1d7/Kernel/Modules/AgentTicketEmail.pm
+# $origin: https://github.com/OTRS/otrs/blob/85b1d64a2f5f4a4310a1138f71e6f880846bdfc8/Kernel/Modules/AgentTicketEmail.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1040,6 +1040,12 @@ sub Run {
                         . 'ServerErrorMsg';
                     $Error{ $Parameter . 'Invalid' } = 'ServerError';
                 }
+                my $IsLocal = $Self->{SystemAddress}->SystemAddressIsLocalAddress(
+                    Address => $Email->address()
+                );
+                if ($IsLocal) {
+                    $Error{ $Parameter . 'IsLocalAddress' } = 'ServerError';
+                }
             }
         }
 
@@ -1158,6 +1164,27 @@ sub Run {
         }
 
         if (%Error) {
+
+            if ( $Error{ToIsLocalAddress} ) {
+                $Self->{LayoutObject}->Block(
+                    Name => 'ToIsLocalAddressServerErrorMsg',
+                    Data => \%GetParam,
+                );
+            }
+
+            if ( $Error{CcIsLocalAddress} ) {
+                $Self->{LayoutObject}->Block(
+                    Name => 'CcIsLocalAddressServerErrorMsg',
+                    Data => \%GetParam,
+                );
+            }
+
+            if ( $Error{BccIsLocalAddress} ) {
+                $Self->{LayoutObject}->Block(
+                    Name => 'BccIsLocalAddressServerErrorMsg',
+                    Data => \%GetParam,
+                );
+            }
 
             # get and format default subject and body
             my $Subject = $Self->{LayoutObject}->Output(
@@ -2082,6 +2109,7 @@ sub _GetUsers {
     # workflow
     my $ACL = $Self->{TicketObject}->TicketAcl(
         %Param,
+        Action        => $Self->{Action},
         ReturnType    => 'Ticket',
         ReturnSubType => 'Owner',
         Data          => \%ShownUsers,
@@ -2142,6 +2170,7 @@ sub _GetResponsibles {
     # workflow
     my $ACL = $Self->{TicketObject}->TicketAcl(
         %Param,
+        Action        => $Self->{Action},
         ReturnType    => 'Ticket',
         ReturnSubType => 'Responsible',
         Data          => \%ShownUsers,

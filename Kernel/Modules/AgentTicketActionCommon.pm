@@ -2,7 +2,7 @@
 # Kernel/Modules/AgentTicketActionCommon.pm - common file for several modules
 # Copyright (C) 2001-2016 OTRS AG, http://otrs.com/
 # --
-# $origin: https://github.com/OTRS/otrs/blob/4620110f5b36688dbae9c373a76a156a61d7a1d7/Kernel/Modules/AgentTicketActionCommon.pm
+# $origin: https://github.com/OTRS/otrs/blob/85b1d64a2f5f4a4310a1138f71e6f880846bdfc8/Kernel/Modules/AgentTicketActionCommon.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -818,26 +818,6 @@ sub Run {
             }
         }
 
-        # set new responsible
-        if ( $Self->{ConfigObject}->Get('Ticket::Responsible') && $Self->{Config}->{Responsible} ) {
-            if ( $GetParam{NewResponsibleID} ) {
-                my $BodyText = $Self->{LayoutObject}->RichText2Ascii(
-                    String => $GetParam{Body} || '',
-                );
-                my $Success = $Self->{TicketObject}->TicketResponsibleSet(
-                    TicketID  => $Self->{TicketID},
-                    UserID    => $Self->{UserID},
-                    NewUserID => $GetParam{NewResponsibleID},
-                    Comment   => $BodyText,
-                );
-
-                # remember to not notify responsible twice
-                if ( $Success && $Success eq 1 ) {
-                    push @NotifyDone, $GetParam{NewResponsibleID};
-                }
-            }
-        }
-
         # move ticket to a new queue, but only if the queue was changed
         if (
             $Self->{Config}->{Queue}
@@ -917,6 +897,26 @@ sub Run {
             # redirect parent window to last screen overview on closed tickets
             if ( $StateData{TypeName} =~ /^close/i ) {
                 $ReturnURL = $Self->{LastScreenOverview} || 'Action=AgentDashboard';
+            }
+        }
+
+        # set new responsible
+        if ( $Self->{ConfigObject}->Get('Ticket::Responsible') && $Self->{Config}->{Responsible} ) {
+            if ( $GetParam{NewResponsibleID} ) {
+                my $BodyText = $Self->{LayoutObject}->RichText2Ascii(
+                    String => $GetParam{Body} || '',
+                );
+                my $Success = $Self->{TicketObject}->TicketResponsibleSet(
+                    TicketID  => $Self->{TicketID},
+                    UserID    => $Self->{UserID},
+                    NewUserID => $GetParam{NewResponsibleID},
+                    Comment   => $BodyText,
+                );
+
+                # remember to not notify responsible twice
+                if ( $Success && $Success eq 1 ) {
+                    push @NotifyDone, $GetParam{NewResponsibleID};
+                }
             }
         }
 
