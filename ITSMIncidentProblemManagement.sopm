@@ -57,6 +57,7 @@
         <File Permission="644" Location="Kernel/Output/HTML/TicketOverviewPreview.pm"/>
         <File Permission="644" Location="Kernel/System/Stats/Dynamic/ITSMTicketFirstLevelSolutionRate.pm"/>
         <File Permission="644" Location="Kernel/System/Stats/Dynamic/ITSMTicketSolutionTimeAverage.pm"/>
+        <File Permission="644" Location="scripts/test/Selenium/Agent/AgentTicketActionCommonACL.t"/>
         <File Permission="644" Location="var/packagesetup/ITSMIncidentProblemManagement.pm"/>
     </Filelist>
     <DatabaseInstall Type="post">
