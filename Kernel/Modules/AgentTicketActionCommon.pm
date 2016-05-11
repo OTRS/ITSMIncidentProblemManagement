@@ -2,7 +2,7 @@
 # Kernel/Modules/AgentTicketActionCommon.pm - common file for several modules
 # Copyright (C) 2001-2016 OTRS AG, http://otrs.com/
 # --
-# $origin: https://github.com/OTRS/otrs/blob/478ee665c535b68029ced4dca197b5235b7b192f/Kernel/Modules/AgentTicketActionCommon.pm
+# $origin: https://github.com/OTRS/otrs/blob/63028c8505ca2c8b783d6a9cb4a8889ed40af48e/Kernel/Modules/AgentTicketActionCommon.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -955,15 +955,14 @@ sub Run {
 
             my $From = "\"$Self->{UserFirstname} $Self->{UserLastname}\" <$Self->{UserEmail}>";
             my @NotifyUserIDs;
-            if ( $Self->{ReplyToArticle} ) {
-                @NotifyUserIDs = (
-                    @{ $Self->{UserListWithoutSelection} },
-                    @{ $Self->{InformUserID} },
-                    @{ $Self->{InvolvedUserID} },
-                );
+            if ( $Self->{Config}->{InformAgent} ) {
+                push @NotifyUserIDs, @{ $Self->{InformUserID} };
             }
-            else {
-                @NotifyUserIDs = ( @{ $Self->{InformUserID} }, @{ $Self->{InvolvedUserID} } );
+            if ( $Self->{Config}->{InvolvedAgent} ) {
+                push @NotifyUserIDs, @{ $Self->{InvolvedUserID} };
+            }
+            if ( $Self->{ReplyToArticle} ) {
+                push @NotifyUserIDs, @{ $Self->{UserListWithoutSelection} };
             }
             $ArticleID = $Self->{TicketObject}->ArticleCreate(
                 TicketID                        => $Self->{TicketID},
@@ -1158,6 +1157,7 @@ sub Run {
         }
 
         my $QueueID = $GetParam{NewQueueID} || $Ticket{QueueID};
+        my $StateID = $GetParam{NewStateID} || $Ticket{StateID};
 
         # convert dynamic field values into a structure for ACLs
         my %DynamicFieldACLParameters;
@@ -1178,16 +1178,19 @@ sub Run {
         my $Owners = $Self->_GetOwners(
             %GetParam,
             QueueID  => $QueueID,
+            StateID  => $StateID,
             AllUsers => $GetParam{OwnerAll},
         );
         my $OldOwners = $Self->_GetOldOwners(
             %GetParam,
             QueueID  => $QueueID,
+            StateID  => $StateID,
             AllUsers => $GetParam{OwnerAll},
         );
         my $ResponsibleUsers = $Self->_GetResponsible(
             %GetParam,
             QueueID  => $QueueID,
+            StateID  => $StateID,
             AllUsers => $GetParam{OwnerAll},
         );
         my $Priorities = $Self->_GetPriorities(
@@ -1197,11 +1200,13 @@ sub Run {
             %GetParam,
             CustomerUserID => $CustomerUser,
             QueueID        => $QueueID,
+            StateID        => $StateID,
         );
         my $Types = $Self->_GetTypes(
             %GetParam,
             CustomerUserID => $CustomerUser,
             QueueID        => $QueueID,
+            StateID        => $StateID,
         );
 
         # reset previous ServiceID to reset SLA-List if no service is selected
@@ -1212,12 +1217,14 @@ sub Run {
             %GetParam,
             CustomerUserID => $CustomerUser,
             QueueID        => $QueueID,
+            StateID        => $StateID,
             ServiceID      => $ServiceID,
         );
         my $NextStates = $Self->_GetNextStates(
             %GetParam,
             CustomerUserID => $CustomerUser || '',
-            QueueID => $QueueID,
+            QueueID        => $QueueID,
+            StateID        => $StateID,
         );
 
         # update Dynamic Fields Possible Values via AJAX
@@ -1974,40 +1981,39 @@ sub _Mask {
             Data => \%Param,
         );
 
-        STATEID:
-        for my $StateID ( sort keys %StateList ) {
+        if ( IsArrayRefWithData( $Self->{Config}->{StateType} ) ) {
 
-            next STATEID if !$StateID;
+            STATETYPE:
+            for my $StateType ( @{ $Self->{Config}->{StateType} } ) {
 
-            # get state data
-            my %StateData = $Self->{StateObject}->StateGet( ID => $StateID );
+                next STATETYPE if !$StateType;
+                next STATETYPE if $StateType !~ /pending/i;
 
-            next STATEID if $StateData{TypeName} !~ /pending/i;
+                # get used calendar
+                my $Calendar = $Self->{TicketObject}->TicketCalendarGet(
+                    %Ticket,
+                );
 
-            # get used calendar
-            my $Calendar = $Self->{TicketObject}->TicketCalendarGet(
-                %Ticket,
-            );
+                $Param{DateString} = $Self->{LayoutObject}->BuildDateSelection(
+                    %Param,
+                    Format           => 'DateInputFormatLong',
+                    YearPeriodPast   => 0,
+                    YearPeriodFuture => 5,
+                    DiffTime         => $Self->{ConfigObject}->Get('Ticket::Frontend::PendingDiffTime')
+                        || 0,
+                    Class => $Param{DateInvalid} || ' ',
+                    Validate             => 1,
+                    ValidateDateInFuture => 1,
+                    Calendar             => $Calendar,
+                );
 
-            $Param{DateString} = $Self->{LayoutObject}->BuildDateSelection(
-                %Param,
-                Format           => 'DateInputFormatLong',
-                YearPeriodPast   => 0,
-                YearPeriodFuture => 5,
-                DiffTime         => $Self->{ConfigObject}->Get('Ticket::Frontend::PendingDiffTime')
-                    || 0,
-                Class => $Param{DateInvalid} || ' ',
-                Validate             => 1,
-                ValidateDateInFuture => 1,
-                Calendar             => $Calendar,
-            );
+                $Self->{LayoutObject}->Block(
+                    Name => 'StatePending',
+                    Data => \%Param,
+                );
 
-            $Self->{LayoutObject}->Block(
-                Name => 'StatePending',
-                Data => \%Param,
-            );
-
-            last STATEID;
+                last STATETYPE;
+            }
         }
     }
 

@@ -2,7 +2,7 @@
 # Kernel/Modules/AgentTicketPrint.pm - print layout for agent interface
 # Copyright (C) 2001-2016 OTRS AG, http://otrs.com/
 # --
-# $origin: https://github.com/OTRS/otrs/blob/478ee665c535b68029ced4dca197b5235b7b192f/Kernel/Modules/AgentTicketPrint.pm
+# $origin: https://github.com/OTRS/otrs/blob/63028c8505ca2c8b783d6a9cb4a8889ed40af48e/Kernel/Modules/AgentTicketPrint.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -209,7 +209,10 @@ sub Run {
     # generate pdf output
     if ( $Self->{PDFObject} ) {
         my $PrintedBy = $Self->{LayoutObject}->{LanguageObject}->Translate('printed by');
-        my $Time      = $Self->{LayoutObject}->{Time};
+        my $Time      = $Self->{LayoutObject}->{LanguageObject}->FormatTimeString(
+            $Self->{TimeObject}->CurrentTimestamp(),
+            'DateFormat',
+        );
         my %Page;
 
         # get maximum number of pages
@@ -1175,13 +1178,15 @@ sub _PDFOutputArticles {
             my $Lines;
             if ( IsArrayRefWithData( $Article{Body} ) ) {
                 for my $Line ( @{ $Article{Body} } ) {
+                    my $CreateTime = $Self->{LayoutObject}->{LanguageObject}
+                        ->FormatTimeString( $Line->{CreateTime}, 'DateFormat' );
                     if ( $Line->{SystemGenerated} ) {
-                        $Lines .= '[' . $Line->{CreateTime} . '] ' . $Line->{MessageText} . "\n";
+                        $Lines .= '[' . $CreateTime . '] ' . $Line->{MessageText} . "\n";
                     }
                     else {
                         $Lines
                             .= '['
-                            . $Line->{CreateTime} . '] '
+                            . $CreateTime . '] '
                             . $Line->{ChatterName} . ' '
                             . $Line->{MessageText} . "\n";
                     }
