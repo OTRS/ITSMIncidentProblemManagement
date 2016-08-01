@@ -389,7 +389,7 @@
 # ---
 # ITSM
 # ---
-                        <a href="[% Env("Baselink") %]Action=AgentLinkObject;Mode=Temporary;SourceObject=Ticket;SourceKey=[% Data.FormID | uri %];TargetIdentifier=ITSMConfigItem" id="OptionLinkTicket" class="AsPopup">[ [% Translate("Link ticket") | html %] ]</a>
+                        <a href="[% Env("Baselink") %]Action=AgentLinkObject;Mode=Temporary;SourceObject=Ticket;SourceKey=[% Data.FormID | uri %];TargetIdentifier=[% Config("Frontend::AgentLinkObject::DefaultTargetIdentifier") %]" id="OptionLinkTicket" class="AsPopup">[ [% Translate("Link ticket") | html %] ]</a>
 # ---
 
 <!-- OutputFilterHook_TicketOptionsEnd -->
