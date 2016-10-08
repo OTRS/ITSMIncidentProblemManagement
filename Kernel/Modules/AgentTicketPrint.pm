@@ -1,5 +1,4 @@
 # --
-# Kernel/Modules/AgentTicketPrint.pm - print layout for agent interface
 # Copyright (C) 2001-2016 OTRS AG, http://otrs.com/
 # --
 # $origin: https://github.com/OTRS/otrs/blob/be07fec70df5989ca43ad33dc0438fb5df8ca969/Kernel/Modules/AgentTicketPrint.pm
