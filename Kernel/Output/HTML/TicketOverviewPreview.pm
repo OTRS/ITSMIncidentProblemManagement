@@ -364,7 +364,7 @@ sub _Show {
     my %Ticket = $Self->{TicketObject}->TicketGet(
         TicketID      => $Param{TicketID},
 # ---
-# ITSM
+# ITSMCore
 # ---
 #        DynamicFields => 0,
         DynamicFields => 1,
@@ -388,7 +388,7 @@ sub _Show {
     );
     %Article = ( %UserInfo, %Article );
 # ---
-# ITSM
+# ITSMCore
 # ---
     # set criticality and impact
     $Ticket{Criticality} = $Ticket{DynamicField_ITSMCriticality} || '-';
@@ -535,7 +535,7 @@ sub _Show {
         Data => {
             %Param,
 # ---
-# ITSM
+# ITSMCore
 # ---
             %Ticket,
 # ---

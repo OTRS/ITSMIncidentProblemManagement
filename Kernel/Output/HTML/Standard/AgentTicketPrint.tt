@@ -26,7 +26,7 @@
                                 <td class="contentvalue" width="60%">[% Translate(Data.State) | html %]</td>
                             </tr>
 # ---
-# ITSM
+# ITSMCore
 # ---
 #                            <tr>
 #                                <td class="contentkey">[% Translate("Priority") | html %]:</td>
@@ -72,7 +72,7 @@
                             </tr>
 [% RenderBlockEnd("TicketService") %]
 # ---
-# ITSM
+# ITSMCore
 # ---
                             <tr>
                                 <td class="contentkey">[% Translate("Criticality") | html %]:</td>

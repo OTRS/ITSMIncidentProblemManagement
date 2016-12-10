@@ -9,7 +9,7 @@
 # --
 
 # ---
-# ITSM
+# ITSMCore
 # ---
 #package Kernel::Modules::AgentTicketFreeText;
 package Kernel::Modules::AgentTicketAddtlITSMField;

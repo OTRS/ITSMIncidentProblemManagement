@@ -30,7 +30,7 @@
                             </tr>
 [% RenderBlockEnd("TicketState") %]
 # ---
-# ITSM
+# ITSMCore
 # ---
 #[% RenderBlockStart("TicketPriority") %]
 #                            <tr>
@@ -76,7 +76,7 @@
                             </tr>
 [% RenderBlockEnd("TicketResponsible") %]
 # ---
-# ITSM
+# ITSMCore
 # ---
                             <tr>
                                 <td class="contentkey">[% Translate("Criticality") | html %]:</td>

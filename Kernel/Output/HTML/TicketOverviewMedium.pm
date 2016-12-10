@@ -361,7 +361,7 @@ sub _Show {
     # show ticket create time in current view
     $Article{Created} = $Ticket{Created};
 # ---
-# ITSM
+# ITSMCore
 # ---
     # set criticality and impact
     $Article{Criticality} = $Article{DynamicField_ITSMCriticality} || '-';

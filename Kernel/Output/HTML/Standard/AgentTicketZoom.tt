@@ -189,7 +189,7 @@
                         <div class="Clear"></div>
 
 # ---
-# ITSM
+# ITSMCore
 # ---
 #                        <label>[% Translate("Priority") | html %]:</label>
 #                        <p class="Value" title="[% Translate(Data.Priority) | html %]">[% Translate(Data.Priority) | html %]</p>
@@ -200,7 +200,7 @@
                         <p class="Value" title="[% Data.Queue | html %]">[% Data.Queue | html | replace('::', '<wbr>::<wbr>') %]</p>
                         <div class="Clear"></div>
 # ---
-# ITSM
+# ITSMCore
 # ---
 [% RenderBlockStart("Owner") %]
                         <label>[% Translate("Owner") | html %]:</label>
@@ -219,7 +219,7 @@
 [% RenderBlockStart("Service") %]
                         <label>[% Translate("Service") | html %]:</label>
 # ---
-# ITSM
+# ITSMCore
 # ---
 #                        <p class="Value" title="[% Data.Service | html %]">[% Data.Service | html %]</p>
                         <p class="Value" title="[% Data.Service | html %]">
@@ -238,7 +238,7 @@
 [% RenderBlockStart("SLA") %]
                         <label>[% Translate("Service Level Agreement") | html %]:</label>
 # ---
-# ITSM
+# ITSMCore
 # ---
 #                        <p class="Value" title="[% Data.SLA | html %]">[% Data.SLA | html %]</p>
                         <p class="Value" title="[% Data.SLA | html %]">
@@ -285,7 +285,7 @@
 [% RenderBlockEnd("SolutionTime") %]
                     </fieldset>
 # ---
-# ITSM
+# ITSMCore
 # ---
                     <fieldset class="TableLike FixedLabelSmall">
 
@@ -431,7 +431,7 @@
                         <div class="Clear"></div>
 [% RenderBlockEnd("PendingUntil") %]
 # ---
-# ITSM
+# ITSMCore
 # ---
 #[% RenderBlockStart("Owner") %]
 #                        <label>[% Translate("Owner") | html %]:</label>

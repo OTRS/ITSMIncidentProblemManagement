@@ -23,7 +23,7 @@ use Kernel::System::StdAttachment;
 use Kernel::System::TemplateGenerator;
 use Kernel::System::VariableCheck qw(:all);
 # ---
-# ITSM
+# ITSMCore
 # ---
 use Kernel::System::Service;
 use Kernel::System::ITSMCIPAllocate;
@@ -56,7 +56,7 @@ sub new {
     );
     $Self->{StandardTemplateObject} = Kernel::System::StandardTemplate->new(%Param);
 # ---
-# ITSM
+# ITSMCore
 # ---
     $Self->{ServiceObject}        = Kernel::System::Service->new(%Param);
     $Self->{CIPAllocateObject}    = Kernel::System::ITSMCIPAllocate->new(%Param);
@@ -299,7 +299,7 @@ sub Run {
     # get dynamic field values form http request
     my %DynamicFieldValues;
 # ---
-# ITSM
+# ITSMCore
 # ---
     # to store the reference to the dynamic field for the impact
     my $ImpactDynamicFieldConfig;
@@ -317,7 +317,7 @@ sub Run {
             LayoutObject       => $Self->{LayoutObject},
         );
 # ---
-# ITSM
+# ITSMCore
 # ---
         # impact field was found
         if ( $DynamicFieldConfig->{Name} eq 'ITSMImpact' ) {
@@ -329,7 +329,7 @@ sub Run {
     }
 
 # ---
-# ITSM
+# ITSMCore
 # ---
     # get needed stuff
     $GetParam{DynamicField_ITSMImpact} = $Self->{ParamObject}->GetParam(Param => 'DynamicField_ITSMImpact');
@@ -1071,7 +1071,7 @@ sub Run {
             );
         }
 # ---
-# ITSM
+# ITSMCore
 # ---
         if ( ($GetParam{ServiceID} && $Service{Criticality} ) || !$GetParam{ServiceID} ) {
 
@@ -1106,7 +1106,7 @@ sub Run {
         );
     }
 # ---
-# ITSM
+# ITSMCore
 # ---
     elsif ( $Self->{Subaction} eq 'GetServiceIncidentState' ) {
 
@@ -2068,7 +2068,7 @@ sub _Mask {
         );
     }
 # ---
-# ITSM
+# ITSMCore
 # ---
     my @IndividualDynamicFields;
 # ---
@@ -2088,7 +2088,7 @@ sub _Mask {
         # get the html strings form $Param
         my $DynamicFieldHTML = $Param{DynamicFieldHTML}->{ $DynamicFieldConfig->{Name} };
 # ---
-# ITSM
+# ITSMCore
 # ---
         # remember dynamic fields that should be displayed individually
         if ( $DynamicFieldConfig->{Name} eq 'ITSMImpact' ) {
@@ -2117,7 +2117,7 @@ sub _Mask {
         );
     }
 # ---
-# ITSM
+# ITSMCore
 # ---
     # cycle trough dynamic fields that should be displayed individually
     DYNAMICFIELD:
