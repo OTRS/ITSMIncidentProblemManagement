@@ -118,7 +118,7 @@
                             <label>[% Translate("Queue") | html %]</label><div title="[% Data.Queue | html %]">[% Data.Queue | html %]</div>
                         </td>
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
 #                        <td>
 #[% RenderBlockStart("CustomerIDRW") %]
@@ -151,7 +151,7 @@
 [% RenderBlockEnd("FirstResponseTime") %]
                         </td>
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
                         <td>
                             <label>[% Translate("Update Time") | html %]</label>
@@ -183,7 +183,7 @@
 [% RenderBlockEnd("Type") %]
                         </td>
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
                         <td>
                             <label>[% Translate("Priority") | html %]</label><div title="[% Translate(Data.Priority) | html %]">[% Translate(Data.Priority) | html %]</div>
@@ -204,7 +204,7 @@
 #                        </td>
 #[% RenderBlockEnd("DynamicField_Field2") %]
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
 #                        <td>
 #                            <label>[% Translate("Update Time") | html %]</label>
@@ -233,7 +233,7 @@
 [% RenderBlockEnd("SLA") %]
                         </td>
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
                         <td>
 [% RenderBlockStart("CustomerIDRW") %]
@@ -260,7 +260,7 @@
 #                        </td>
 #[% RenderBlockEnd("DynamicField_Field3") %]
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
 #                        <td>
 #                            <label>[% Translate("Solution Time") | html %]</label>

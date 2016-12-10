@@ -140,7 +140,7 @@ EOF
             $ServiceID = $ServiceObject->ServiceAdd(
                 Name    => "UT Testservice $Count",
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
                 TypeID      => 1,
                 Criticality => '3 normal',

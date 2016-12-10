@@ -28,7 +28,7 @@ use Kernel::System::ProcessManagement::TransitionAction;
 use Kernel::System::SystemAddress;
 use Kernel::System::JSON;
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
 use Kernel::System::Service;
 # ---
@@ -153,7 +153,7 @@ sub new {
     $Self->{DynamicFieldObject} = Kernel::System::DynamicField->new(%Param);
     $Self->{BackendObject}      = Kernel::System::DynamicField::Backend->new(%Param);
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
     $Self->{ServiceObject} = Kernel::System::Service->new(%Param);
 # ---
@@ -1092,7 +1092,7 @@ sub MaskAgentZoom {
     # ticket service
     if ( $Self->{ConfigObject}->Get('Ticket::Service') && $Ticket{Service} ) {
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
 #        $Self->{LayoutObject}->Block(
 #            Name => 'Service',
@@ -1377,7 +1377,7 @@ sub MaskAgentZoom {
         FieldFilter => $Self->{DynamicFieldFilter} || {},
     );
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
     my @IndividualDynamicFields;
 
@@ -1404,7 +1404,7 @@ sub MaskAgentZoom {
         next DYNAMICFIELD if !defined $Ticket{ 'DynamicField_' . $DynamicFieldConfig->{Name} };
         next DYNAMICFIELD if $Ticket{ 'DynamicField_' . $DynamicFieldConfig->{Name} } eq '';
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
         # remember dynamic fields that should be displayed individually
         if ( $ITSMDynamicFields{ $DynamicFieldConfig->{Name} } ) {
@@ -1622,7 +1622,7 @@ sub MaskAgentZoom {
         }
     }
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
     # cycle trough dynamic fields that should be displayed individually
     DYNAMICFIELD:

@@ -29,7 +29,7 @@ use Kernel::System::TemplateGenerator;
 use Kernel::System::VariableCheck qw(:all);
 use Kernel::System::Web::UploadCache;
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
 use Kernel::System::Service;
 use Kernel::System::ITSMCIPAllocate;
@@ -66,7 +66,7 @@ sub new {
     $Self->{BackendObject}          = Kernel::System::DynamicField::Backend->new(%Param);
     $Self->{StandardTemplateObject} = Kernel::System::StandardTemplate->new(%Param);
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
     $Self->{ServiceObject}          = Kernel::System::Service->new(%Param);
     $Self->{CIPAllocateObject}      = Kernel::System::ITSMCIPAllocate->new(%Param);
@@ -323,7 +323,7 @@ sub Run {
     # get Dynamic fields form ParamObject
     my %DynamicFieldValues;
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
     # to store the reference to the dynamic field for the impact
     my $ImpactDynamicFieldConfig;
@@ -341,7 +341,7 @@ sub Run {
             LayoutObject       => $Self->{LayoutObject},
         );
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
         # impact field was found
         if ( $DynamicFieldConfig->{Name} eq 'ITSMImpact' ) {
@@ -363,7 +363,7 @@ sub Run {
     }
     $GetParam{DynamicField} = \%DynamicFieldACLParameters;
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
     # get needed stuff
     $GetParam{DynamicField_ITSMImpact} = $Self->{ParamObject}->GetParam(Param => 'DynamicField_ITSMImpact');
@@ -1341,7 +1341,7 @@ sub Run {
         }
 
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
         if ( $GetParam{ServiceID} && $Service{Criticality} ) {
 
@@ -1556,7 +1556,7 @@ sub Run {
         }
 
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
             # get the temporarily links
             my $TempLinkList = $Self->{LinkObject}->LinkList(
@@ -1629,7 +1629,7 @@ sub Run {
         );
     }
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
     elsif ( $Self->{Subaction} eq 'GetServiceIncidentState' ) {
 
@@ -2714,7 +2714,7 @@ sub _MaskEmailNew {
         }
     }
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
     if ( $Param{PriorityIDFromImpact} ) {
         $Param{PriorityID} = $Param{PriorityIDFromImpact};
@@ -2794,7 +2794,7 @@ sub _MaskEmailNew {
         );
     }
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
     my @IndividualDynamicFields;
 # ---
@@ -2814,7 +2814,7 @@ sub _MaskEmailNew {
         my $DynamicFieldHTML = $Param{DynamicFieldHTML}->{ $DynamicFieldConfig->{Name} };
 
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
         # remember dynamic fields that should be displayed individually
         if ( $DynamicFieldConfig->{Name} eq 'ITSMImpact' ) {
@@ -2842,7 +2842,7 @@ sub _MaskEmailNew {
         );
     }
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
     # cycle trough dynamic fields that should be displayed individually
     DYNAMICFIELD:
@@ -2965,7 +2965,7 @@ sub _MaskEmailNew {
         );
     }
 # ---
-# ITSMCore
+# ITSMIncidentProblemManagement
 # ---
     # make sure to show the options block so that the "Link Ticket" option is shown
     # even if spellchecker, address book and OptionCustomer is turned off
