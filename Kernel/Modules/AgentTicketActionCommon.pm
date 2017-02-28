@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - dcb4bca6b4f9d5de2ece16c2022c994effb9e589 - Kernel/Modules/AgentTicketActionCommon.pm
+# $origin: otrs - 2018700bd4c3907f4306401daaebee69c5f23b40 - Kernel/Modules/AgentTicketActionCommon.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -2702,6 +2702,7 @@ sub _GetSLAs {
         %SLA = $Self->{TicketObject}->TicketSLAList(
             %Param,
             Action => $Self->{Action},
+            UserID => $Self->{UserID},
         );
     }
     return \%SLA;
