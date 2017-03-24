@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - dcb4bca6b4f9d5de2ece16c2022c994effb9e589 - scripts/test/Selenium/Agent/AgentTicketActionCommonACL.t
+# $origin: otrs - 302b881249f63f395fe1738f74227caadd78218b - scripts/test/Selenium/Agent/AgentTicketActionCommonACL.t
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -19,26 +19,66 @@ my $Selenium = $Kernel::OM->Get('Kernel::System::UnitTest::Selenium');
 
 $Selenium->RunTest(
     sub {
-
-        $Kernel::OM->Get('Kernel::System::SysConfig')->ConfigItemUpdate(
-            Valid => 1,
-            Key   => 'Ticket::Service',
-            Value => 1,
-        );
-
-        $Kernel::OM->Get('Kernel::System::SysConfig')->ConfigItemUpdate(
-            Valid => 1,
-            Key   => 'Ticket::Frontend::AgentTicketNote###Service',
-            Value => 1,
-        );
-
-        # get helper object
         $Kernel::OM->ObjectParamAdd(
             'Kernel::System::UnitTest::Helper' => {
                 RestoreSystemConfiguration => 1,
             },
         );
         my $Helper = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
+
+        my $ConfigObject    = $Kernel::OM->Get('Kernel::Config');
+        my $SysConfigObject = $Kernel::OM->Get('Kernel::System::SysConfig');
+
+        $ConfigObject->Set(
+            Key   => 'CheckMXRecord',
+            Value => 0,
+        );
+
+        $SysConfigObject->ConfigItemUpdate(
+            Valid => 1,
+            Key   => 'Ticket::Service',
+            Value => 1,
+        );
+        $ConfigObject->Set(
+            Key   => 'Ticket::Service',
+            Value => 1,
+        );
+
+        $SysConfigObject->ConfigItemUpdate(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::AgentTicketNote###Service',
+            Value => 1,
+        );
+
+        my $RandomID = $Helper->GetRandomID();
+
+        # Create test ticket dynamic field.
+        my $DynamicFieldObject = $Kernel::OM->Get('Kernel::System::DynamicField');
+        my $DynamicFieldID     = $DynamicFieldObject->DynamicFieldAdd(
+            Name       => 'Field' . $RandomID,
+            Label      => 'a description',
+            FieldOrder => 99999,
+            FieldType  => 'Text',
+            ObjectType => 'Ticket',
+            Config     => {
+                DefaultValue => 'Default',
+            },
+            Reorder => 0,
+            ValidID => 1,
+            UserID  => 1,
+        );
+        $Self->True(
+            $DynamicFieldID,
+            "DynamicFieldAdd - Added dynamic field ($DynamicFieldID)",
+        );
+
+        $SysConfigObject->ConfigItemUpdate(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::AgentTicketNote###DynamicField',
+            Value => {
+                'Field' . $RandomID => 1,
+            },
+        );
 
         # get ACL object
         my $ACLObject = $Kernel::OM->Get('Kernel::System::ACL::DB::ACL');
@@ -53,7 +93,7 @@ $Selenium->RunTest(
     Possible:
       Ticket:
         Service:
-        - UT Testservice 1
+        - UT Test Service 1 $RandomID
   ConfigMatch:
     Properties:
       Ticket:
@@ -63,7 +103,27 @@ $Selenium->RunTest(
   CreateTime: 2016-02-16 02:55:35
   Description: ''
   ID: '1'
-  Name: ThisIsAUnitTestACL
+  Name: ThisIsAUnitTestACL-1
+  StopAfterMatch: 0
+  ValidID: '1'
+- ChangeBy: root\@localhost
+  ChangeTime: 2016-02-16 03:10:05
+  Comment: ''
+  ConfigChange:
+    Possible:
+      Ticket:
+        SLA:
+        - UT Test SLA 1 $RandomID
+  ConfigMatch:
+    Properties:
+      DynamicField:
+        DynamicField_Field$RandomID:
+        - '0'
+  CreateBy: root\@localhost
+  CreateTime: 2016-02-16 03:10:05
+  Description: ''
+  ID: '2'
+  Name: ThisIsAUnitTestACL-2
   StopAfterMatch: 0
   ValidID: '1'
 EOF
@@ -81,9 +141,6 @@ EOF
             User     => $TestUserLogin,
             Password => $TestUserLogin,
         );
-
-        # get config object
-        my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
 
         # get script alias
         my $ScriptAlias = $ConfigObject->Get('ScriptAlias');
@@ -131,18 +188,49 @@ EOF
             "TicketCreate - ID $TicketID",
         );
 
-        # create some testservices
+        # Set test ticket dynamic field to zero-value, please see bug#12273 for more information.
+        my $Success = $Kernel::OM->Get('Kernel::System::DynamicFieldValue')->ValueSet(
+            FieldID  => $DynamicFieldID,
+            ObjectID => $TicketID,
+            Value    => [
+                {
+                    ValueText => '0',
+                },
+            ],
+            UserID => 1,
+        );
+
+        # Create some test services.
         my $ServiceObject = $Kernel::OM->Get('Kernel::System::Service');
+# ---
+# ITSMIncidentProblemManagement
+# ---
+        # get the list of service types from general catalog
+        my $ServiceTypeList = $Kernel::OM->Get('Kernel::System::GeneralCatalog')->ItemList(
+            Class => 'ITSM::Service::Type',
+        );
+
+        # build a lookup hash
+        my %ServiceTypeName2ID = reverse %{ $ServiceTypeList };
+
+        # get the list of sla types from general catalog
+        my $SLATypeList = $Kernel::OM->Get('Kernel::System::GeneralCatalog')->ItemList(
+            Class => 'ITSM::SLA::Type',
+        );
+
+        # build a lookup hash
+        my %SLATypeName2ID = reverse %{ $SLATypeList };
+# ---
 
         my $ServiceID;
         my @Services;
         for my $Count ( 1 .. 3 ) {
             $ServiceID = $ServiceObject->ServiceAdd(
-                Name    => "UT Testservice $Count",
+                Name    => "UT Test Service $Count $RandomID",
 # ---
 # ITSMIncidentProblemManagement
 # ---
-                TypeID      => 1,
+                TypeID      => $ServiceTypeName2ID{Training},
                 Criticality => '3 normal',
 # ---
                 ValidID => 1,
@@ -161,6 +249,25 @@ EOF
                 $ServiceID,
                 "Test service $Count ($ServiceID) created and assigned to customer user",
             );
+        }
+
+        # Create several test SLAs.
+        my $SLAObject = $Kernel::OM->Get('Kernel::System::SLA');
+
+        my @SLAs;
+        for my $Count ( 1 .. 3 ) {
+            my $SLAID = $SLAObject->SLAAdd(
+                ServiceIDs => \@Services,
+                Name       => "UT Test SLA $Count $RandomID",
+# ---
+# ITSMIncidentProblemManagement
+# ---
+                TypeID => $SLATypeName2ID{Other},
+# ---
+                ValidID    => 1,
+                UserID     => 1,
+            );
+            push @SLAs, $SLAID;
         }
 
         # navigate to AgentTicketZoom screen of created test ticket
@@ -183,37 +290,58 @@ EOF
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#ServiceID").length' );
 
         # check for entries in the service selection, there should be only one
-        $Self->True(
+        $Self->Is(
             $Selenium->execute_script(
-                "return \$('#ServiceID option').length"
+                "return \$('#ServiceID option:not([value=\"\"])').length"
             ),
+            1,
             "There is only one entry in the service selection",
         );
 
-        # delete test ACL
-        my $ACLData = $ACLObject->ACLGet(
-            Name   => 'ThisIsAUnitTestACL',
-            UserID => 1,
+        # Set test service and trigger AJAX refresh.
+        $Selenium->execute_script(
+            "\$('#ServiceID option:not([value=\"\"])').attr('selected', true).trigger('redraw.InputField').trigger('change');"
+        );
+        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length' );
+
+        # Check for restricted entries in the SLA selection, there should be only one.
+        $Self->Is(
+            $Selenium->execute_script(
+                "return \$('#SLAID option:not([value=\"\"])').length"
+            ),
+            1,
+            "There is only one entry in the SLA selection",
         );
 
-        my $Success = $ACLObject->ACLDelete(
-            ID     => $ACLData->{ID},
-            UserID => 1,
+        # Cleanup
+
+        # Restore SysConfig defaults.
+        $SysConfigObject->ConfigItemReset(
+            Name => 'Ticket::Service',
         );
-        $Self->True(
-            $Success,
-            "ACL with ID $ACLData->{ID} is deleted"
+        $SysConfigObject->ConfigItemReset(
+            Name => 'Ticket::Frontend::AgentTicketNote###Service',
+        );
+        $SysConfigObject->ConfigItemReset(
+            Name => 'Ticket::Frontend::AgentTicketNote###DynamicField',
         );
 
-        # delete created test tickets
-        $Success = $TicketObject->TicketDelete(
-            TicketID => $TicketID,
-            UserID   => 1,
-        );
-        $Self->True(
-            $Success,
-            "Ticket with ticket ID $TicketID is deleted"
-        );
+        # Delete test ACLs rules.
+        for my $Count ( 1 .. 2 ) {
+            my $ACLData = $ACLObject->ACLGet(
+                Name   => 'ThisIsAUnitTestACL-' . $Count,
+                UserID => 1,
+            );
+
+            my $Success = $ACLObject->ACLDelete(
+                ID     => $ACLData->{ID},
+                UserID => 1,
+            );
+            $Self->True(
+                $Success,
+                "ACL with ID $ACLData->{ID} is deleted"
+            );
+        }
 
         # deploy again after we deleted the test acl
         $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AdminACL;Subaction=ACLDeploy");
@@ -226,8 +354,33 @@ EOF
             "ACL deployment successful."
         );
 
-        # delete services and relations
+        # delete created test tickets
+        $Success = $TicketObject->TicketDelete(
+            TicketID => $TicketID,
+            UserID   => 1,
+        );
+        $Self->True(
+            $Success,
+            "Ticket with ticket ID $TicketID is deleted"
+        );
+
+        # make sure the cache is correct
+        $Kernel::OM->Get('Kernel::System::Cache')->CleanUp( Type => 'Ticket' );
+
+        # Delete test SLAs.
         my $DBObject = $Kernel::OM->Get('Kernel::System::DB');
+        for my $SLAID (@SLAs) {
+            my $Success = $DBObject->Do(
+                SQL  => "DELETE FROM service_sla WHERE sla_id = ?",
+                Bind => [ \$SLAID ],
+            );
+            $Self->True(
+                $Success,
+                "Deleted SLA with ID $SLAID",
+            );
+        }
+
+        # delete services and relations
         $Success = $DBObject->Do(
             SQL  => "DELETE FROM service_customer_user WHERE customer_user_login = ?",
             Bind => [ \$CustomerUserLogin ],
@@ -237,6 +390,19 @@ EOF
             "Deleted service relations for $CustomerUserLogin",
         );
         for my $ServiceID (@Services) {
+# ---
+# ITSMIncidentProblemManagement
+# ---
+            # clean up servica data
+            $Success = $DBObject->Do(
+                SQL  => "DELETE FROM service_preferences WHERE service_id = ?",
+                Bind => [ \$ServiceID ],
+            );
+            $Self->True(
+                $Success,
+                "ServicePreferences is deleted - ID $ServiceID",
+            );
+# ---
             $Success = $DBObject->Do(
                 SQL  => "DELETE FROM service WHERE ID = ?",
                 Bind => [ \$ServiceID ],
@@ -255,7 +421,22 @@ EOF
             $Success,
             "Deleted Customer $CustomerUserLogin",
         );
-    }
+
+        # Delete test dynamic field.
+        $Success = $DynamicFieldObject->DynamicFieldDelete(
+            ID     => $DynamicFieldID,
+            UserID => 1,
+        );
+        $Self->True(
+            $Success,
+            "DynamicFieldDelete - Deleted test dynamic field $DynamicFieldID",
+        );
+
+        # make sure the cache is correct
+        for my $Cache (qw( Service SLA CustomerUser DynamicField )) {
+            $Kernel::OM->Get('Kernel::System::Cache')->CleanUp( Type => $Cache );
+        }
+    },
 );
 
 1;

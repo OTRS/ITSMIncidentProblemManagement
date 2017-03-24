@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 2018700bd4c3907f4306401daaebee69c5f23b40 - Kernel/Modules/AgentTicketActionCommon.pm
+# $origin: otrs - eb6bc9fda6c1eabadcc94e223a2a7f62debb8fc2 - Kernel/Modules/AgentTicketActionCommon.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -327,7 +327,6 @@ sub Run {
         }
 # ---
     }
-
 # ---
 # ITSMIncidentProblemManagement
 # ---
@@ -411,12 +410,14 @@ sub Run {
     $DynamicFieldValues{ITSMImpact} = $GetParam{DynamicField_ITSMImpact};
 
 # ---
+
     # convert dynamic field values into a structure for ACLs
     my %DynamicFieldACLParameters;
     DYNAMICFIELD:
     for my $DynamicField ( sort keys %DynamicFieldValues ) {
         next DYNAMICFIELD if !$DynamicField;
-        next DYNAMICFIELD if !$DynamicFieldValues{$DynamicField};
+        next DYNAMICFIELD if !defined $DynamicFieldValues{$DynamicField};
+        next DYNAMICFIELD if !length $DynamicFieldValues{$DynamicField};
 
         $DynamicFieldACLParameters{ 'DynamicField_' . $DynamicField } = $DynamicFieldValues{$DynamicField};
     }
@@ -1174,7 +1175,8 @@ sub Run {
         DYNAMICFIELD:
         for my $DynamicField ( sort keys %DynamicFieldValues ) {
             next DYNAMICFIELD if !$DynamicField;
-            next DYNAMICFIELD if !$DynamicFieldValues{$DynamicField};
+            next DYNAMICFIELD if !defined $DynamicFieldValues{$DynamicField};
+            next DYNAMICFIELD if !length $DynamicFieldValues{$DynamicField};
 
             $DynamicFieldACLParameters{ 'DynamicField_' . $DynamicField } = $DynamicFieldValues{$DynamicField};
         }
