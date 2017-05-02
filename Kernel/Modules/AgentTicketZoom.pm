@@ -931,7 +931,7 @@ sub MaskAgentZoom {
     }
 
     # set display options
-    $Param{WidgetTitle} = 'Ticket Information';
+    $Param{WidgetTitle} = Translatable('Ticket Information');
     $Param{Hook} = $ConfigObject->Get('Ticket::Hook') || 'Ticket#';
 
     # check if ticket is normal or process ticket
