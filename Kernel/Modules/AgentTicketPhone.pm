@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - dcb4bca6b4f9d5de2ece16c2022c994effb9e589 - Kernel/Modules/AgentTicketPhone.pm
+# $origin: otrs - c65fd76a871029a737d8691a5f212facb0d03ad2 - Kernel/Modules/AgentTicketPhone.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1365,7 +1365,6 @@ sub Run {
                 UserID             => $Self->{UserID},
             );
         }
-
 # ---
 # ITSMIncidentProblemManagement
 # ---
@@ -1393,6 +1392,7 @@ sub Run {
             );
         }
 # ---
+
         # get pre loaded attachment
         my @AttachmentData = $Self->{UploadCacheObject}->FormIDGetAllFilesData(
             FormID => $Self->{FormID},
@@ -1671,7 +1671,6 @@ sub Run {
                 %GetParam,
             );
         }
-
 # ---
 # ITSMIncidentProblemManagement
 # ---
@@ -1737,6 +1736,7 @@ sub Run {
                 }
             }
 # ---
+
         # get redirect screen
         my $NextScreen = $Self->{UserCreateNextMask} || 'AgentTicketPhone';
 
@@ -2352,6 +2352,10 @@ sub _GetTos {
                 || '<Realname> <<Email>> - Queue: <Queue>';
             $String =~ s/<Queue>/$QueueData{Name}/g;
             $String =~ s/<QueueComment>/$QueueData{Comment}/g;
+
+            # remove trailing spaces
+            $String =~ s{\s+\z}{} if !$QueueData{Comment};
+
             if ( $Self->{ConfigObject}->Get('Ticket::Frontend::NewQueueSelectionType') ne 'Queue' )
             {
                 my %SystemAddressData = $Self->{SystemAddress}->SystemAddressGet(
@@ -2742,7 +2746,6 @@ sub _MaskPhoneNew {
 
         # get the html strings form $Param
         my $DynamicFieldHTML = $Param{DynamicFieldHTML}->{ $DynamicFieldConfig->{Name} };
-
 # ---
 # ITSMIncidentProblemManagement
 # ---
@@ -2752,6 +2755,7 @@ sub _MaskPhoneNew {
             next DYNAMICFIELD;
         }
 # ---
+
         $Self->{LayoutObject}->Block(
             Name => 'DynamicField',
             Data => {

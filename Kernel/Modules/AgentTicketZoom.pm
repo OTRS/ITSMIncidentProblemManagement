@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - dcb4bca6b4f9d5de2ece16c2022c994effb9e589 - Kernel/Modules/AgentTicketZoom.pm
+# $origin: otrs - 59ac5cbdd0b2b3c37dd5000ea39f358c675d222a - Kernel/Modules/AgentTicketZoom.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -271,7 +271,7 @@ sub Run {
 
         return $Self->{LayoutObject}->NoPermission(
             Message    => $TranslatableMessage,
-            WithHeader => 'yes',
+            WithHeader => $Self->{Subaction} && $Self->{Subaction} eq 'ArticleUpdate' ? 'no' : 'yes',
         );
     }
 
