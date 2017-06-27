@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - eb6bc9fda6c1eabadcc94e223a2a7f62debb8fc2 - Kernel/Modules/AgentTicketActionCommon.pm
+# $origin: otrs - 091859d457414e43b34cadd795121a7d7fa0eef9 - Kernel/Modules/AgentTicketActionCommon.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1220,6 +1220,9 @@ sub Run {
             QueueID        => $QueueID,
             StateID        => $StateID,
         );
+        my $NewQueues = $Self->_GetQueues(
+            %GetParam,
+        );
 
         # reset previous ServiceID to reset SLA-List if no service is selected
         if ( !defined $ServiceID || !$Services->{$ServiceID} ) {
@@ -1470,6 +1473,14 @@ sub Run {
                     Name         => 'TypeID',
                     Data         => $Types,
                     SelectedID   => $GetParam{TypeID},
+                    PossibleNone => 1,
+                    Translation  => 0,
+                    Max          => 100,
+                },
+                {
+                    Name         => 'NewQueueID',
+                    Data         => $NewQueues,
+                    SelectedID   => $GetParam{NewQueueID},
                     PossibleNone => 1,
                     Translation  => 0,
                     Max          => 100,
@@ -2905,6 +2916,20 @@ sub _GetTypes {
         );
     }
     return \%Type;
+}
+
+sub _GetQueues {
+    my ( $Self, %Param ) = @_;
+
+    # Get Queues.
+    my %Queues = $Self->{TicketObject}->TicketMoveList(
+        %Param,
+        TicketID => $Self->{TicketID},
+        UserID   => $Self->{UserID},
+        Action   => $Self->{Action},
+        Type     => 'move_into',
+    );
+    return \%Queues;
 }
 
 1;

@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 302b881249f63f395fe1738f74227caadd78218b - scripts/test/Selenium/Agent/AgentTicketActionCommonACL.t
+# $origin: otrs - 091859d457414e43b34cadd795121a7d7fa0eef9 - scripts/test/Selenium/Agent/AgentTicketActionCommonACL.t
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -47,6 +47,16 @@ $Selenium->RunTest(
         $SysConfigObject->ConfigItemUpdate(
             Valid => 1,
             Key   => 'Ticket::Frontend::AgentTicketNote###Service',
+            Value => 1,
+        );
+        $SysConfigObject->ConfigItemUpdate(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::AgentTicketNote###Queue',
+            Value => 1,
+        );
+        $SysConfigObject->ConfigItemUpdate(
+            Valid => 1,
+            Key   => 'Ticket::Frontend::AgentTicketNote###Priority',
             Value => 1,
         );
 
@@ -124,6 +134,26 @@ $Selenium->RunTest(
   Description: ''
   ID: '2'
   Name: ThisIsAUnitTestACL-2
+  StopAfterMatch: 0
+  ValidID: '1'
+- ChangeBy: root\@localhost
+  ChangeTime: 2016-02-16 03:11:05
+  Comment: ''
+  ConfigChange:
+    PossibleNot:
+      Ticket:
+        Queue:
+        - 'Junk'
+  ConfigMatch:
+    Properties:
+      Ticket:
+        Priority:
+        - '2 low'
+  CreateBy: root\@localhost
+  CreateTime: 2016-02-16 03:11:05
+  Description: ''
+  ID: '3'
+  Name: ThisIsAUnitTestACL-3
   StopAfterMatch: 0
   ValidID: '1'
 EOF
@@ -313,6 +343,24 @@ EOF
             "There is only one entry in the SLA selection",
         );
 
+        # Verify queue is updated on ACL trigger, see bug#12862 ( https://bugs.otrs.org/show_bug.cgi?id=12862 ).
+        my %JunkQueue = $Kernel::OM->Get('Kernel::System::Queue')->QueueGet(
+            Name => 'Junk',
+        );
+        $Self->True(
+            $Selenium->execute_script("return \$('#NewQueueID option[value=\"$JunkQueue{QueueID}\"]').length > 0"),
+            "Junk queue is available in selection before ACL trigger"
+        );
+
+        # Trigger ACL on priority change.
+        $Selenium->execute_script("\$('#NewPriorityID').val('2').trigger('redraw.InputField').trigger('change');");
+        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length' );
+
+        $Self->False(
+            $Selenium->execute_script("return \$('#NewQueueID option[value=\"$JunkQueue{QueueID}\"]').length > 0"),
+            "Junk queue is not available in selection after ACL trigger"
+        );
+
         # Cleanup
 
         # Restore SysConfig defaults.
@@ -327,7 +375,7 @@ EOF
         );
 
         # Delete test ACLs rules.
-        for my $Count ( 1 .. 2 ) {
+        for my $Count ( 1 .. 3 ) {
             my $ACLData = $ACLObject->ACLGet(
                 Name   => 'ThisIsAUnitTestACL-' . $Count,
                 UserID => 1,

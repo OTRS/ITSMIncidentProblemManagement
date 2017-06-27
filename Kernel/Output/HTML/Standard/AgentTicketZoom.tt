@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - dcb4bca6b4f9d5de2ece16c2022c994effb9e589 - Kernel/Output/HTML/Standard/AgentTicketZoom.tt
+# $origin: otrs - d206a6b2b5d57cd4a08e1de8b5a48021e876064e - Kernel/Output/HTML/Standard/AgentTicketZoom.tt
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -204,12 +204,12 @@
 # ---
 [% RenderBlockStart("Owner") %]
                         <label>[% Translate("Owner") | html %]:</label>
-                        <p class="Value" title="[% Data.UserFullname | html %] [% Data.OutOfOfficeMessage | html %] ([% Data.UserLogin | html %])">[% Data.UserFullname | html %] [% Data.OutOfOfficeMessage | html %]</p>
+                        <p class="Value" title="[% Data.UserFullname | html %] ([% Data.UserLogin | html %])">[% Data.UserFullname | html %]</p>
                         <div class="Clear"></div>
 [% RenderBlockEnd("Owner") %]
 [% RenderBlockStart("Responsible") %]
                         <label>[% Translate("Responsible") | html %]:</label>
-                        <p class="Value" title="[% Data.UserFullname | html %] [% Data.OutOfOfficeMessage | html %] ([% Data.UserLogin | html %])">[% Data.UserFullname | html %] [% Data.OutOfOfficeMessage | html %]</p>
+                        <p class="Value" title="[% Data.UserFullname | html %] ([% Data.UserLogin | html %])">[% Data.UserFullname | html %]</p>
                         <div class="Clear"></div>
 [% RenderBlockEnd("Responsible") %]
                     </fieldset>
@@ -435,13 +435,13 @@
 # ---
 #[% RenderBlockStart("Owner") %]
 #                        <label>[% Translate("Owner") | html %]:</label>
-#                        <p class="Value" title="[% Data.UserFullname | html %] [% Data.OutOfOfficeMessage | html %] ([% Data.UserLogin | html %])">[% Data.UserFullname | html %] [% Data.OutOfOfficeMessage | html %]</p>
+#                        <p class="Value" title="[% Data.UserFullname | html %] ([% Data.UserLogin | html %])">[% Data.UserFullname | html %]</p>
 #                        <div class="Clear"></div>
 #
 #[% RenderBlockEnd("Owner") %]
 #[% RenderBlockStart("Responsible") %]
 #                        <label>[% Translate("Responsible") | html %]:</label>
-#                        <p class="Value" title="[% Data.UserFullname | html %] [% Data.OutOfOfficeMessage | html %] ([% Data.UserLogin | html %])">[% Data.UserFullname | html %] [% Data.OutOfOfficeMessage | html %]</p>
+#                        <p class="Value" title="[% Data.UserFullname | html %] ([% Data.UserLogin | html %])">[% Data.UserFullname | html %]</p>
 #                        <div class="Clear"></div>
 #
 #[% RenderBlockEnd("Responsible") %]
