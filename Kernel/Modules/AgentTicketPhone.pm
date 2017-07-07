@@ -1129,7 +1129,7 @@ sub Run {
                     User => $FromExternalCustomer{Customer},
                 );
                 $FromExternalCustomer{Email}
-                    = "\"$ExternalCustomerUserData{UserFirstname} $ExternalCustomerUserData{UserLastname}\" <$ExternalCustomerUserData{UserEmail}>";
+                    = "\"$ExternalCustomerUserData{UserFullname}\" <$ExternalCustomerUserData{UserEmail}>";
             }
             $Error{ExpandCustomerName} = 1;
         }
