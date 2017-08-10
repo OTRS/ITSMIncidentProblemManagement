@@ -147,6 +147,8 @@ sub Data {
     $Self->{Translation}->{'Shows the title fields in the decision screen of the agent interface.'} =
         '在服务人员界面工单决定窗口显示工单标题字段。';
     $Self->{Translation}->{'Ticket decision.'} = '工单决定。';
+    $Self->{Translation}->{'Defines the next state of a ticket after being bounced, in the ticket bounce screen of the agent interface.'} =
+        '定义服务人员界面工单退回操作窗口退回工单后的下一个工单状态。';
 
 }
 

@@ -195,6 +195,25 @@
             </Array>
         </Setting>
     </ConfigItem>
+    <ConfigItem Name="Ticket::Frontend::AgentTicketAddtlITSMField###State" Required="0" Valid="0">
+        <Description Translatable="1">Determines the next possible ticket states, after the creation of a new phone ticket in the agent interface.</Description>
+        <Group>Ticket</Group>
+        <SubGroup>Frontend::Agent::Ticket::ViewAddtlITSMField</SubGroup>
+        <Setting>
+            <Hash>
+                <Item Key="closed successful" Translatable="1">0</Item>
+                <Item Key="closed unsuccessful" Translatable="1">0</Item>
+                <Item Key="closed with workaround" Translatable="1">0</Item>
+                <Item Key="merged" Translatable="1">0</Item>
+                <Item Key="new" Translatable="1">0</Item>
+                <Item Key="open" Translatable="1">0</Item>
+                <Item Key="pending auto close+" Translatable="1">0</Item>
+                <Item Key="pending auto close-" Translatable="1">0</Item>
+                <Item Key="pending reminder" Translatable="1">0</Item>
+                <Item Key="removed" Translatable="1">0</Item>
+            </Hash>
+        </Setting>
+    </ConfigItem>
     <ConfigItem Name="Ticket::Frontend::AgentTicketAddtlITSMField###StateDefault" Required="0" Valid="0">
         <Description Translatable="1">Defines the default next state of a ticket after adding a note, in the additional ITSM field screen of the agent interface.</Description>
         <Group>Ticket</Group>
@@ -483,6 +502,25 @@
                 <Item>pending reminder</Item>
                 <Item>pending auto</Item>
             </Array>
+        </Setting>
+    </ConfigItem>
+    <ConfigItem Name="Ticket::Frontend::AgentTicketDecision###State" Required="0" Valid="0">
+        <Description Translatable="1">Defines the next state of a ticket after adding a note, in the decision screen of the agent interface.</Description>
+        <Group>Ticket</Group>
+        <SubGroup>Frontend::Agent::Ticket::ViewDecision</SubGroup>
+        <Setting>
+            <Hash>
+                <Item Key="closed successful" Translatable="1">0</Item>
+                <Item Key="closed unsuccessful" Translatable="1">0</Item>
+                <Item Key="closed with workaround" Translatable="1">0</Item>
+                <Item Key="merged" Translatable="1">0</Item>
+                <Item Key="new" Translatable="1">0</Item>
+                <Item Key="open" Translatable="1">0</Item>
+                <Item Key="pending auto close+" Translatable="1">0</Item>
+                <Item Key="pending auto close-" Translatable="1">0</Item>
+                <Item Key="pending reminder" Translatable="1">0</Item>
+                <Item Key="removed" Translatable="1">0</Item>
+            </Hash>
         </Setting>
     </ConfigItem>
     <ConfigItem Name="Ticket::Frontend::AgentTicketDecision###StateDefault" Required="0" Valid="0">
