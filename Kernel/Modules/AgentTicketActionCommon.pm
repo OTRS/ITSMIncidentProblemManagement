@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 091859d457414e43b34cadd795121a7d7fa0eef9 - Kernel/Modules/AgentTicketActionCommon.pm
+# $origin: otrs - 12376bdde1e75bc6e53700d971810c0897bc686e - Kernel/Modules/AgentTicketActionCommon.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -417,7 +417,6 @@ sub Run {
     for my $DynamicField ( sort keys %DynamicFieldValues ) {
         next DYNAMICFIELD if !$DynamicField;
         next DYNAMICFIELD if !defined $DynamicFieldValues{$DynamicField};
-        next DYNAMICFIELD if !length $DynamicFieldValues{$DynamicField};
 
         $DynamicFieldACLParameters{ 'DynamicField_' . $DynamicField } = $DynamicFieldValues{$DynamicField};
     }
@@ -875,9 +874,10 @@ sub Run {
         # set state
         if ( $Self->{Config}->{State} && $GetParam{NewStateID} ) {
             $Self->{TicketObject}->TicketStateSet(
-                TicketID => $Self->{TicketID},
-                StateID  => $GetParam{NewStateID},
-                UserID   => $Self->{UserID},
+                TicketID     => $Self->{TicketID},
+                StateID      => $GetParam{NewStateID},
+                UserID       => $Self->{UserID},
+                DynamicField => $GetParam{DynamicField},
             );
 
             # unlock the ticket after close
@@ -1169,17 +1169,6 @@ sub Run {
 
         my $QueueID = $GetParam{NewQueueID} || $Ticket{QueueID};
         my $StateID = $GetParam{NewStateID} || $Ticket{StateID};
-
-        # convert dynamic field values into a structure for ACLs
-        my %DynamicFieldACLParameters;
-        DYNAMICFIELD:
-        for my $DynamicField ( sort keys %DynamicFieldValues ) {
-            next DYNAMICFIELD if !$DynamicField;
-            next DYNAMICFIELD if !defined $DynamicFieldValues{$DynamicField};
-            next DYNAMICFIELD if !length $DynamicFieldValues{$DynamicField};
-
-            $DynamicFieldACLParameters{ 'DynamicField_' . $DynamicField } = $DynamicFieldValues{$DynamicField};
-        }
 
         # get list type
         my $TreeView = 0;

@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 091859d457414e43b34cadd795121a7d7fa0eef9 - scripts/test/Selenium/Agent/AgentTicketActionCommonACL.t
+# $origin: otrs - 988c4daa9c910bd36bdba8ad049fb1a453db4d3a - scripts/test/Selenium/Agent/AgentTicketActionCommonACL.t
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -66,12 +66,18 @@ $Selenium->RunTest(
         my $DynamicFieldObject = $Kernel::OM->Get('Kernel::System::DynamicField');
         my $DynamicFieldID     = $DynamicFieldObject->DynamicFieldAdd(
             Name       => 'Field' . $RandomID,
-            Label      => 'a description',
-            FieldOrder => 99999,
-            FieldType  => 'Text',
+            Label      => 'Field' . $RandomID,
+            FieldOrder => 99998,
+            FieldType  => 'Dropdown',
             ObjectType => 'Ticket',
             Config     => {
-                DefaultValue => 'Default',
+                DefaultValue   => '',
+                PossibleNone   => 1,
+                PossibleValues => {
+                    0 => 'No',
+                    1 => 'Yes',
+                },
+                TranslatableValues => 1,
             },
             Reorder => 0,
             ValidID => 1,
@@ -82,11 +88,38 @@ $Selenium->RunTest(
             "DynamicFieldAdd - Added dynamic field ($DynamicFieldID)",
         );
 
+        my $DynamicFieldID2 = $DynamicFieldObject->DynamicFieldAdd(
+            Name       => 'Field2' . $RandomID,
+            Label      => 'Field2' . $RandomID,
+            FieldOrder => 99999,
+            FieldType  => 'Dropdown',
+            ObjectType => 'Ticket',
+            Config     => {
+                DefaultValue   => '',
+                PossibleNone   => 1,
+                PossibleValues => {
+                    a => 'a',
+                    b => 'b',
+                    c => 'c',
+                    d => 'd',
+                },
+                TranslatableValues => 1,
+            },
+            Reorder => 0,
+            ValidID => 1,
+            UserID  => 1,
+        );
+        $Self->True(
+            $DynamicFieldID2,
+            "DynamicFieldAdd - Added dynamic field ($DynamicFieldID)",
+        );
+
         $SysConfigObject->ConfigItemUpdate(
             Valid => 1,
             Key   => 'Ticket::Frontend::AgentTicketNote###DynamicField',
             Value => {
-                'Field' . $RandomID => 1,
+                'Field' . $RandomID  => 1,
+                'Field2' . $RandomID => 1,
             },
         );
 
@@ -156,6 +189,27 @@ $Selenium->RunTest(
   Name: ThisIsAUnitTestACL-3
   StopAfterMatch: 0
   ValidID: '1'
+- ChangeBy: root\@localhost
+  ChangeTime: 2017-07-10 09:00:00
+  Comment: ''
+  ConfigChange:
+    Possible:
+      Ticket:
+        DynamicField_Field2$RandomID:
+        - 'a'
+        - 'b'
+  ConfigMatch:
+    Properties:
+      DynamicField:
+        DynamicField_Field$RandomID:
+        - '0'
+  CreateBy: root\@localhost
+  CreateTime: 2017-07-10 09:00:00
+  Description: ''
+  ID: '5'
+  Name: ThisIsAUnitTestACL-4
+  StopAfterMatch: 0
+  ValidID: '1'
 EOF
             OverwriteExistingEntities => 1,
             UserID                    => 1,
@@ -219,7 +273,9 @@ EOF
         );
 
         # Set test ticket dynamic field to zero-value, please see bug#12273 for more information.
-        my $Success = $Kernel::OM->Get('Kernel::System::DynamicFieldValue')->ValueSet(
+        my $DynamicFieldValueObject = $Kernel::OM->Get('Kernel::System::DynamicFieldValue');
+
+        my $Success = $DynamicFieldValueObject->ValueSet(
             FieldID  => $DynamicFieldID,
             ObjectID => $TicketID,
             Value    => [
@@ -361,6 +417,65 @@ EOF
             "Junk queue is not available in selection after ACL trigger"
         );
 
+        # Close the new note popup.
+        $Selenium->find_element( '.CancelClosePopup', 'css' )->click();
+
+        $Selenium->WaitFor( WindowCount => 1 );
+        $Selenium->switch_to_window( $Handles->[0] );
+
+        # Please see bug#12871 for more information.
+        $Success = $DynamicFieldValueObject->ValueSet(
+            FieldID  => $DynamicFieldID2,
+            ObjectID => $TicketID,
+            Value    => [
+                {
+                    ValueText => 'a',
+                },
+            ],
+            UserID => 1,
+        );
+
+        # click on 'Note' and switch window
+        $Selenium->find_element("//a[contains(\@href, \'Action=AgentTicketNote;TicketID=$TicketID' )]")
+            ->VerifiedClick();
+
+        $Selenium->WaitFor( WindowCount => 2 );
+        $Handles = $Selenium->get_window_handles();
+        $Selenium->switch_to_window( $Handles->[1] );
+
+        # Wait until page has loaded.
+        $Selenium->WaitFor(
+            JavaScript => 'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete'
+        );
+
+        $Self->Is(
+            $Selenium->execute_script(
+                "return \$('#DynamicField_Field2$RandomID option:not([value=\"\"])').length"
+            ),
+            2,
+            "There are only two entries in the dynamic field 2 selection",
+        );
+
+        # De-select the dynamic field value for the first field.
+        $Selenium->execute_script(
+            "return \$('#DynamicField_Field$RandomID').val('').trigger('redraw.InputField').trigger('change');"
+        );
+        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length' );
+
+        $Self->Is(
+            $Selenium->execute_script(
+                "return \$('#DynamicField_Field2$RandomID option:not([value=\"\"])').length"
+            ),
+            4,
+            "There are all four entries in the dynamic field 2 selection",
+        );
+
+        # Close the new note popup.
+        $Selenium->find_element( '.CancelClosePopup', 'css' )->click();
+
+        $Selenium->WaitFor( WindowCount => 1 );
+        $Selenium->switch_to_window( $Handles->[0] );
+
         # Cleanup
 
         # Restore SysConfig defaults.
@@ -375,7 +490,7 @@ EOF
         );
 
         # Delete test ACLs rules.
-        for my $Count ( 1 .. 3 ) {
+        for my $Count ( 1 .. 4 ) {
             my $ACLData = $ACLObject->ACLGet(
                 Name   => 'ThisIsAUnitTestACL-' . $Count,
                 UserID => 1,
@@ -407,6 +522,15 @@ EOF
             TicketID => $TicketID,
             UserID   => 1,
         );
+
+        # Ticket deletion could fail if apache still writes to ticket history. Try again in this case.
+        if ( !$Success ) {
+            sleep 3;
+            $Success = $TicketObject->TicketDelete(
+                TicketID => $TicketID,
+                UserID   => 1,
+            );
+        }
         $Self->True(
             $Success,
             "Ticket with ticket ID $TicketID is deleted"
@@ -478,6 +602,15 @@ EOF
         $Self->True(
             $Success,
             "DynamicFieldDelete - Deleted test dynamic field $DynamicFieldID",
+        );
+
+        $Success = $DynamicFieldObject->DynamicFieldDelete(
+            ID     => $DynamicFieldID2,
+            UserID => 1,
+        );
+        $Self->True(
+            $Success,
+            "DynamicFieldDelete - Deleted test dynamic field $DynamicFieldID2",
         );
 
         # make sure the cache is correct

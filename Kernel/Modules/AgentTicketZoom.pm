@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 59ac5cbdd0b2b3c37dd5000ea39f358c675d222a - Kernel/Modules/AgentTicketZoom.pm
+# $origin: otrs - c3577d01bc26c1fb0f81ae284b84f7a39a9c333d - Kernel/Modules/AgentTicketZoom.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1275,7 +1275,7 @@ sub MaskAgentZoom {
         # get next activity dialogs
         my $NextActivityDialogs;
         if ( $Ticket{$ActivityEntityIDField} ) {
-            $NextActivityDialogs = ${ActivityData}->{ActivityDialog} // {};
+            $NextActivityDialogs = ${ActivityData}->{ActivityDialog} || {};
         }
         my $ActivityName = $ActivityData->{Name};
 
@@ -1898,23 +1898,11 @@ sub _ArticleTree {
         );
     }
 
-    # check if expand/collapse view is usable (not available for too many
-    # articles)
-    if ( $Self->{ZoomExpand} && $#ArticleBox < $ArticleMaxLimit ) {
-        $Self->{LayoutObject}->Block(
-            Name => 'Collapse',
-            Data => {
-                %Ticket,
-                ArticleID      => $ArticleID,
-                ZoomExpand     => $Self->{ZoomExpand},
-                ZoomExpandSort => $Self->{ZoomExpandSort},
-                Page           => $Param{Page},
-            },
-        );
-    }
-    elsif ( $Self->{ZoomTimeline} ) {
+    # Check first if chronical view is in use.
+    # If expand/collapse view is for use, check number of articles (not available for too many articles).
+    if ( $Self->{ZoomTimeline} ) {
 
-        # show trigger for chronical view
+        # Show trigger for chronical view.
         $Self->{LayoutObject}->Block(
             Name => 'Chronical',
             Data => {
@@ -1927,8 +1915,9 @@ sub _ArticleTree {
         );
     }
     elsif ( $#ArticleBox < $ArticleMaxLimit ) {
+        my $BlockName = $Self->{ZoomExpand} ? 'Collapse' : 'Expand';
         $Self->{LayoutObject}->Block(
-            Name => 'Expand',
+            Name => $BlockName,
             Data => {
                 %Ticket,
                 ArticleID      => $ArticleID,
