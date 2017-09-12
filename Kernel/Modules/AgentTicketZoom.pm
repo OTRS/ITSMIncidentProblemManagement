@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 1a6191a820b45ac08c1f5dd79dba1bfb22cf2c45 - Kernel/Modules/AgentTicketZoom.pm
+# $origin: otrs - b834c7950f190dbe20e27c8db2768890e68baa98 - Kernel/Modules/AgentTicketZoom.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1477,7 +1477,7 @@ sub MaskAgentZoom {
         # get next activity dialogs
         my $NextActivityDialogs;
         if ( $Ticket{$ActivityEntityIDField} ) {
-            $NextActivityDialogs = ${ActivityData}->{ActivityDialog} // {};
+            $NextActivityDialogs = ${ActivityData}->{ActivityDialog} || {};
         }
         my $ActivityName = $ActivityData->{Name};
 

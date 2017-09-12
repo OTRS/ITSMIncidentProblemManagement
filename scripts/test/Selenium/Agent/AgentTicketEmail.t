@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - f7df6fc2e713d53a214cb84ac46d10cf6b9e4846 - scripts/test/Selenium/Agent/AgentTicketEmail.t
+# $origin: otrs - 3f35f3ea511dffcc13ab9674d09d28e0971a3489 - scripts/test/Selenium/Agent/AgentTicketEmail.t
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -246,12 +246,11 @@ $Selenium->RunTest(
         );
 # ---
         # Select customer user.
-        my $AutoCompleteString
-            = "\"$TestData[0]->{UserFirstName} $TestData[0]->{UserLastName}\" <$TestData[0]->{UserLogin}\@localhost.com> ($TestData[0]->{UserLogin})";
         $Selenium->find_element( "#ToCustomer", 'css' )->send_keys($RandomID);
 
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("li.ui-menu-item:visible").length' );
-        $Selenium->find_element("//*[text()='$AutoCompleteString']")->click();
+        $Selenium->execute_script("\$('li.ui-menu-item:contains($TestData[0]->{UserFirstName})').click()");
+
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length' );
 
         $SignatureText = "Customer First Name: $TestData[0]->{UserFirstName}";
@@ -287,12 +286,10 @@ $Selenium->RunTest(
         );
 
         # Add new customer in 'To'.
-        $AutoCompleteString
-            = "\"$TestData[1]->{UserFirstName} $TestData[1]->{UserLastName}\" <$TestData[1]->{UserLogin}\@localhost.com> ($TestData[1]->{UserLogin})";
         $Selenium->find_element( "#ToCustomer", 'css' )->send_keys( $TestData[1]->{UserLogin} );
 
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("li.ui-menu-item:visible").length' );
-        $Selenium->find_element("//*[text()='$AutoCompleteString']")->click();
+        $Selenium->execute_script("\$('li.ui-menu-item:contains($TestData[1]->{UserFirstName})').click()");
 
         # Change selected customer, trigger replacement tag in signature.
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#CustomerSelected_2").length' );
@@ -449,12 +446,11 @@ $Selenium->RunTest(
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length' );
 
         # Select the first customer user.
-        $AutoCompleteString
-            = "\"$TestData[0]->{UserFirstName} $TestData[0]->{UserLastName}\" <$TestData[0]->{UserLogin}\@localhost.com> ($TestData[0]->{UserLogin})";
         $Selenium->find_element( "#ToCustomer", 'css' )->send_keys($RandomID);
 
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("li.ui-menu-item:visible").length' );
-        $Selenium->find_element("//*[text()='$AutoCompleteString']")->click();
+        $Selenium->execute_script("\$('li.ui-menu-item:contains($TestData[0]->{UserFirstName})').click()");
+
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length' );
 
         $SignatureText = "Customer First Name: $TestData[0]->{UserFirstName}";
@@ -476,6 +472,15 @@ $Selenium->RunTest(
             TicketID => $TicketID,
             UserID   => 1,
         );
+
+        # Ticket deletion could fail if apache still writes to ticket history. Try again in this case.
+        if ( !$Success ) {
+            sleep 3;
+            $Success = $Kernel::OM->Get('Kernel::System::Ticket')->TicketDelete(
+                TicketID => $TicketID,
+                UserID   => 1,
+            );
+        }
         $Self->True(
             $Success,
             "Ticket with ticket ID $TicketID is deleted",
