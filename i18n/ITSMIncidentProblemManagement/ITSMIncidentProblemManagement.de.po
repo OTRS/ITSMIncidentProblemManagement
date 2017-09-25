@@ -4,12 +4,12 @@
 # nilsleideck <nils.leideck@leidex.net>, 2016
 # ru_otrs <robert.ullrich@otrs.com>, 2014,2016
 # Udo Bretz, 2014
-# Udo Bretz, 2014
+# Udo Bretz, 2014,2017
 msgid ""
 msgstr ""
 "Project-Id-Version: OTRS\n"
-"POT-Creation-Date: 2017-07-07 13:48+0000\n"
-"PO-Revision-Date: 2017-07-07 11:25+0000\n"
+"POT-Creation-Date: 2017-08-21 11:57+0000\n"
+"PO-Revision-Date: 2017-09-21 11:46+0000\n"
 "Last-Translator: Udo Bretz\n"
 "Language-Team: German (http://www.transifex.com/otrs/OTRS/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -76,7 +76,7 @@ msgstr "Wiederherstellung Startzeit"
 
 #. Perl Module: var/packagesetup/ITSMIncidentProblemManagement.pm
 msgid "Decision Date"
-msgstr "Entscheidung"
+msgstr "Entscheidungsdatum"
 
 #. Perl Module: var/packagesetup/ITSMIncidentProblemManagement.pm
 msgid "Due Date"

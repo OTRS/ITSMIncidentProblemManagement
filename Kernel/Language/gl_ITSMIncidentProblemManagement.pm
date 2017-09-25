@@ -6,7 +6,7 @@
 # did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
 # --
 
-package Kernel::Language::de_ITSMIncidentProblemManagement;
+package Kernel::Language::gl_ITSMIncidentProblemManagement;
 
 use strict;
 use warnings;
@@ -16,136 +16,136 @@ sub Data {
     my $Self = shift;
 
     # Template: AgentTicketActionCommon
-    $Self->{Translation}->{'Change Decision of Ticket'} = 'Die Entscheidung des Tickets ändern';
-    $Self->{Translation}->{'Change ITSM fields of ticket'} = 'Ändern der ITSM Felder des Tickets';
-    $Self->{Translation}->{'Service Incident State'} = 'Service Vorfallsstatus';
+    $Self->{Translation}->{'Change Decision of Ticket'} = 'Cambiar a decisión do tícket';
+    $Self->{Translation}->{'Change ITSM fields of ticket'} = 'Cambie os campos ITSM do ticket';
+    $Self->{Translation}->{'Service Incident State'} = 'Estado de Incidente de Servizo';
 
     # Template: AgentTicketEmail
-    $Self->{Translation}->{'Link ticket'} = 'Ticket verknüpfen';
+    $Self->{Translation}->{'Link ticket'} = 'Vincule ticket';
 
     # Template: AgentTicketOverviewPreview
-    $Self->{Translation}->{'Criticality'} = 'Kritikalität';
-    $Self->{Translation}->{'Impact'} = 'Auswirkung';
+    $Self->{Translation}->{'Criticality'} = 'Criticidad';
+    $Self->{Translation}->{'Impact'} = 'Impacto';
 
     # Perl Module: var/packagesetup/ITSMIncidentProblemManagement.pm
-    $Self->{Translation}->{'Review Required'} = 'Nachbearbeitung erforderlich';
-    $Self->{Translation}->{'Decision Result'} = 'Entscheidung';
-    $Self->{Translation}->{'Approved'} = 'Genehmigt';
+    $Self->{Translation}->{'Review Required'} = 'Precisa revisión';
+    $Self->{Translation}->{'Decision Result'} = 'Resultado da decisión';
+    $Self->{Translation}->{'Approved'} = '';
     $Self->{Translation}->{'Postponed'} = '';
     $Self->{Translation}->{'Pre-approved'} = '';
     $Self->{Translation}->{'Rejected'} = '';
-    $Self->{Translation}->{'Repair Start Time'} = 'Reparatur Startzeit';
-    $Self->{Translation}->{'Recovery Start Time'} = 'Wiederherstellung Startzeit';
-    $Self->{Translation}->{'Decision Date'} = 'Entscheidungsdatum';
-    $Self->{Translation}->{'Due Date'} = 'Fälligkeitsdatum';
+    $Self->{Translation}->{'Repair Start Time'} = 'Hora de inicio da reparación';
+    $Self->{Translation}->{'Recovery Start Time'} = 'Tempo de Inicio de Recuperación';
+    $Self->{Translation}->{'Decision Date'} = 'Data da decisión';
+    $Self->{Translation}->{'Due Date'} = 'Data de vencemento';
 
     # Database XML Definition: ITSMIncidentProblemManagement.sopm
-    $Self->{Translation}->{'closed with workaround'} = 'provisorisch geschlossen';
+    $Self->{Translation}->{'closed with workaround'} = 'pechado con apaño';
 
     # SysConfig
-    $Self->{Translation}->{'Add a decision!'} = 'Hinzufügen einer Entscheidung!';
-    $Self->{Translation}->{'Additional ITSM Fields'} = 'Zusätzliche ITSM Felder';
-    $Self->{Translation}->{'Additional ITSM ticket fields.'} = 'Zusätzliche ITSM Ticketfelder.';
+    $Self->{Translation}->{'Add a decision!'} = 'Engada unha decisión!';
+    $Self->{Translation}->{'Additional ITSM Fields'} = 'Campos ITSM Adicionáis';
+    $Self->{Translation}->{'Additional ITSM ticket fields.'} = '';
     $Self->{Translation}->{'Allows adding notes in the additional ITSM field screen of the agent interface.'} =
-        'Erlaubt das Hinzufügen von Notizen in der zusätzlichen ITSM-Oberfläche im Agenten-Interface.';
+        'Permite engadir notas na pantalla campo adicional ITSM da interface de axente.';
     $Self->{Translation}->{'Allows adding notes in the decision screen of the agent interface.'} =
-        'Erlaubt das Hinzufügen von Notizen im Entscheidungs-Bildschirm im Agenten-Interface.';
-    $Self->{Translation}->{'Change the ITSM fields!'} = 'Ändern der ITSM-Felder!';
-    $Self->{Translation}->{'Decision'} = 'Entscheidung';
+        'Permite engadir notas na pantalla decisión da interface de axente.';
+    $Self->{Translation}->{'Change the ITSM fields!'} = 'Cambie os campos ITSM!';
+    $Self->{Translation}->{'Decision'} = 'Decisión';
     $Self->{Translation}->{'Defines if a ticket lock is required in the additional ITSM field screen of the agent interface (if the ticket isn\'t locked yet, the ticket gets locked and the current agent will be set automatically as its owner).'} =
-        'Bestimmt, ob dieser Screen im Agenten-Interface das Sperren des Tickets voraussetzt. Das Ticket wird (falls nötig) gesperrt und der aktuelle Agent wird als Besitzer gesetzt.';
+        'Define se un bloqueo de ticket é requirido na pantalla de campo adicional ITSM da interface de axente (se o ticket aínda non está bloqueado, o ticket bloquéase e o axente actual vai ser automaticamente o seu propietario).';
     $Self->{Translation}->{'Defines if a ticket lock is required in the decision screen of the agent interface (if the ticket isn\'t locked yet, the ticket gets locked and the current agent will be set automatically as its owner).'} =
-        'Bestimmt, ob dieser Screen im Agenten-Interface das Sperren des Tickets voraussetzt. Das Ticket wird (falls nötig) gesperrt und der aktuelle Agent wird als Besitzer gesetzt.';
+        'Define se un bloqueo de ticket é requirido na pantalla de sdecisión da interface de axente (se o ticket aínda non está bloqueado, o ticket bloquéase e o axente actual vai ser automaticamente o seu propietario).';
     $Self->{Translation}->{'Defines if the service incident state should be shown during service selection in the agent interface.'} =
-        'Bestimmt, ob der Service Incident Status während der Service-Auswahl im Agenten-Interface angezeigt werden soll.';
+        'Define se o estado de incidente de servizo debe ser mostrado durante a selección de servizo na interface de axente.';
     $Self->{Translation}->{'Defines the default body of a note in the additional ITSM field screen of the agent interface.'} =
-        'Definiert den Standard-Inhalt einer Notiz in der zusätzliche ITSM Felder-Oberfläche im Agenten-Interface.';
+        'Define o corpo por defecto dunha nota na pantalla campo ITSM adicional da interface de axente.';
     $Self->{Translation}->{'Defines the default body of a note in the decision screen of the agent interface.'} =
-        'Definiert den Standard-Inhalt einer Notiz in der Entscheidungs-Oberfläche im Agenten-Interface.';
+        'Define o corpo por defecto dunha nota na pantalla dedecisión da interface de axente.';
     $Self->{Translation}->{'Defines the default next state of a ticket after adding a note, in the additional ITSM field screen of the agent interface.'} =
-        'Bestimmt den Folgestatus für Tickets, für die über die zusätzlichen ITSM Felder im Agenten-Interface eine Notiz hinzugefügt wurde.';
+        'Define o próximo estado por defecto dun ticket despois de engadir unha nota, na pantalla campo ITSM adicional da interface de axente.';
     $Self->{Translation}->{'Defines the default next state of a ticket after adding a note, in the decision screen of the agent interface.'} =
-        'Bestimmt den Folgestatus für Tickets, für die in der Entscheiduns-Oberfläche im Agenten-Interface eine Notiz hinzugefügt wurde.';
+        'Define o próximo estado por defecto dun ticket despois de engadir unha nota, na pantalla de decisión da interface de axente.';
     $Self->{Translation}->{'Defines the default subject of a note in the additional ITSM field screen of the agent interface.'} =
-        'Definiert den Standard-Betreff einer Notiz in der zusätzliche ITSM Felder-Oberfläche im Agenten-Interface.';
+        'Define o tema por defecto dunha nota na pantalla campo ITSM adicional da interface de axente.';
     $Self->{Translation}->{'Defines the default subject of a note in the decision screen of the agent interface.'} =
-        'Definiert den Standard-Betreff einer Notiz in der Entscheidungs-Oberfläche im Agenten-Interface.';
+        'Define o tema por defecto dunha nota na pantalla de decisión da interface de axente.';
     $Self->{Translation}->{'Defines the default ticket priority in the additional ITSM field screen of the agent interface.'} =
-        'Definiert die Standard-Priorität in der zusätzliche ITSM Felder-Oberfläche im Agenten-Interface.';
+        'Define a prioridade do ticket por defecto na pantalla campo ITSM adicional da interface de axente.';
     $Self->{Translation}->{'Defines the default ticket priority in the decision screen of the agent interface.'} =
-        'Definiert die Standard-Priorität in der Entscheidungs-Oberfläche im Agenten-Interface.';
+        'Define a prioridade do ticket por defecto na pantalla de decisión da interface de axente.';
     $Self->{Translation}->{'Defines the default type of the note in the additional ITSM field screen of the agent interface.'} =
-        'Definiert den Standard-Typ einer Notiz in der zusätzliche ITSM Felder-Oberfläche im Agenten-Interface.';
+        'Define o tipo por defecto dunha nota na pantalla de campo ITSM adicional da interface de axente.';
     $Self->{Translation}->{'Defines the default type of the note in the decision screen of the agent interface.'} =
-        'Definiert den Standard-Typ einer Notiz in der Entscheidungs-Oberfläche im Agenten-Interface.';
+        'Define o tipo por defecto dunha nota na pantalla de decisión da interface de axente.';
     $Self->{Translation}->{'Defines the history comment for the additional ITSM field screen action, which gets used for ticket history.'} =
-        'Steuert den Historien-Kommentar für die Aktionen in der Oberfläche zusätzliche ITSM-Felder im Agentenbereich.';
+        'Define o histórico dos comentarios para a acción da pantalla campo ITSM adicional, o cal é usado para o histórico do ticket.';
     $Self->{Translation}->{'Defines the history comment for the decision screen action, which gets used for ticket history.'} =
-        'Steuert den Historien-Kommentar für die Entscheidungs-Aktion im Agentenbereich.';
+        'Define o histórico dos comentarios para a acción da pantalla de decisión, o cal é usado para o histórico do ticket.';
     $Self->{Translation}->{'Defines the history type for the additional ITSM field screen action, which gets used for ticket history.'} =
-        '';
+        'Define o histórico dos tipos para a acción da pantalla campo ITSM adicional, o cal é usado para o histórico do ticket.';
     $Self->{Translation}->{'Defines the history type for the decision screen action, which gets used for ticket history.'} =
-        '';
+        'Define o histórico dos tipos para a acción da pantalla de decisión, o cal é usado para o histórico do ticket.';
     $Self->{Translation}->{'Defines the next state of a ticket after adding a note, in the additional ITSM field screen of the agent interface.'} =
-        '';
+        'Define o seguinte estado dun ticket despois de engadir unha nota, na pantalla campo ITSM adicional da interface de axente.';
     $Self->{Translation}->{'Defines the next state of a ticket after adding a note, in the decision screen of the agent interface.'} =
-        '';
+        'Define o seguinte estado dun ticket despois de engadir unha nota, na pantalla de decisión da interface de axente.';
     $Self->{Translation}->{'Dynamic fields shown in the additional ITSM field screen of the agent interface. Possible settings: 0 = Disabled, 1 = Enabled, 2 = Enabled and required.'} =
-        '';
+        'Campos dinámicos mostrados na pantalla campo ITSM adicional da interface de axente. Axustes posibles: 0 = Desactivado, 1 = Activado, 2 = Activado e requerido.';
     $Self->{Translation}->{'Dynamic fields shown in the decision screen of the agent interface. Possible settings: 0 = Disabled, 1 = Enabled, 2 = Enabled and required.'} =
-        '';
+        'Campos dinámicos mostrados na pantalla de decisión da interface de axente. Axustes posibles: 0 = Desactivado, 1 = Activado, 2 = Activado e requerido.';
     $Self->{Translation}->{'Dynamic fields shown in the ticket search screen of the agent interface. Possible settings: 0 = Disabled, 1 = Enabled.'} =
-        '';
+        'Campos dinámicos mostrados na pantalla busca de ticket da interface de axente. Axustes posibles: 0 = Desactivado, 1 = Activado.';
     $Self->{Translation}->{'Dynamic fields shown in the ticket zoom screen of the agent interface. Possible settings: 0 = Disabled, 1 = Enabled.'} =
-        '';
+        'Campos dinámicos mostrados na pantalla zoom de ticket da interface de axente. Axustes posibles: 0 = Desactivado, 1 = Activado.';
     $Self->{Translation}->{'Enables the stats module to generate statistics about the average of ITSM ticket first level solution rate.'} =
-        '';
+        'Activar módulo estatístico para xerar estatísticas sobre a media da taxa de resolución en primeiro nivel de tickets ITSM.';
     $Self->{Translation}->{'Enables the stats module to generate statistics about the average of ITSM ticket solution.'} =
-        '';
+        'Activar módulo estatístico para xerar estatísticas sobre a media da resolución de tickets ITSM.';
     $Self->{Translation}->{'If a note is added by an agent, sets the state of a ticket in the additional ITSM field screen of the agent interface.'} =
-        '';
+        'Se unha nota é engadida por un axente, establece o estado dun ticket na pantalla campo ITSM adicional da interface de axente.';
     $Self->{Translation}->{'If a note is added by an agent, sets the state of a ticket in the decision screen of the agent interface.'} =
-        '';
+        'Se unha nota é engadida por un axente, establece o estado dun ticket na pantalla de decisión da interface de axente.';
     $Self->{Translation}->{'Required permissions to use the additional ITSM field screen in the agent interface.'} =
-        '';
+        'Permisos requiridos para usar a pantalla campo ITSM adicional na interface de axente.';
     $Self->{Translation}->{'Required permissions to use the decision screen in the agent interface.'} =
-        '';
+        'Permisos requiridos para usar a pantalla de decisión na interface de axente.';
     $Self->{Translation}->{'Sets the service in the additional ITSM field screen of the agent interface (Ticket::Service needs to be activated).'} =
-        'Setzt den Service in der zusätzliche ITSM-Felder-Oberfläche für Tickets im Agentenbereich (Ticket::Type muss aktiviert sein).';
+        'Establece o servizo na pantalla de campo ITSM adicional da interface de axente (Ticket::Servizo debe ser activado).';
     $Self->{Translation}->{'Sets the service in the decision screen of the agent interface (Ticket::Service needs to be activated).'} =
-        'Setzt den Service in der Entscheidungs-Oberfläche für Tickets im Agentenbereich (Ticket::Service muss aktiviert sein).';
+        'Establece o servizo na pantalla de decisión da interface de axente (Ticket::Servizo debe ser activado).';
     $Self->{Translation}->{'Sets the ticket owner in the additional ITSM field screen of the agent interface.'} =
-        'Setzt den Ticket-Besitzer in der zusätzliche ITSM Felder-Oberfläche im Agenten-Interface.';
+        'Establece o propietario de ticket na pantalla campo ITSM adicional da interface de axente.';
     $Self->{Translation}->{'Sets the ticket owner in the decision screen of the agent interface.'} =
-        'Setzt den Besitzer in der Entscheidungs-Oberfläche für Tickets im Agentenbereich.';
+        'Establece o propietario de ticket na pantalla de decisión da interface de axente.';
     $Self->{Translation}->{'Sets the ticket responsible in the additional ITSM field screen of the agent interface.'} =
-        'Setzt den Ticket-Verantwortlichen in der zusätzliche ITSM Felder-Oberfläche im Agenten-Interface.';
+        'Establece o responsable de ticket na pantalla campo ITSM adicional da interface de axente.';
     $Self->{Translation}->{'Sets the ticket responsible in the decision screen of the agent interface.'} =
-        'Setzt den Ticket-Verantwortlichen in der Entscheidungs-Oberfläche für Tickets im Agentenbereich.';
+        'Establece o propietario de ticket na pantalla de decisión da interface de axente.';
     $Self->{Translation}->{'Sets the ticket type in the additional ITSM field screen of the agent interface (Ticket::Type needs to be activated).'} =
-        'Setzt den Ticket-Typ in der zusätzliche ITSM-Felder-Oberfläche für Tickets im Agentenbereich (Ticket::Type muss aktiviert sein).';
+        'Establece o tipo de ticket na pantalla campo ITSM adicional da interface de axente (Ticket::Tipo ten que ser activado).';
     $Self->{Translation}->{'Sets the ticket type in the decision screen of the agent interface (Ticket::Type needs to be activated).'} =
-        'Setzt den Ticket-Typ in der Entscheidungs-Oberfläche für Tickets im Agentenbereich (Ticket::Type muss aktiviert sein).';
+        'Establece o tipo de ticket na pantalla de decisión da interface de axente (Ticket::Tipo ten que ser activado).';
     $Self->{Translation}->{'Shows a link in the menu to change the decision of a ticket in its zoom view of the agent interface.'} =
-        'Zeigt in der Agenten-Oberfläche imTicket-Menü einen Link an um die Entscheidung an einem Ticket zu ändern';
+        'Mostra un enlace no menu para cambiar a decisión dun ticket na súa vista zoom da interface de axente.';
     $Self->{Translation}->{'Shows a link in the menu to modify additional ITSM fields in the ticket zoom view of the agent interface.'} =
-        'Zeigt einen Link in der Menu-Leiste in der Zoom-Ansicht im Agenten-Interface an, der es ermöglicht die zusätzlichen ITSM-Felder zu bearbeiten.';
+        'Mostra un enlace no menu para cambiar campos ITSM adicionáis na vista zoom de ticket da interface de axente.';
     $Self->{Translation}->{'Shows a list of all the involved agents on this ticket, in the additional ITSM field screen of the agent interface.'} =
-        'Zeigt in der Oberfläche zusätzliche ITSM-Felder der Agenten-Oberfläche eine Liste aller am Ticket beteiligten Agenten.';
+        'Mostra unha lista de tódolos axentes implicados neste ticket, na pantalla campo ITSM adicional da interface de axente.';
     $Self->{Translation}->{'Shows a list of all the involved agents on this ticket, in the decision screen of the agent interface.'} =
-        'Zeigt in der Oberfläche Entscheidung der Agenten-Oberfläche eine Liste aller am Ticket beteiligten Agenten.';
+        'Mostra unha lista de tódolos axentes implicados neste ticket, na pantalla de decisión da interface de axente.';
     $Self->{Translation}->{'Shows a list of all the possible agents (all agents with note permissions on the queue/ticket) to determine who should be informed about this note, in the additional ITSM field screen of the agent interface.'} =
-        '';
+        'Mostra unha lista de tódolos posibles axentes (tódolos axentes con permisos de nota nesta cola/ticket) para determinar quen debe ser informado sobre esta nota, na pantalla campo ITSM adicional da interface de axente.';
     $Self->{Translation}->{'Shows a list of all the possible agents (all agents with note permissions on the queue/ticket) to determine who should be informed about this note, in the decision screen of the agent interface.'} =
-        '';
+        'Mostra unha lista de tódolos posibles axentes (tódolos axentes con permisos de nota nesta cola/ticket) para determinar quen debe ser informado sobre esta nota, na pantalla de decisión da interface de axente.';
     $Self->{Translation}->{'Shows the ticket priority options in the additional ITSM field screen of the agent interface.'} =
-        'Zeigt die Ticket-Priorität in der zusätzliche ITSM-Felder-Oberfläche im Agenten-Interface.';
+        'Mostra as opcións de prioridade de ticket na pantalla campo ITSM adicional da interface de axente.';
     $Self->{Translation}->{'Shows the ticket priority options in the decision screen of the agent interface.'} =
-        'Zeigt die Ticket-Priorität in der Entscheidungs-Oberfläche im Agenten-Interface.';
+        'Mostra as opcións de prioridade de ticket na pantalla de decisión da interface de axente.';
     $Self->{Translation}->{'Shows the title fields in the additional ITSM field screen of the agent interface.'} =
-        'Zeigt den Ticket-Titel in der zusätzliche ITSM-Felder-Oberfläche für Tickets im Agentenbereich.';
+        'Mostra campos de título na pantalla campo ITSM adicional da interface de axente.';
     $Self->{Translation}->{'Shows the title fields in the decision screen of the agent interface.'} =
-        'Zeigt den Ticket-Titel in der Entscheidungs-Oberfläche für Tickets im Agentenbereich.';
+        'Mostra os campos de título na pantalla de decisións da interface do axente.';
     $Self->{Translation}->{'Ticket decision.'} = '';
 
 }
