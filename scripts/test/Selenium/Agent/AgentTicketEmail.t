@@ -183,7 +183,7 @@ $Selenium->RunTest(
         # Check client side validation.
         my $Element = $Selenium->find_element( "#Subject", 'css' );
         $Element->send_keys("");
-        $Element->VerifiedSubmit();
+        $Selenium->find_element( "#submitRichText", 'css' )->VerifiedClick();
 
         $Self->Is(
             $Selenium->execute_script(
@@ -357,7 +357,7 @@ $Selenium->RunTest(
         );
 # ---
         # Submit form.
-        $Selenium->find_element( "#Subject", 'css' )->VerifiedSubmit();
+        $Selenium->find_element( "#submitRichText", 'css' )->VerifiedClick();
 
         # Get created test ticket data.
         my %TicketIDs = $Kernel::OM->Get('Kernel::System::Ticket')->TicketSearch(
@@ -437,7 +437,7 @@ $Selenium->RunTest(
         $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AgentTicketEmail");
         $Selenium->find_element( "#User",        'css' )->send_keys($TestUserLogin);
         $Selenium->find_element( "#Password",    'css' )->send_keys($TestUserLogin);
-        $Selenium->find_element( "#LoginButton", 'css' )->VerifiedSubmit();
+        $Selenium->find_element( "#LoginButton", 'css' )->VerifiedClick();
 
         # Select the first queue.
         $Selenium->execute_script(

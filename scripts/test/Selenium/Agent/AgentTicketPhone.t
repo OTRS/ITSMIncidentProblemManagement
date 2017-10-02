@@ -143,7 +143,7 @@ $Selenium->RunTest(
         # Check client side validation.
         my $Element = $Selenium->find_element( "#Subject", 'css' );
         $Element->send_keys("");
-        $Element->VerifiedSubmit();
+        $Selenium->find_element( "#submitRichText", 'css' )->VerifiedClick();
 
         $Self->Is(
             $Selenium->execute_script(
@@ -292,7 +292,7 @@ $Selenium->RunTest(
             "Customer email is not a link with class AsPopup."
         );
 
-        $Selenium->find_element( "#Subject", 'css' )->VerifiedSubmit();
+        $Selenium->find_element( "#submitRichText", 'css' )->VerifiedClick();
 
         my $TicketObject = $Kernel::OM->Get('Kernel::System::Ticket');
 
@@ -355,6 +355,7 @@ $Selenium->RunTest(
                 "DynamicFieldUpdate $UpdateText - found",
             );
         }
+
 # ---
 
         # Test bug #12229
@@ -489,6 +490,11 @@ $Selenium->RunTest(
             $Success,
             "Service is deleted - ID $ServiceID",
         );
+
+        sleep 1;
+        if ( scalar( @{ $Selenium->get_window_handles() } ) == 2 ) {
+            $Selenium->close();
+        }
 # ---
 
         # Delete created test customer user.
