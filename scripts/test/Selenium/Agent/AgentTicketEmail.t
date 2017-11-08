@@ -7,6 +7,7 @@
 # the enclosed file COPYING for license information (AGPL). If you
 # did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
 # --
+# Please do not sync this file until OTRS 5.0.24.
 
 use strict;
 use warnings;
