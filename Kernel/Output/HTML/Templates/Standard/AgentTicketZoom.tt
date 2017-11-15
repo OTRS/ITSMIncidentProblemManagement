@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - e4aa623943896eb85ec87bc0646713d921026829 - Kernel/Output/HTML/Templates/Standard/AgentTicketZoom.tt
+# $origin: otrs - 8af3a46e14045d5ae5d7353f5ecad32b14a9b0c5 - Kernel/Output/HTML/Templates/Standard/AgentTicketZoom.tt
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1039,6 +1039,7 @@ $('.ShowFieldInfoOverlay').bind('click', function() {
 [% IF Config("TimelineViewEnabled") == 1 %]
 var TicketID    = [% Data.TicketID | JSON %],
     ArticleID   = [% Data.ArticleID | JSON %],
+    NoTimelineViewAutoArticle = [% Data.NoTimelineViewAutoArticle | JSON %],
     ListObjects = [
 [% FOREACH Item IN Data.Items %]
     {
@@ -1073,7 +1074,7 @@ var TicketID    = [% Data.TicketID | JSON %],
 [% END %]
 ];
 
-Core.Agent.TicketZoom.TimelineView.Init(TicketID, ListObjects, ArticleID);
+Core.Agent.TicketZoom.TimelineView.Init(TicketID, ListObjects, ArticleID, NoTimelineViewAutoArticle);
 
 [% END %]
 //]]></script>

@@ -1,13 +1,12 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 3f35f3ea511dffcc13ab9674d09d28e0971a3489 - scripts/test/Selenium/Agent/AgentTicketEmail.t
+# $origin: otrs - e50dedecba8f8c6a4bded9a429af2df583faa34b - scripts/test/Selenium/Agent/AgentTicketEmail.t
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
 # did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
 # --
-# Please do not sync this file until OTRS 5.0.24.
 
 use strict;
 use warnings;
@@ -20,7 +19,10 @@ my $Selenium = $Kernel::OM->Get('Kernel::System::UnitTest::Selenium');
 $Selenium->RunTest(
     sub {
 
-        my $Helper = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
+        my $Helper             = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
+        my $SignatureObject    = $Kernel::OM->Get('Kernel::System::Signature');
+        my $QueueObject        = $Kernel::OM->Get('Kernel::System::Queue');
+        my $CustomerUserObject = $Kernel::OM->Get('Kernel::System::CustomerUser');
 
         # Disable check email addresses.
         $Helper->ConfigSettingChange(
@@ -66,11 +68,6 @@ $Selenium->RunTest(
 
         # Define random test variable.
         my $RandomID = $Helper->GetRandomID();
-
-        # Create test signatures, queues and customer users.
-        my $SignatureObject    = $Kernel::OM->Get('Kernel::System::Signature');
-        my $QueueObject        = $Kernel::OM->Get('Kernel::System::Queue');
-        my $CustomerUserObject = $Kernel::OM->Get('Kernel::System::CustomerUser');
 
         my @SignatureIDs;
         my @QueueIDs;
@@ -184,13 +181,11 @@ $Selenium->RunTest(
         # Check client side validation.
         my $Element = $Selenium->find_element( "#Subject", 'css' );
         $Element->send_keys("");
-        $Selenium->find_element( "#submitRichText", 'css' )->VerifiedClick();
+        $Selenium->find_element( "#submitRichText", 'css' )->click();
+        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#Subject.Error").length' );
 
-        $Self->Is(
-            $Selenium->execute_script(
-                "return \$('#Subject').hasClass('Error')"
-            ),
-            '1',
+        $Self->True(
+            $Selenium->execute_script("return \$('#Subject.Error').length"),
             'Client side validation correctly detected missing input value',
         );
 
@@ -247,25 +242,27 @@ $Selenium->RunTest(
         );
 # ---
         # Select customer user.
-        $Selenium->find_element( "#ToCustomer", 'css' )->send_keys($RandomID);
-
+        $Selenium->find_element( "#ToCustomer", 'css' )->clear();
+        $Selenium->find_element( "#ToCustomer", 'css' )->send_keys( $TestData[0]->{UserLogin} );
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("li.ui-menu-item:visible").length' );
-        $Selenium->execute_script("\$('li.ui-menu-item:contains($TestData[0]->{UserFirstName})').click()");
-
-        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length' );
+        $Selenium->execute_script("\$('li.ui-menu-item:contains($TestData[0]->{UserLogin})').click()");
+        $Selenium->WaitFor(
+            JavaScript =>
+                'return typeof($) === "function" && $("#CustomerSelected_1").length && !$(".AJAXLoader:visible").length'
+        );
 
         $SignatureText = "Customer First Name: $TestData[0]->{UserFirstName}";
         $Selenium->WaitFor(
             JavaScript =>
-                "return typeof(\$) === 'function' && \$('#Signature').val().indexOf('$SignatureText') !== -1;",
-            Time => 5,
+                "return typeof(\$) === 'function' && \$('#Signature').val().indexOf('$SignatureText') !== -1;"
         );
 
-        # Input subject data
+        # Input subject data.
         my $TicketSubject = "Selenium Ticket";
+        $Selenium->find_element( "#Subject", 'css' )->clear();
         $Selenium->find_element( "#Subject", 'css' )->send_keys($TicketSubject);
 
-        # Queue and customer are selected, signature have replaced tags.
+        # Queue and customer are selected, signature has replaced tags.
         $Self->Is(
             $Selenium->execute_script('return $("#Signature").val()'),
             $SignatureText,
@@ -287,10 +284,10 @@ $Selenium->RunTest(
         );
 
         # Add new customer in 'To'.
+        $Selenium->find_element( "#ToCustomer", 'css' )->clear();
         $Selenium->find_element( "#ToCustomer", 'css' )->send_keys( $TestData[1]->{UserLogin} );
-
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("li.ui-menu-item:visible").length' );
-        $Selenium->execute_script("\$('li.ui-menu-item:contains($TestData[1]->{UserFirstName})').click()");
+        $Selenium->execute_script("\$('li.ui-menu-item:contains($TestData[1]->{UserLogin})').click()");
 
         # Change selected customer, trigger replacement tag in signature.
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#CustomerSelected_2").length' );
@@ -300,12 +297,12 @@ $Selenium->RunTest(
         $SignatureText = "Customer Last Name: $TestData[1]->{UserLastName}";
         $Selenium->WaitFor(
             JavaScript =>
-                "return typeof(\$) === 'function' && \$('#Signature').val().indexOf('$SignatureText') !== -1;",
-            Time => 5,
+                "return typeof(\$) === 'function' && \$('#Signature').val().indexOf('$SignatureText') !== -1;"
         );
 
         # Input body data.
         my $TicketBody = "Selenium body test";
+        $Selenium->find_element( "#RichText", 'css' )->clear();
         $Selenium->find_element( "#RichText", 'css' )->send_keys($TicketBody);
 
         # Selected customer is changed, signature replaced tags are changed.
@@ -440,25 +437,24 @@ $Selenium->RunTest(
         $Selenium->find_element( "#Password",    'css' )->send_keys($TestUserLogin);
         $Selenium->find_element( "#LoginButton", 'css' )->VerifiedClick();
 
-        # Select the first queue.
         $Selenium->execute_script(
             "\$('#Dest').val(\$('#Dest option').filter(function () { return \$(this).html() == '$QueueNames[0]'; } ).val() ).trigger('redraw.InputField').trigger('change');"
         );
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length' );
 
-        # Select the first customer user.
-        $Selenium->find_element( "#ToCustomer", 'css' )->send_keys($RandomID);
-
+        # Select customer user.
+        $Selenium->find_element( "#ToCustomer", 'css' )->send_keys( $TestData[0]->{UserLogin} );
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("li.ui-menu-item:visible").length' );
-        $Selenium->execute_script("\$('li.ui-menu-item:contains($TestData[0]->{UserFirstName})').click()");
-
-        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && !$(".AJAXLoader:visible").length' );
+        $Selenium->execute_script("\$('li.ui-menu-item:contains($TestData[0]->{UserLogin})').click()");
+        $Selenium->WaitFor(
+            JavaScript =>
+                'return typeof($) === "function" && $("#CustomerSelected_1").length && !$(".AJAXLoader:visible").length'
+        );
 
         $SignatureText = "Customer First Name: $TestData[0]->{UserFirstName}";
         $Selenium->WaitFor(
             JavaScript =>
-                "return typeof(\$) === 'function' && \$('#Signature').val().indexOf('$SignatureText') !== -1;",
-            Time => 5,
+                "return typeof(\$) === 'function' && \$('#Signature').val().indexOf('$SignatureText') !== -1;"
         );
 
         # Check if signature have correct text after set queue and customer user.
@@ -555,19 +551,16 @@ $Selenium->RunTest(
             );
         }
 
-        # make sure the cache is correct
-        for my $Cache (
+        my $CacheObject = $Kernel::OM->Get('Kernel::System::Cache');
+
+        # Make sure the cache is correct.
 # ---
 # ITSMIncidentProblemManagement
 # ---
-#            qw (Ticket CustomerUser)
-            qw (Ticket CustomerUser Service)
+#        for my $Cache (qw (Ticket CustomerUser)) {
+        for my $Cache (qw (Ticket CustomerUser Service)) {
 # ---
-            )
-        {
-            $Kernel::OM->Get('Kernel::System::Cache')->CleanUp(
-                Type => $Cache,
-            );
+            $CacheObject->CleanUp( Type => $Cache );
         }
 
     }

@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - b834c7950f190dbe20e27c8db2768890e68baa98 - Kernel/Modules/AgentTicketZoom.pm
+# $origin: otrs - 8af3a46e14045d5ae5d7353f5ecad32b14a9b0c5 - Kernel/Modules/AgentTicketZoom.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -2780,12 +2780,18 @@ sub _ArticleTree {
             }
         }
 
+        # Get NoTimelineViewAutoArticle config value for usage in JS.
+        $Param{NoTimelineViewAutoArticle} = $ConfigObject->Get('NoTimelineViewAutoArticle') || '0';
+
         # set TicketID for usage in JS
         $Param{TicketID} = $Self->{TicketID};
 
         $LayoutObject->Block(
             Name => 'TimelineView',
-            Data => \%Param,
+            Data => {
+                %Param,
+                ArticleID => $Self->{ArticleID},
+            },
         );
 
         # jump to selected article
