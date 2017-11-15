@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 9f57b0ceb2c824b6784c4ecc4f77e30fa056c35a - Kernel/Modules/AgentTicketPhone.pm
+# $origin: otrs - 4d96d9808619d06db974cc7ffde9e44d405eea5b - Kernel/Modules/AgentTicketPhone.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -858,6 +858,8 @@ sub Run {
         }
 
         my ( $NewQueueID, $To ) = split( /\|\|/, $Dest );
+        $GetParam{QueueID} = $NewQueueID;
+
         my $CustomerUser = $Self->{ParamObject}->GetParam( Param => 'CustomerUser' )
             || $Self->{ParamObject}->GetParam( Param => 'PreSelectedCustomerUser' )
             || $Self->{ParamObject}->GetParam( Param => 'SelectedCustomerUser' )
