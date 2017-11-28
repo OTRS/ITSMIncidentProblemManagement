@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 8af3a46e14045d5ae5d7353f5ecad32b14a9b0c5 - Kernel/Modules/AgentTicketZoom.pm
+# $origin: otrs - 044346925d1d4c924671aaf9821e58907bed2b50 - Kernel/Modules/AgentTicketZoom.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1671,13 +1671,11 @@ sub MaskAgentZoom {
             )
         {
             push @FieldsSidebar, {
-                Name                        => $DynamicFieldConfig->{Name},
-                Title                       => $ValueStrg->{Title},
-                Value                       => $ValueStrg->{Value},
-                Label                       => $Label,
-                Link                        => $ValueStrg->{Link},
-                LinkPreview                 => $ValueStrg->{LinkPreview},
-                $DynamicFieldConfig->{Name} => $ValueStrg->{Title},
+                Title       => $ValueStrg->{Title},
+                Value       => $ValueStrg->{Value},
+                Label       => $Label,
+                Link        => $ValueStrg->{Link},
+                LinkPreview => $ValueStrg->{LinkPreview},
             };
         }
 
@@ -1740,15 +1738,10 @@ sub MaskAgentZoom {
                             $LayoutObject->Block(
                                 Name => 'ProcessWidgetDynamicFieldLink',
                                 Data => {
-                                    %Ticket,
-
-                                    # alias for ticket title, Title will be overwritten
-                                    TicketTitle    => $Ticket{Title},
-                                    Value          => $Field->{Value},
-                                    Title          => $Field->{Title},
-                                    Link           => $Field->{Link},
-                                    LinkPreview    => $Field->{LinkPreview},
-                                    $Field->{Name} => $Field->{Title},
+                                    Value       => $Field->{Value},
+                                    Title       => $Field->{Title},
+                                    Link        => $Field->{Link},
+                                    LinkPreview => $Field->{LinkPreview},
                                 },
                             );
                         }
@@ -1817,15 +1810,10 @@ sub MaskAgentZoom {
                 $LayoutObject->Block(
                     Name => 'ProcessWidgetDynamicFieldLink',
                     Data => {
-                        %Ticket,
-
-                        # alias for ticket title, Title will be overwritten
-                        TicketTitle    => $Ticket{Title},
-                        Value          => $Field->{Value},
-                        Title          => $Field->{Title},
-                        Link           => $Field->{Link},
-                        LinkPreview    => $Field->{LinkPreview},
-                        $Field->{Name} => $Field->{Title},
+                        Value       => $Field->{Value},
+                        Title       => $Field->{Title},
+                        Link        => $Field->{Link},
+                        LinkPreview => $Field->{LinkPreview},
                     },
                 );
             }
@@ -1902,15 +1890,10 @@ sub MaskAgentZoom {
             $LayoutObject->Block(
                 Name => 'TicketDynamicFieldLink',
                 Data => {
-                    %Ticket,
-
-                    # alias for ticket title, Title will be overwritten
-                    TicketTitle    => $Ticket{Title},
-                    Value          => $Field->{Value},
-                    Title          => $Field->{Title},
-                    Link           => $Field->{Link},
-                    LinkPreview    => $Field->{LinkPreview},
-                    $Field->{Name} => $Field->{Title},
+                    Value       => $Field->{Value},
+                    Title       => $Field->{Title},
+                    Link        => $Field->{Link},
+                    LinkPreview => $Field->{LinkPreview},
                 },
             );
         }
