@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - d874ccf7a982ad3a5dd47b60076a12b76a9e1d1b - Kernel/Modules/AgentTicketZoom.pm
+# $origin: otrs - aa9d1bffe3d3a192c95554fad4dd31d154fb6e49 - Kernel/Modules/AgentTicketZoom.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1430,14 +1430,17 @@ sub MaskAgentZoom {
             );
 
             push @FieldsWidget, {
-                Name  => $DynamicFieldConfig->{Name},
-                Title => $ValueStrg->{Title},
-                Value => $ValueStrg->{Value},
-                ValueKey
-                    => $Ticket{ 'DynamicField_' . $DynamicFieldConfig->{Name} },
+                $DynamicFieldConfig->{Name} => $ValueStrg->{Title},
+                Name                        => $DynamicFieldConfig->{Name},
+                Title                       => $ValueStrg->{Title},
+                Value                       => $ValueStrg->{Value},
+                ValueKey                    => $Ticket{ 'DynamicField_' . $DynamicFieldConfig->{Name} },
                 Label                       => $Label,
                 Link                        => $ValueStrg->{Link},
-                $DynamicFieldConfig->{Name} => $ValueStrg->{Title},
+
+                # Include unique parameter with dynamic field name in case of collision with others.
+                #   Please see bug#13362 for more information.
+                "DynamicField_$DynamicFieldConfig->{Name}" => $ValueStrg->{Title},
             };
         }
 
@@ -1455,10 +1458,16 @@ sub MaskAgentZoom {
             )
         {
             push @FieldsSidebar, {
-                Title => $ValueStrg->{Title},
-                Value => $ValueStrg->{Value},
-                Label => $Label,
-                Link  => $ValueStrg->{Link},
+                $DynamicFieldConfig->{Name} => $ValueStrg->{Title},
+                Name                        => $DynamicFieldConfig->{Name},
+                Title                       => $ValueStrg->{Title},
+                Value                       => $ValueStrg->{Value},
+                Label                       => $Label,
+                Link                        => $ValueStrg->{Link},
+
+                # Include unique parameter with dynamic field name in case of collision with others.
+                #   Please see bug#13362 for more information.
+                "DynamicField_$DynamicFieldConfig->{Name}" => $ValueStrg->{Title},
             };
         }
 
@@ -1521,9 +1530,18 @@ sub MaskAgentZoom {
                             $Self->{LayoutObject}->Block(
                                 Name => 'ProcessWidgetDynamicFieldLink',
                                 Data => {
-                                    Value => $Field->{Value},
-                                    Title => $Field->{Title},
-                                    Link  => $Field->{Link},
+                                    $Field->{Name} => $Field->{Title},
+                                    %Ticket,
+
+                                    # alias for ticket title, Title will be overwritten
+                                    TicketTitle => $Ticket{Title},
+                                    Value       => $Field->{Value},
+                                    Title       => $Field->{Title},
+                                    Link        => $Field->{Link},
+
+                                    # Include unique parameter with dynamic field name in case of collision with others.
+                                    #   Please see bug#13362 for more information.
+                                    "DynamicField_$Field->{Name}" => $Field->{Title},
                                 },
                             );
                         }
@@ -1592,9 +1610,18 @@ sub MaskAgentZoom {
                 $Self->{LayoutObject}->Block(
                     Name => 'ProcessWidgetDynamicFieldLink',
                     Data => {
-                        Value => $Field->{Value},
-                        Title => $Field->{Title},
-                        Link  => $Field->{Link},
+                        %Ticket,
+                        $Field->{Name} => $Field->{Title},
+
+                        # alias for ticket title, Title will be overwritten
+                        TicketTitle => $Ticket{Title},
+                        Value       => $Field->{Value},
+                        Title       => $Field->{Title},
+                        Link        => $Field->{Link},
+
+                        # In case of collision of Dynamic Field 'Name' with other
+                        #   parameters allow uniqueness and integrity.
+                        "DynamicField_$Field->{Name}" => $Field->{Title},
                     },
                 );
             }
@@ -1671,9 +1698,18 @@ sub MaskAgentZoom {
             $Self->{LayoutObject}->Block(
                 Name => 'TicketDynamicFieldLink',
                 Data => {
-                    Value => $Field->{Value},
-                    Title => $Field->{Title},
-                    Link  => $Field->{Link},
+                    $Field->{Name} => $Field->{Title},
+                    %Ticket,
+
+                    # alias for ticket title, Title will be overwritten
+                    TicketTitle => $Ticket{Title},
+                    Value       => $Field->{Value},
+                    Title       => $Field->{Title},
+                    Link        => $Field->{Link},
+
+                    # Include unique parameter with dynamic field name in case of collision with others.
+                    #   Please see bug#13362 for more information.
+                    "DynamicField_$Field->{Name}" => $Field->{Title},
                 },
             );
         }
