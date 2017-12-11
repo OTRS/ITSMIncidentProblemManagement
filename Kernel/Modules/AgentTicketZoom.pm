@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 460b09efc06143c3952d8a4ce484ac149d2f0954 - Kernel/Modules/AgentTicketZoom.pm
+# $origin: otrs - 698821224074839cc448a35d6782bd2de4e21ee8 - Kernel/Modules/AgentTicketZoom.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
