@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # $origin: otrs - e50dedecba8f8c6a4bded9a429af2df583faa34b - scripts/test/Selenium/Agent/AgentTicketEmail.t
 # --

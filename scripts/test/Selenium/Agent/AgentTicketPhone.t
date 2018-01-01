@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # $origin: otrs - 80032ff0e1abfed65c540aca17837762900a4049 - scripts/test/Selenium/Agent/AgentTicketPhone.t
 # --

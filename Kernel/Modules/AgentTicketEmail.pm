@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # $origin: otrs - 9d4096797d5ea206f6064d857ea4add1bb6aa79d - Kernel/Modules/AgentTicketEmail.pm
 # --

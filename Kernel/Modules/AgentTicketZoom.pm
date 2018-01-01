@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # $origin: otrs - 698821224074839cc448a35d6782bd2de4e21ee8 - Kernel/Modules/AgentTicketZoom.pm
 # --
