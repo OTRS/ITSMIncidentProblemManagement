@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # $origin: otrs - 988c4daa9c910bd36bdba8ad049fb1a453db4d3a - scripts/test/Selenium/Agent/AgentTicketActionCommonACL.t
 # --

@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2001-2017 OTRS AG, http://otrs.com/
+# Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
 # $origin: otrs - cc3e3a5b73fe2374ae0890036314096ab066da72 - Kernel/Output/HTML/TicketOverviewPreview.pm
 # --
