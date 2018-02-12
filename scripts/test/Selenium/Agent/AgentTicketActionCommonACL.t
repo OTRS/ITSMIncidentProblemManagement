@@ -385,15 +385,18 @@ EOF
         # navigate to AgentTicketZoom screen of created test ticket
         $Selenium->VerifiedGet("${ScriptAlias}index.pl?Action=AgentTicketZoom;TicketID=$TicketID");
 
-        # wait for displaying submenu items for 'People' ticket menu item
+        # Force sub menu to be visible in order to be able to click one of the links.
+        $Selenium->WaitFor( JavaScript => "return typeof(\$) === 'function'" );
+        $Selenium->execute_script("\$('#nav-Communication-container').css('height', 'auto')");
+        $Selenium->execute_script("\$('#nav-Communication-container').css('opacity', '1')");
         $Selenium->WaitFor(
             JavaScript =>
-                'return typeof($) === "function" && $("#nav-Communication ul").css({ "height": "auto", "opacity": "100" });'
+                "return \$('#nav-Communication-container').css('height') !== '0px' && \$('#nav-Communication-container').css('opacity') == '1'"
         );
 
         # click on 'Note' and switch window
         $Selenium->find_element("//a[contains(\@href, \'Action=AgentTicketNote;TicketID=$TicketID' )]")
-            ->VerifiedClick();
+            ->click();
 
         $Selenium->WaitFor( WindowCount => 2 );
         my $Handles = $Selenium->get_window_handles();
@@ -459,7 +462,7 @@ EOF
 
         # Click on 'Note' and switch window.
         $Selenium->find_element("//a[contains(\@href, \'Action=AgentTicketNote;TicketID=$TicketID' )]")
-            ->VerifiedClick();
+            ->click();
 
         $Selenium->WaitFor( WindowCount => 2 );
         $Handles = $Selenium->get_window_handles();
@@ -512,7 +515,7 @@ EOF
 
         # click on 'Note' and switch window
         $Selenium->find_element("//a[contains(\@href, \'Action=AgentTicketNote;TicketID=$TicketID' )]")
-            ->VerifiedClick();
+            ->click();
 
         $Selenium->WaitFor( WindowCount => 2 );
         $Handles = $Selenium->get_window_handles();
@@ -553,7 +556,7 @@ EOF
 
         # Click on 'Close' action and switch to it.
         $Selenium->find_element("//a[contains(\@href, \'Action=AgentTicketClose;TicketID=$TicketID' )]")
-            ->VerifiedClick();
+            ->click();
 
         $Selenium->WaitFor( WindowCount => 2 );
         $Handles = $Selenium->get_window_handles();
