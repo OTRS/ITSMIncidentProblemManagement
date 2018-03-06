@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 698821224074839cc448a35d6782bd2de4e21ee8 - Kernel/Modules/AgentTicketZoom.pm
+# $origin: otrs - ee6b92b1e41b7915cea320aba12069457708741a - Kernel/Modules/AgentTicketZoom.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1627,6 +1627,18 @@ sub MaskAgentZoom {
             next DYNAMICFIELD;
         }
 # ---
+
+        # Check if this field is supposed to be hidden from the ticket information box.
+        #   For example, it's displayed by a different mechanism (i.e. async widget).
+        if (
+            $DynamicFieldBackendObject->HasBehavior(
+                DynamicFieldConfig => $DynamicFieldConfig,
+                Behavior           => 'IsHiddenInTicketInformation',
+            )
+            )
+        {
+            next DYNAMICFIELD;
+        }
 
         # use translation here to be able to reduce the character length in the template
         my $Label = $LayoutObject->{LanguageObject}->Translate( $DynamicFieldConfig->{Label} );
