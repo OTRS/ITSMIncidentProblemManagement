@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - b7c342a640f72cb8938ef7a7d56ebc14cc614bca - Kernel/Output/HTML/Standard/CustomerTicketZoom.tt
+# $origin: otrs - a4512636fc11eff48b5864b208e064bb1cce29f3 - Kernel/Output/HTML/Standard/CustomerTicketZoom.tt
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
