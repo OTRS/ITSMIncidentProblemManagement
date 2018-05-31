@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 6559a7a0ada76af361b47b13d2cbbea64361e6a7 - Kernel/Modules/AgentTicketEmail.pm
+# $origin: otrs - cab6ab4bb39bd628c331ea826aa1379c0e048104 - Kernel/Modules/AgentTicketEmail.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1795,7 +1795,7 @@ sub Run {
                 CustomerUserID => $CustomerUser || '',
                 Action         => $Self->{Action},
                 TicketID       => $Self->{TicketID},
-                QueueID        => $QueueID      || 0,
+                QueueID        => $QueueID || 0,
                 ReturnType     => 'Ticket',
                 ReturnSubType  => 'DynamicField_' . $DynamicFieldConfig->{Name},
                 Data           => \%AclData,
@@ -1925,7 +1925,7 @@ sub Run {
 
                 # get AJAX param values
                 if ( $Object->can('GetParamAJAX') ) {
-                    %GetParam = ( %GetParam, $Object->GetParamAJAX(%GetParam) )
+                    %GetParam = ( %GetParam, $Object->GetParamAJAX(%GetParam) );
                 }
 
                 my $Key = $Object->Option( %GetParam, Config => $Jobs{$Job} );
@@ -2758,10 +2758,10 @@ sub _MaskEmailNew {
     # build text template string
     if ( IsHashRefWithData( \%StandardTemplates ) ) {
         $Param{StandardTemplateStrg} = $LayoutObject->BuildSelection(
-            Data       => $Param{StandardTemplates}  || {},
-            Name       => 'StandardTemplateID',
-            SelectedID => $Param{StandardTemplateID} || '',
-            Class      => 'Modernize',
+            Data         => $Param{StandardTemplates} || {},
+            Name         => 'StandardTemplateID',
+            SelectedID   => $Param{StandardTemplateID} || '',
+            Class        => 'Modernize',
             PossibleNone => 1,
             Sort         => 'AlphanumericValue',
             Translation  => 1,

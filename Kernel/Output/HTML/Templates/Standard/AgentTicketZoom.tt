@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 6559a7a0ada76af361b47b13d2cbbea64361e6a7 - Kernel/Output/HTML/Templates/Standard/AgentTicketZoom.tt
+# $origin: otrs - 2f4d7a5b95ad13647c7e353f900c80f22e6035da - Kernel/Output/HTML/Templates/Standard/AgentTicketZoom.tt
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -725,7 +725,7 @@ $('.ShowFieldInfoOverlay').bind('click', function() {
                         <fieldset>
 [% RenderBlockStart("ProcessWidgetDynamicFieldGroups") %]
 [% RenderBlockStart("ProcessWidgetDynamicFieldGroupSeparator") %]
-                            <h2 class="FieldSetSeparator">[% Data.Name %]</h2>
+                            <h2 class="FieldSetSeparator">[% Translate(Data.Name) | html %]</h2>
 [% RenderBlockEnd("ProcessWidgetDynamicFieldGroupSeparator") %]
 [% RenderBlockStart("ProcessWidgetDynamicField") %]
                             <div class="FieldContainer DynamicFieldAutoResize">

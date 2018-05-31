@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - ee6b92b1e41b7915cea320aba12069457708741a - Kernel/Modules/AgentTicketZoom.pm
+# $origin: otrs - 536567c6d871862c88040812fc76d88614fbd831 - Kernel/Modules/AgentTicketZoom.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -603,7 +603,7 @@ sub Run {
             )
         {
             my @IDs = split /,/, $1;
-            $Self->{EventTypeFilter}->{EventTypeID} = \@IDs,
+            $Self->{EventTypeFilter}->{EventTypeID} = \@IDs;
         }
     }
 
@@ -1084,7 +1084,7 @@ sub MaskAgentZoom {
                 Link  => '#',
                 Class => 'ClusterLink',
                 Items => $MenuClusters{$Cluster}->{Items},
-                }
+            };
         }
 
         # display all items
@@ -1537,7 +1537,7 @@ sub MaskAgentZoom {
             );
 
             if ($ACL) {
-                %{$NextActivityDialogs} = $TicketObject->TicketAclData()
+                %{$NextActivityDialogs} = $TicketObject->TicketAclData();
             }
 
             $LayoutObject->Block(
@@ -1966,6 +1966,11 @@ sub MaskAgentZoom {
                 User => $Ticket{CustomerUserID},
             );
         }
+
+        if ( $CustomerData{UserTitle} ) {
+            $CustomerData{UserTitle} = $LayoutObject->{LanguageObject}->Translate( $CustomerData{UserTitle} );
+        }
+
         $Param{CustomerTable} = $LayoutObject->AgentCustomerViewTable(
             Data   => \%CustomerData,
             Ticket => \%Ticket,
@@ -3895,7 +3900,7 @@ sub _CollectArticleAttachments {
             %{ $Article{Atms}->{$FileID} },
             FileID => $FileID,
             Target => $Target,
-            }
+        };
     }
 
     return \%Attachments;

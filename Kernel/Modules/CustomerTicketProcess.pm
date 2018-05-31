@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 6559a7a0ada76af361b47b13d2cbbea64361e6a7 - Kernel/Modules/CustomerTicketProcess.pm
+# $origin: otrs - cab6ab4bb39bd628c331ea826aa1379c0e048104 - Kernel/Modules/CustomerTicketProcess.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -177,7 +177,7 @@ sub Run {
     # fetch also FadeAway processes to continue working with existing tickets, but not to start new
     #    ones
     if ( !$Self->{IsMainWindow} && $Self->{Subaction} ) {
-        push @ProcessStates, 'FadeAway'
+        push @ProcessStates, 'FadeAway';
     }
 
     # get process object
@@ -4119,9 +4119,9 @@ sub _DisplayProcessList {
     my $LayoutObject = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
 
     $Param{ProcessList} = $LayoutObject->BuildSelection(
-        Class => 'Modernize Validate_Required' . ( $Param{Errors}->{ProcessEntityIDInvalid} || ' ' ),
-        Data  => $Param{ProcessList},
-        Name  => 'ProcessEntityID',
+        Class        => 'Modernize Validate_Required' . ( $Param{Errors}->{ProcessEntityIDInvalid} || ' ' ),
+        Data         => $Param{ProcessList},
+        Name         => 'ProcessEntityID',
         SelectedID   => $Param{ProcessEntityID},
         PossibleNone => 1,
         Sort         => 'AlphanumericValue',

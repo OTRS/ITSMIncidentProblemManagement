@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 6559a7a0ada76af361b47b13d2cbbea64361e6a7 - Kernel/Output/HTML/TicketOverview/Preview.pm
+# $origin: otrs - cab6ab4bb39bd628c331ea826aa1379c0e048104 - Kernel/Output/HTML/TicketOverview/Preview.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -804,7 +804,7 @@ sub _Show {
             Space => ' ',
         );
         if ( 60 * 60 * 1 > $Article{FirstResponseTime} ) {
-            $Article{FirstResponseTimeClass} = 'Warning'
+            $Article{FirstResponseTimeClass} = 'Warning';
         }
         $LayoutObject->Block(
             Name => 'FirstResponseTime',
@@ -823,7 +823,7 @@ sub _Show {
             Space => ' ',
         );
         if ( 60 * 60 * 1 > $Article{UpdateTime} ) {
-            $Article{UpdateTimeClass} = 'Warning'
+            $Article{UpdateTimeClass} = 'Warning';
         }
         $LayoutObject->Block(
             Name => 'UpdateTime',
@@ -842,7 +842,7 @@ sub _Show {
             Space => ' ',
         );
         if ( 60 * 60 * 1 > $Article{SolutionTime} ) {
-            $Article{SolutionTimeClass} = 'Warning'
+            $Article{SolutionTimeClass} = 'Warning';
         }
         $LayoutObject->Block(
             Name => 'SolutionTime',
@@ -1075,9 +1075,9 @@ sub _Show {
 
             # html quoting
             $ArticleItem->{Body} = $LayoutObject->Ascii2Html(
-                NewLine => $Param{Config}->{DefaultViewNewLine}  || 90,
-                Text    => $ArticleItem->{Body},
-                VMax    => $Param{Config}->{DefaultPreViewLines} || 25,
+                NewLine         => $Param{Config}->{DefaultViewNewLine} || 90,
+                Text            => $ArticleItem->{Body},
+                VMax            => $Param{Config}->{DefaultPreViewLines} || 25,
                 LinkFeature     => 1,
                 HTMLResultMode  => 1,
                 StripEmptyLines => $Param{Config}->{StripEmptyLines},
