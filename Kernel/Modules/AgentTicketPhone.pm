@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - a4512636fc11eff48b5864b208e064bb1cce29f3 - Kernel/Modules/AgentTicketPhone.pm
+# $origin: otrs - 2c5f0dabd90cadb410f0965ea78dc255c08638a7 - Kernel/Modules/AgentTicketPhone.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -1909,7 +1909,7 @@ sub Run {
                 %ACLCompatGetParam,
                 CustomerUserID => $CustomerUser || '',
                 Action         => $Self->{Action},
-                QueueID        => $QueueID      || 0,
+                QueueID        => $QueueID || 0,
                 ReturnType     => 'Ticket',
                 ReturnSubType  => 'DynamicField_' . $DynamicFieldConfig->{Name},
                 Data           => \%AclData,
@@ -2575,9 +2575,9 @@ sub _MaskPhoneNew {
     # build type string
     if ( $Self->{ConfigObject}->Get('Ticket::Type') ) {
         $Param{TypeStrg} = $Self->{LayoutObject}->BuildSelection(
-            Class => 'Validate_Required' . ( $Param{Errors}->{TypeIDInvalid} || ' ' ),
-            Data  => $Param{Types},
-            Name  => 'TypeID',
+            Class        => 'Validate_Required' . ( $Param{Errors}->{TypeIDInvalid} || ' ' ),
+            Data         => $Param{Types},
+            Name         => 'TypeID',
             SelectedID   => $Param{TypeID},
             PossibleNone => 1,
             Sort         => 'AlphanumericValue',
@@ -2676,9 +2676,9 @@ sub _MaskPhoneNew {
     # build text template string
     if ( IsHashRefWithData( \%StandardTemplates ) ) {
         $Param{StandardTemplateStrg} = $Self->{LayoutObject}->BuildSelection(
-            Data       => $Param{StandardTemplates}  || {},
-            Name       => 'StandardTemplateID',
-            SelectedID => $Param{StandardTemplateID} || '',
+            Data         => $Param{StandardTemplates} || {},
+            Name         => 'StandardTemplateID',
+            SelectedID   => $Param{StandardTemplateID} || '',
             PossibleNone => 1,
             Sort         => 'AlphanumericValue',
             Translation  => 1,

@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - a4512636fc11eff48b5864b208e064bb1cce29f3 - Kernel/Modules/AgentTicketZoom.pm
+# $origin: otrs - 2c5f0dabd90cadb410f0965ea78dc255c08638a7 - Kernel/Modules/AgentTicketZoom.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -636,7 +636,7 @@ sub Run {
             )
         {
             my @IDs = split /,/, $1;
-            $Self->{EventTypeFilter}->{EventTypeID} = \@IDs,
+            $Self->{EventTypeFilter}->{EventTypeID} = \@IDs;
         }
     }
 
@@ -1333,7 +1333,7 @@ sub MaskAgentZoom {
             );
 
             if ($ACL) {
-                %{$NextActivityDialogs} = $Self->{TicketObject}->TicketAclData()
+                %{$NextActivityDialogs} = $Self->{TicketObject}->TicketAclData();
             }
 
             $Self->{LayoutObject}->Block(
@@ -3501,7 +3501,7 @@ sub _CollectArticleAttachments {
             %{ $Article{Atms}->{$FileID} },
             FileID => $FileID,
             Target => $Target,
-            }
+        };
     }
 
     return \%Attachments;
