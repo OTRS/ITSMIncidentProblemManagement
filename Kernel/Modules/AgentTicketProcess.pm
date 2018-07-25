@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, http://otrs.com/
 # --
-# $origin: otrs - 8ddb662abdd7c64374493a1537ddf91223e18286 - Kernel/Modules/AgentTicketProcess.pm
+# $origin: otrs - 8fd3f3ea4b4a65c057310de2904d4ba8b6dca568 - Kernel/Modules/AgentTicketProcess.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -165,25 +165,34 @@ sub Run {
                 }
                 else {
 
-                    # set lock
-                    $TicketObject->TicketLockSet(
+                    my %Ticket = $TicketObject->TicketGet(
+                        TicketID => $TicketID,
+                    );
+
+                    my $Lock = $TicketObject->TicketLockSet(
                         TicketID => $TicketID,
                         Lock     => 'lock',
-                        UserID   => $Self->{UserID},
+                        UserID   => $Self->{UserID}
                     );
 
-                    # set user id
-                    $TicketObject->TicketOwnerSet(
-                        TicketID  => $TicketID,
-                        UserID    => $Self->{UserID},
-                        NewUserID => $Self->{UserID},
-                    );
+                    # Set new owner if ticket owner is different then logged user.
+                    if ( $Lock && ( $Ticket{OwnerID} != $Self->{UserID} ) ) {
 
-                    # reload the parent window to show the updated lock state
-                    $Param{ParentReload} = 1;
+                        # Remember previous owner, which will be used to restore ticket owner on undo action.
+                        $Param{PreviousOwner} = $Ticket{OwnerID};
 
-                    # show lock state link
-                    $Param{RenderLocked} = 1;
+                        my $Success = $TicketObject->TicketOwnerSet(
+                            TicketID  => $TicketID,
+                            UserID    => $Self->{UserID},
+                            NewUserID => $Self->{UserID},
+                        );
+
+                        # Reload the parent window to show the updated lock state.
+                        $Param{ParentReload} = 1;
+
+                        # show lock state link
+                        $Param{RenderLocked} = 1;
+                    }
 
                     my $TicketNumber = $TicketObject->TicketNumberLookup(
                         TicketID => $TicketID,
