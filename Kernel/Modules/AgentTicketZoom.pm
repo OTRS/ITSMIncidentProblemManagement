@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - 536567c6d871862c88040812fc76d88614fbd831 - Kernel/Modules/AgentTicketZoom.pm
+# $origin: otrs - ff5c78c6878f56f1ef8eff0823eaf5f813eccdfa - Kernel/Modules/AgentTicketZoom.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -2821,6 +2821,19 @@ sub _ArticleTree {
 
         # set TicketID for usage in JS
         $Param{TicketID} = $Self->{TicketID};
+
+        # Modify body text to avoid '</script>' tag issue (see bug#14023).
+        ITEMS:
+        for my $Item ( @{ $Param{Items} } ) {
+            next ITEMS if !$Item->{ArticleID};
+
+            if ( $Item->{IsChatArticle} ) {
+                $Item->{ArticleData}->{BodyChat} =~ s{</script>}{<###/script>}g;
+            }
+            else {
+                $Item->{ArticleData}->{Body} =~ s{</script>}{<###/script>}g;
+            }
+        }
 
         $LayoutObject->Block(
             Name => 'TimelineView',
