@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - 7065477b2febac0723cc317638c39a549771f13d - scripts/test/Selenium/Agent/AgentTicketActionCommonACL.t
+# $origin: otrs - 77d4495533edfdbd2370353edad87839ee636357 - scripts/test/Selenium/Agent/AgentTicketActionCommonACL.t
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you

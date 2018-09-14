@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - 2c5f0dabd90cadb410f0965ea78dc255c08638a7 - Kernel/Output/HTML/TicketOverviewPreview.pm
+# $origin: otrs - 77d4495533edfdbd2370353edad87839ee636357 - Kernel/Output/HTML/TicketOverviewPreview.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
