@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - ca27120a296d64d7bea88b10ac94c7848bad89da - Kernel/Modules/CustomerTicketProcess.pm
+# $origin: otrs - 2ab9c4a88444da66afd8f87c8acd5db0b890d929 - Kernel/Modules/CustomerTicketProcess.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -3445,7 +3445,7 @@ sub _StoreActivityDialog {
                     }
 
                     if ( $ValidationResult->{ServerError} ) {
-                        $Error{ $DynamicFieldConfig->{Name} } = 1;
+                        $Error{ $DynamicFieldConfig->{Name} }        = 1;
                         $ErrorMessage{ $DynamicFieldConfig->{Name} } = $ValidationResult->{ErrorMessage} || '';
                     }
 
@@ -3813,7 +3813,7 @@ sub _StoreActivityDialog {
         }
 
         if ( $CurrentField =~ m{^DynamicField_(.*)}xms ) {
-            my $DynamicFieldName = $1;
+            my $DynamicFieldName   = $1;
             my $DynamicFieldConfig = ( grep { $_->{Name} eq $DynamicFieldName } @{$DynamicField} )[0];
 
             if ( !IsHashRefWithData($DynamicFieldConfig) ) {

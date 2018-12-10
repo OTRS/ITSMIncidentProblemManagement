@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - ca27120a296d64d7bea88b10ac94c7848bad89da - Kernel/Output/HTML/TicketOverview/Preview.pm
+# $origin: otrs - 2ab9c4a88444da66afd8f87c8acd5db0b890d929 - Kernel/Output/HTML/TicketOverview/Preview.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -353,7 +353,7 @@ sub _Show {
     my @ArticleBody = $TicketObject->ArticleGet(
         %ArticleGetParams,
     );
-    my %Article = %{ $ArticleBody[0] || {} };
+    my %Article      = %{ $ArticleBody[0] || {} };
     my $ArticleCount = scalar @ArticleBody;
 
     my %Ticket = $TicketObject->TicketGet(

@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - ca27120a296d64d7bea88b10ac94c7848bad89da - Kernel/Modules/AgentTicketEmail.pm
+# $origin: otrs - 2ab9c4a88444da66afd8f87c8acd5db0b890d929 - Kernel/Modules/AgentTicketEmail.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -74,7 +74,7 @@ sub Run {
     my $MainObject   = $Kernel::OM->Get('Kernel::System::Main');
     my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
 
-    my $Debug = $Param{Debug} || 0;
+    my $Debug  = $Param{Debug} || 0;
     my $Config = $ConfigObject->Get("Ticket::Frontend::$Self->{Action}");
 
     # get params
@@ -606,7 +606,7 @@ sub Run {
                 QueueID => $Self->{QueueID} || 1,
             );
             my $SLAs = $Self->_GetSLAs(
-                QueueID => $Self->{QueueID} || 1,
+                QueueID  => $Self->{QueueID} || 1,
                 Services => $Services,
                 %GetParam,
                 %ACLCompatGetParam,
@@ -676,7 +676,7 @@ sub Run {
     # deliver signature
     elsif ( $Self->{Subaction} eq 'Signature' ) {
         my $CustomerUser = $ParamObject->GetParam( Param => 'SelectedCustomerUser' ) || '';
-        my $QueueID = $ParamObject->GetParam( Param => 'QueueID' );
+        my $QueueID      = $ParamObject->GetParam( Param => 'QueueID' );
         if ( !$QueueID ) {
             my $Dest = $ParamObject->GetParam( Param => 'Dest' ) || '';
             ($QueueID) = split( /\|\|/, $Dest );
@@ -751,7 +751,7 @@ sub Run {
             || $ParamObject->GetParam( Param => 'PreSelectedCustomerUser' )
             || $ParamObject->GetParam( Param => 'SelectedCustomerUser' )
             || '';
-        my $CustomerID = $ParamObject->GetParam( Param => 'CustomerID' ) || '';
+        my $CustomerID           = $ParamObject->GetParam( Param => 'CustomerID' ) || '';
         my $SelectedCustomerUser = $ParamObject->GetParam( Param => 'SelectedCustomerUser' )
             || '';
         my $ExpandCustomerName = $ParamObject->GetParam( Param => 'ExpandCustomerName' )
@@ -1229,7 +1229,7 @@ sub Run {
             my $SLAs = $Self->_GetSLAs(
                 %GetParam,
                 %ACLCompatGetParam,
-                QueueID => $NewQueueID || 1,
+                QueueID  => $NewQueueID || 1,
                 Services => $Services,
             );
 
@@ -1698,7 +1698,7 @@ sub Run {
             %GetParam,
             %ACLCompatGetParam,
             CustomerUserID => $CustomerUser || '',
-            QueueID => $QueueID,
+            QueueID        => $QueueID,
         );
 
         my $NewTos;
@@ -2101,7 +2101,7 @@ sub _GetUsers {
 
     # show all users who are owner or rw in the queue group
     elsif ( $Param{QueueID} ) {
-        my $GID = $Kernel::OM->Get('Kernel::System::Queue')->GetQueueGroupID( QueueID => $Param{QueueID} );
+        my $GID        = $Kernel::OM->Get('Kernel::System::Queue')->GetQueueGroupID( QueueID => $Param{QueueID} );
         my %MemberList = $Kernel::OM->Get('Kernel::System::Group')->PermissionGroupGet(
             GroupID => $GID,
             Type    => 'owner',
@@ -2164,7 +2164,7 @@ sub _GetResponsibles {
 
     # show all users who are responsible or rw in the queue group
     elsif ( $Param{QueueID} ) {
-        my $GID = $Kernel::OM->Get('Kernel::System::Queue')->GetQueueGroupID( QueueID => $Param{QueueID} );
+        my $GID        = $Kernel::OM->Get('Kernel::System::Queue')->GetQueueGroupID( QueueID => $Param{QueueID} );
         my %MemberList = $Kernel::OM->Get('Kernel::System::Group')->PermissionGroupGet(
             GroupID => $GID,
             Type    => 'responsible',

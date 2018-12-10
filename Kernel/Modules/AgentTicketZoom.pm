@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - ff5c78c6878f56f1ef8eff0823eaf5f813eccdfa - Kernel/Modules/AgentTicketZoom.pm
+# $origin: otrs - 2ab9c4a88444da66afd8f87c8acd5db0b890d929 - Kernel/Modules/AgentTicketZoom.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -361,7 +361,7 @@ sub Run {
 
     # article update
     elsif ( $Self->{Subaction} eq 'ArticleUpdate' ) {
-        my $Count = $ParamObject->GetParam( Param => 'Count' );
+        my $Count   = $ParamObject->GetParam( Param => 'Count' );
         my %Article = $TicketObject->ArticleGet(
             ArticleID     => $Self->{ArticleID},
             DynamicFields => 0,
@@ -932,7 +932,7 @@ sub MaskAgentZoom {
 
     # set display options
     $Param{WidgetTitle} = 'Ticket Information';
-    $Param{Hook} = $ConfigObject->Get('Ticket::Hook') || 'Ticket#';
+    $Param{Hook}        = $ConfigObject->Get('Ticket::Hook') || 'Ticket#';
 
     # check if ticket is normal or process ticket
     my $IsProcessTicket = $TicketObject->TicketCheckForProcessType(
@@ -1116,7 +1116,7 @@ sub MaskAgentZoom {
 
     # get MoveQueuesStrg
     if ( $ConfigObject->Get('Ticket::Frontend::MoveType') =~ /^form$/i ) {
-        $MoveQueues{0} = '- ' . $LayoutObject->{LanguageObject}->Translate('Move') . ' -';
+        $MoveQueues{0}         = '- ' . $LayoutObject->{LanguageObject}->Translate('Move') . ' -';
         $Param{MoveQueuesStrg} = $LayoutObject->AgentQueueListOption(
             Name           => 'DestQueueID',
             Data           => \%MoveQueues,
@@ -1339,7 +1339,7 @@ sub MaskAgentZoom {
 
     my %OnlineData;
     if ($EnableChat) {
-        my $VideoChatEnabled = 0;
+        my $VideoChatEnabled     = 0;
         my $VideoChatAgentsGroup = $ConfigObject->Get('ChatEngine::PermissionGroup::VideoChatAgents') || 'users';
 
         # Enable the video chat feature if system is entitled and agent is a member of configured group.
@@ -2871,7 +2871,7 @@ sub _ArticleTree {
                     ArticleID => $ArticleID,
                     TicketID  => $Self->{TicketID},
                     MenuItems => \@MenuItems,
-                    }
+                }
             );
 
             # show attachments box
@@ -2886,7 +2886,7 @@ sub _ArticleTree {
                     Data => {
                         ArticleID   => $ArticleID,
                         Attachments => $ArticleAttachments,
-                        }
+                    }
                 );
             }
         }
@@ -3858,13 +3858,13 @@ sub _ArticleCollectMeta {
 
                 # replace the whole keyword
                 my $MatchLinkEncode = $LayoutObject->LinkEncode( $Match->{Name} );
-                $URL =~ s/<MATCH>/$MatchLinkEncode/g;
+                $URL        =~ s/<MATCH>/$MatchLinkEncode/g;
                 $URLPreview =~ s/<MATCH>/$MatchLinkEncode/g;
 
                 # replace the keyword components
                 for my $Part ( sort keys %{ $Match->{Parts} || {} } ) {
                     $MatchLinkEncode = $LayoutObject->LinkEncode( $Match->{Parts}->{$Part} );
-                    $URL =~ s/<MATCH$Part>/$MatchLinkEncode/g;
+                    $URL        =~ s/<MATCH$Part>/$MatchLinkEncode/g;
                     $URLPreview =~ s/<MATCH$Part>/$MatchLinkEncode/g;
                 }
 

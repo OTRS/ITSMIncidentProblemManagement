@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - 611ee0f8522803797d67800b0fa842e99ac7d7d3 - Kernel/Modules/AgentTicketActionCommon.pm
+# $origin: otrs - 2ab9c4a88444da66afd8f87c8acd5db0b890d929 - Kernel/Modules/AgentTicketActionCommon.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -1834,7 +1834,7 @@ sub _Mask {
             %ShownUsers = %AllGroupsMembers;
         }
         else {
-            my $GID = $QueueObject->GetQueueGroupID( QueueID => $Ticket{QueueID} );
+            my $GID        = $QueueObject->GetQueueGroupID( QueueID => $Ticket{QueueID} );
             my %MemberList = $GroupObject->PermissionGroupGet(
                 GroupID => $GID,
                 Type    => 'owner',
@@ -1938,7 +1938,7 @@ sub _Mask {
             %ShownUsers = %AllGroupsMembers;
         }
         else {
-            my $GID = $QueueObject->GetQueueGroupID( QueueID => $Ticket{QueueID} );
+            my $GID        = $QueueObject->GetQueueGroupID( QueueID => $Ticket{QueueID} );
             my %MemberList = $GroupObject->PermissionGroupGet(
                 GroupID => $GID,
                 Type    => 'responsible',
@@ -2210,7 +2210,7 @@ sub _Mask {
             Type  => 'Long',
             Valid => 1,
         );
-        my $GID = $QueueObject->GetQueueGroupID( QueueID => $Ticket{QueueID} );
+        my $GID        = $QueueObject->GetQueueGroupID( QueueID => $Ticket{QueueID} );
         my %MemberList = $GroupObject->PermissionGroupGet(
             GroupID => $GID,
             Type    => 'note',
@@ -2521,7 +2521,7 @@ sub _Mask {
         # get possible notes
         if ( $Config->{ArticleTypes} ) {
             my %DefaultNoteTypes = %{ $Config->{ArticleTypes} };
-            my %NoteTypes = $TicketObject->ArticleTypeList( Result => 'HASH' );
+            my %NoteTypes        = $TicketObject->ArticleTypeList( Result => 'HASH' );
             for my $KeyNoteType ( sort keys %NoteTypes ) {
                 if ( !$DefaultNoteTypes{ $NoteTypes{$KeyNoteType} } ) {
                     delete $NoteTypes{$KeyNoteType};
@@ -2848,7 +2848,7 @@ sub _GetQuotedReplyBody {
         if ( $Param{Body} ) {
             $Param{Body} =~ s/\t/ /g;
             my $Quote = $LayoutObject->Ascii2Html(
-                Text => $ConfigObject->Get('Ticket::Frontend::Quote') || '',
+                Text           => $ConfigObject->Get('Ticket::Frontend::Quote') || '',
                 HTMLResultMode => 1,
             );
             if ($Quote) {

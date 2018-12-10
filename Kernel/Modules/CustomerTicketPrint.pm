@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2018 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - ca27120a296d64d7bea88b10ac94c7848bad89da - Kernel/Modules/CustomerTicketPrint.pm
+# $origin: otrs - 2ab9c4a88444da66afd8f87c8acd5db0b890d929 - Kernel/Modules/CustomerTicketPrint.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -84,7 +84,7 @@ sub Run {
     $Ticket{Impact}      = $Ticket{DynamicField_ITSMImpact}      || '-';
 # ---
     my @CustomerArticleTypes = $TicketObject->ArticleTypeList( Type => 'Customer' );
-    my @ArticleBox = $TicketObject->ArticleContentIndex(
+    my @ArticleBox           = $TicketObject->ArticleContentIndex(
         TicketID                   => $Self->{TicketID},
         ArticleType                => \@CustomerArticleTypes,
         StripPlainBodyAsAttachment => 1,
