@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - 9409633f822dde39ec6fa4b45f9861ed876fb2a6 - scripts/test/Selenium/Agent/AgentTicketEmail.t
+# $origin: otrs - 75795abc986ca1d37b66bbd7cb170368e6cc50b8 - scripts/test/Selenium/Agent/AgentTicketEmail.t - rel-5_0_38
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -463,6 +463,25 @@ $Selenium->RunTest(
             $SignatureText,
             "Signature has correct text"
         );
+
+        # Check if Address Book is working. See bug#14639.
+        $Selenium->find_element( "#OptionAddressBook", 'css' )->click();
+
+        $Self->Is(
+            $Selenium->execute_script(
+                "return \$('.Dialog.Modal').length"
+            ),
+            '1',
+            "Address Book is shown"
+        );
+
+        $Selenium->SwitchToFrame(
+            FrameSelector => '.TextOption',
+            WaitForLoad   => 1,
+        );
+
+        # check if input field search exists.
+        $Selenium->find_element( "#Search", 'css' );
 
         # Delete created test ticket.
         my $Success = $Kernel::OM->Get('Kernel::System::Ticket')->TicketDelete(

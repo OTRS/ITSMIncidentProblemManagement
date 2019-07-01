@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - 9409633f822dde39ec6fa4b45f9861ed876fb2a6 - Kernel/Modules/AgentTicketPrint.pm
+# $origin: otrs - eca187c63be37ecdaf70305b7072894e8650e898 - Kernel/Modules/AgentTicketPrint.pm - rel-5_0_38
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -36,7 +36,7 @@ sub Run {
     my $ParamObject  = $Kernel::OM->Get('Kernel::System::Web::Request');
 
     my $Output;
-    my $QueueID = $TicketObject->TicketQueueID( TicketID => $Self->{TicketID} );
+    my $QueueID   = $TicketObject->TicketQueueID( TicketID => $Self->{TicketID} );
     my $ArticleID = $ParamObject->GetParam( Param => 'ArticleID' );
 
     # get layout object

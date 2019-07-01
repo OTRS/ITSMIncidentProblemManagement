@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2019 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - edbc7371a52fc5d0032e934d2456b5f39da317f1 - Kernel/Modules/AgentTicketPhone.pm
+# $origin: otrs - 03ca8f396b1aa9933c212a63f52a9ea26c06e7da - Kernel/Modules/AgentTicketPhone.pm - rel-5_0_38
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -91,9 +91,9 @@ sub Run {
     if ($CustomersNumber) {
         my $CustomerCounter = 1;
         for my $Count ( 1 ... $CustomersNumber ) {
-            my $CustomerElement = $ParamObject->GetParam( Param => 'CustomerTicketText_' . $Count );
+            my $CustomerElement  = $ParamObject->GetParam( Param => 'CustomerTicketText_' . $Count );
             my $CustomerSelected = ( $Selected eq $Count ? 'checked="checked"' : '' );
-            my $CustomerKey = $ParamObject->GetParam( Param => 'CustomerKey_' . $Count )
+            my $CustomerKey      = $ParamObject->GetParam( Param => 'CustomerKey_' . $Count )
                 || '';
 
             if ($CustomerElement) {
@@ -436,14 +436,20 @@ sub Run {
                 $Article{ContentType} = 'text/plain';
             }
 
-            # Strip out external content if needed.
-            if ( $ConfigObject->Get('Ticket::Frontend::BlockLoadingRemoteContent') ) {
-                my %SafetyCheckResult = $Kernel::OM->Get('Kernel::System::HTMLUtils')->Safety(
-                    String       => $Article{Body},
-                    NoExtSrcLoad => 1,
-                );
-                $Article{Body} = $SafetyCheckResult{String};
-            }
+            my %SafetyCheckResult = $Kernel::OM->Get('Kernel::System::HTMLUtils')->Safety(
+                String => $Article{Body},
+
+                # Strip out external content if BlockLoadingRemoteContent is enabled.
+                NoExtSrcLoad => $ConfigObject->Get('Ticket::Frontend::BlockLoadingRemoteContent'),
+
+                # Disallow potentially unsafe content.
+                NoApplet     => 1,
+                NoObject     => 1,
+                NoEmbed      => 1,
+                NoSVG        => 1,
+                NoJavaScript => 1,
+            );
+            $Article{Body} = $SafetyCheckResult{String};
 
             # show customer info
             if ( $ConfigObject->Get('Ticket::Frontend::CustomerInfoCompose') ) {
@@ -1898,7 +1904,7 @@ sub Run {
         my $Dest           = $ParamObject->GetParam( Param => 'Dest' ) || '';
         my $CustomerUser   = $ParamObject->GetParam( Param => 'SelectedCustomerUser' );
         my $ElementChanged = $ParamObject->GetParam( Param => 'ElementChanged' ) || '';
-        my $QueueID        = '';
+        my $QueueID = '';
         if ( $Dest =~ /^(\d{1,100})\|\|.+?$/ ) {
             $QueueID = $1;
         }
