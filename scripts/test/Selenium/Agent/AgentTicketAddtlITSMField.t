@@ -71,8 +71,9 @@ $Selenium->RunTest(
         my $Handles = $Selenium->get_window_handles();
         $Selenium->switch_to_window( $Handles->[1] );
 
-        # wait until page has loaded, if necessary
-        $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#RepairStartTimeUsed").length' );
+        # # wait until page has loaded, if necessary
+        $Selenium->WaitFor(
+            JavaScript => 'return typeof($) === "function" && $("#DynamicField_ITSMRepairStartTimeUsed").length' );
 
         # check screen
         for my $ID (
