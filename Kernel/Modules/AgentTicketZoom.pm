@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2020 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - eca187c63be37ecdaf70305b7072894e8650e898 - Kernel/Modules/AgentTicketZoom.pm
+# $origin: otrs - d58b5ce855ef55a2c541fc9186218a9a0d54aa12 - Kernel/Modules/AgentTicketZoom.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -2213,7 +2213,7 @@ sub _ArticleTree {
 
         # build article filter reset link only if filter is set
         if (
-            ( !$Self->{ZoomTimeline}   && $Self->{ArticleFilter} )
+            ( !$Self->{ZoomTimeline} && $Self->{ArticleFilter} )
             || ( $Self->{ZoomTimeline} && $Self->{EventTypeFilter} )
             )
         {
