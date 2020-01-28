@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2020 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - 77d4495533edfdbd2370353edad87839ee636357 - Kernel/Modules/AgentTicketPhone.pm
+# $origin: otrs - 92530888593a665df32c6ac0d27c91fed5c55b6e - Kernel/Modules/AgentTicketPhone.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -118,7 +118,7 @@ sub Run {
     # MultipleCustomer From-field
     my @MultipleCustomer;
     my $CustomersNumber = $Self->{ParamObject}->GetParam( Param => 'CustomerTicketCounterFromCustomer' ) || 0;
-    my $Selected = $Self->{ParamObject}->GetParam( Param => 'CustomerSelected' ) || '';
+    my $Selected        = $Self->{ParamObject}->GetParam( Param => 'CustomerSelected' )                  || '';
 
     # hash for check duplicated entries
     my %AddressesList;
@@ -126,9 +126,9 @@ sub Run {
     if ($CustomersNumber) {
         my $CustomerCounter = 1;
         for my $Count ( 1 ... $CustomersNumber ) {
-            my $CustomerElement = $Self->{ParamObject}->GetParam( Param => 'CustomerTicketText_' . $Count );
+            my $CustomerElement  = $Self->{ParamObject}->GetParam( Param => 'CustomerTicketText_' . $Count );
             my $CustomerSelected = ( $Selected eq $Count ? 'checked="checked"' : '' );
-            my $CustomerKey = $Self->{ParamObject}->GetParam( Param => 'CustomerKey_' . $Count )
+            my $CustomerKey      = $Self->{ParamObject}->GetParam( Param => 'CustomerKey_' . $Count )
                 || '';
 
             if ($CustomerElement) {
@@ -349,7 +349,7 @@ sub Run {
         if (
             $Self->{LastScreenOverview}
             && $Self->{LastScreenOverview} !~ /Action=AgentTicketPhone/
-            && $Self->{RequestedURL} !~ /Action=AgentTicketPhone.*LinkTicketID=/
+            && $Self->{RequestedURL}       !~ /Action=AgentTicketPhone.*LinkTicketID=/
             )
         {
             $Self->{SessionObject}->UpdateSessionID(
@@ -807,7 +807,7 @@ sub Run {
                 %ACLCompatGetParam,
                 %SplitTicketParam,
                 CustomerUserID => $CustomerData{UserLogin} || '',
-                QueueID => $Self->{QueueID},
+                QueueID        => $Self->{QueueID},
             ),
             From         => $Article{From},
             Subject      => $Subject,
@@ -838,8 +838,8 @@ sub Run {
                 ID => $GetParam{NextStateID},
             );
         }
-        my $NextState = $StateData{Name} || '';
-        my $Dest = $Self->{ParamObject}->GetParam( Param => 'Dest' ) || '';
+        my $NextState = $StateData{Name}                                  || '';
+        my $Dest      = $Self->{ParamObject}->GetParam( Param => 'Dest' ) || '';
 
         # see if only a name has been passed
         if ( $Dest && $Dest !~ m{ \A (\d+)? \| \| .+ \z }xms ) {
@@ -866,7 +866,7 @@ sub Run {
             || '';
         my $SelectedCustomerUser = $Self->{ParamObject}->GetParam( Param => 'SelectedCustomerUser' )
             || '';
-        my $CustomerID = $Self->{ParamObject}->GetParam( Param => 'CustomerID' ) || '';
+        my $CustomerID         = $Self->{ParamObject}->GetParam( Param => 'CustomerID' ) || '';
         my $ExpandCustomerName = $Self->{ParamObject}->GetParam( Param => 'ExpandCustomerName' )
             || 0;
         my %FromExternalCustomer;
@@ -1299,20 +1299,20 @@ sub Run {
                     %GetParam,
                     %ACLCompatGetParam,
                     CustomerUserID => $CustomerUser || $SelectedCustomerUser || '',
-                    QueueID => $NewQueueID || 1,
+                    QueueID        => $NewQueueID   || 1,
                 ),
                 NextState  => $NextState,
                 Priorities => $Self->_GetPriorities(
                     %GetParam,
                     %ACLCompatGetParam,
                     CustomerUserID => $CustomerUser || $SelectedCustomerUser || '',
-                    QueueID => $NewQueueID || 1,
+                    QueueID        => $NewQueueID   || 1,
                 ),
                 Types => $Self->_GetTypes(
                     %GetParam,
                     %ACLCompatGetParam,
                     CustomerUserID => $CustomerUser || $SelectedCustomerUser || '',
-                    QueueID => $NewQueueID || 1,
+                    QueueID        => $NewQueueID   || 1,
                 ),
                 Services          => $Services,
                 SLAs              => $SLAs,
@@ -1805,7 +1805,7 @@ sub Run {
         my $Dest           = $Self->{ParamObject}->GetParam( Param => 'Dest' ) || '';
         my $CustomerUser   = $Self->{ParamObject}->GetParam( Param => 'SelectedCustomerUser' );
         my $ElementChanged = $Self->{ParamObject}->GetParam( Param => 'ElementChanged' ) || '';
-        my $QueueID        = '';
+        my $QueueID = '';
         if ( $Dest =~ /^(\d{1,100})\|\|.+?$/ ) {
             $QueueID = $1;
         }
@@ -1820,7 +1820,7 @@ sub Run {
             %GetParam,
             %ACLCompatGetParam,
             CustomerUserID => $CustomerUser || '',
-            QueueID => $QueueID,
+            QueueID        => $QueueID,
         );
 
         my $NewTos;
@@ -2149,7 +2149,7 @@ sub _GetUsers {
 
     # show all users who are owner or rw in the queue group
     elsif ( $Param{QueueID} ) {
-        my $GID = $Self->{QueueObject}->GetQueueGroupID( QueueID => $Param{QueueID} );
+        my $GID        = $Self->{QueueObject}->GetQueueGroupID( QueueID => $Param{QueueID} );
         my %MemberList = $Self->{GroupObject}->GroupMemberList(
             GroupID => $GID,
             Type    => 'owner',
@@ -2210,7 +2210,7 @@ sub _GetResponsibles {
 
     # show all users who are responsible or rw in the queue group
     elsif ( $Param{QueueID} ) {
-        my $GID = $Self->{QueueObject}->GetQueueGroupID( QueueID => $Param{QueueID} );
+        my $GID        = $Self->{QueueObject}->GetQueueGroupID( QueueID => $Param{QueueID} );
         my %MemberList = $Self->{GroupObject}->GroupMemberList(
             GroupID => $GID,
             Type    => 'responsible',

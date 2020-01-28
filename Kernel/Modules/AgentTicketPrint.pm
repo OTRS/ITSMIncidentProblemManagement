@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2020 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - 77d4495533edfdbd2370353edad87839ee636357 - Kernel/Modules/AgentTicketPrint.pm
+# $origin: otrs - 4b5de865d1ad6c6a22b5bb35755d5ace2eab7d7b - Kernel/Modules/AgentTicketPrint.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -60,7 +60,7 @@ sub Run {
     my ( $Self, %Param ) = @_;
 
     my $Output;
-    my $QueueID = $Self->{TicketObject}->TicketQueueID( TicketID => $Self->{TicketID} );
+    my $QueueID   = $Self->{TicketObject}->TicketQueueID( TicketID => $Self->{TicketID} );
     my $ArticleID = $Self->{ParamObject}->GetParam( Param => 'ArticleID' );
 
     # check needed stuff
@@ -671,7 +671,7 @@ sub _PDFOutputLinkedObjects {
     for my $LinkTypeLinkDirection ( sort { lc $a cmp lc $b } keys %{ $Param{LinkData} } ) {
 
         # investigate link type name
-        my @LinkData = split q{::}, $LinkTypeLinkDirection;
+        my @LinkData     = split q{::}, $LinkTypeLinkDirection;
         my $LinkTypeName = $TypeList{ $LinkData[0] }->{ $LinkData[1] . 'Name' };
         $LinkTypeName = $Self->{LayoutObject}->{LanguageObject}->Translate($LinkTypeName);
 
@@ -1361,7 +1361,7 @@ sub _HTMLMask {
 
     # build article stuff
     my $SelectedArticleID = $Param{ArticleID} || '';
-    my @ArticleBox = @{ $Param{ArticleBox} };
+    my @ArticleBox        = @{ $Param{ArticleBox} };
 
     # get last customer article
     for my $ArticleTmp (@ArticleBox) {

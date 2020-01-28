@@ -1,7 +1,7 @@
 # --
 # Copyright (C) 2001-2020 OTRS AG, https://otrs.com/
 # --
-# $origin: otrs - 77d4495533edfdbd2370353edad87839ee636357 - Kernel/Modules/AgentTicketEmail.pm
+# $origin: otrs - 92530888593a665df32c6ac0d27c91fed5c55b6e - Kernel/Modules/AgentTicketEmail.pm
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (GPL). If you
@@ -132,14 +132,14 @@ sub Run {
     # MultipleCustomer To-field
     my @MultipleCustomer;
     my $CustomersNumber = $Self->{ParamObject}->GetParam( Param => 'CustomerTicketCounterToCustomer' ) || 0;
-    my $Selected = $Self->{ParamObject}->GetParam( Param => 'CustomerSelected' ) || '';
+    my $Selected        = $Self->{ParamObject}->GetParam( Param => 'CustomerSelected' )                || '';
 
     if ($CustomersNumber) {
         my $CustomerCounter = 1;
         for my $Count ( 1 ... $CustomersNumber ) {
-            my $CustomerElement = $Self->{ParamObject}->GetParam( Param => 'CustomerTicketText_' . $Count );
+            my $CustomerElement  = $Self->{ParamObject}->GetParam( Param => 'CustomerTicketText_' . $Count );
             my $CustomerSelected = ( $Selected eq $Count ? 'checked="checked"' : '' );
-            my $CustomerKey = $Self->{ParamObject}->GetParam( Param => 'CustomerKey_' . $Count )
+            my $CustomerKey      = $Self->{ParamObject}->GetParam( Param => 'CustomerKey_' . $Count )
                 || '';
 
             if ($CustomerElement) {
@@ -621,7 +621,7 @@ sub Run {
                 QueueID => $Self->{QueueID} || 1,
             );
             my $SLAs = $Self->_GetSLAs(
-                QueueID => $Self->{QueueID} || 1,
+                QueueID  => $Self->{QueueID} || 1,
                 Services => $Services,
                 %GetParam,
                 %ACLCompatGetParam,
@@ -690,7 +690,7 @@ sub Run {
     # deliver signature
     elsif ( $Self->{Subaction} eq 'Signature' ) {
         my $CustomerUser = $Self->{ParamObject}->GetParam( Param => 'SelectedCustomerUser' ) || '';
-        my $QueueID = $Self->{ParamObject}->GetParam( Param => 'QueueID' );
+        my $QueueID      = $Self->{ParamObject}->GetParam( Param => 'QueueID' );
         if ( !$QueueID ) {
             my $Dest = $Self->{ParamObject}->GetParam( Param => 'Dest' ) || '';
             ($QueueID) = split( /\|\|/, $Dest );
@@ -765,7 +765,7 @@ sub Run {
             || $Self->{ParamObject}->GetParam( Param => 'PreSelectedCustomerUser' )
             || $Self->{ParamObject}->GetParam( Param => 'SelectedCustomerUser' )
             || '';
-        my $CustomerID = $Self->{ParamObject}->GetParam( Param => 'CustomerID' ) || '';
+        my $CustomerID           = $Self->{ParamObject}->GetParam( Param => 'CustomerID' ) || '';
         my $SelectedCustomerUser = $Self->{ParamObject}->GetParam( Param => 'SelectedCustomerUser' )
             || '';
         my $ExpandCustomerName = $Self->{ParamObject}->GetParam( Param => 'ExpandCustomerName' )
@@ -1235,7 +1235,7 @@ sub Run {
             my $SLAs = $Self->_GetSLAs(
                 %GetParam,
                 %ACLCompatGetParam,
-                QueueID => $NewQueueID || 1,
+                QueueID  => $NewQueueID || 1,
                 Services => $Services,
             );
 
@@ -1704,7 +1704,7 @@ sub Run {
             %GetParam,
             %ACLCompatGetParam,
             CustomerUserID => $CustomerUser || '',
-            QueueID => $QueueID,
+            QueueID        => $QueueID,
         );
 
         my $NewTos;
@@ -2104,7 +2104,7 @@ sub _GetUsers {
 
     # show all users who are owner or rw in the queue group
     elsif ( $Param{QueueID} ) {
-        my $GID = $Self->{QueueObject}->GetQueueGroupID( QueueID => $Param{QueueID} );
+        my $GID        = $Self->{QueueObject}->GetQueueGroupID( QueueID => $Param{QueueID} );
         my %MemberList = $Self->{GroupObject}->GroupMemberList(
             GroupID => $GID,
             Type    => 'owner',
@@ -2165,7 +2165,7 @@ sub _GetResponsibles {
 
     # show all users who are responsible or rw in the queue group
     elsif ( $Param{QueueID} ) {
-        my $GID = $Self->{QueueObject}->GetQueueGroupID( QueueID => $Param{QueueID} );
+        my $GID        = $Self->{QueueObject}->GetQueueGroupID( QueueID => $Param{QueueID} );
         my %MemberList = $Self->{GroupObject}->GroupMemberList(
             GroupID => $GID,
             Type    => 'responsible',
